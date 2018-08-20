@@ -1,0 +1,190 @@
+<!doctype html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymleaf/layout"
+      xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="webjars/materializecss/0.99.0/css/materialize.css" type="text/css" media="screen,projection"/>
+    <link rel="stylesheet" href="webjars/material-design-icons/3.0.1/material-icons.css" type="text/css" media="all"/>
+
+    <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/style.css}" />
+    <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/mystyle.css}" />
+
+</head>
+<body>
+
+<div id="navigation">
+    <nav>
+        <div class="container">
+            <div class="nav-wrapper">
+                <a class="brand-logo" href="#">
+                    <img src="" alt="YSTR"/>
+                </a>
+                <ul class="right main-nav">
+                    <li>
+                        <a class="waves-effect waves-light" href="#login">Register</a>
+                    </li>
+                    <li>
+                        <a class="waves-effect waves-light" href="#login">Login</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>
+
+<section id="home" class="home-section">
+    <div class="overlay-shade"></div>
+    <div class="container">
+        <div class="row btm-mrgn-0">
+            <div class="col s12 m7 l7 summary-text">
+                <p class="white-text">
+                    UniQTyper<sup>TM</sup> Y-10 genotyping systems was developed at the University of the Western Cape,
+                    South Africa. The UniQTyper Reference Database (URD) was designed to provide statistical support
+                    for forensic, population and genealogical studies and host profiles generated with the 11 Y-STR
+                    UniQTyper<sup>TM</sup> Y-10 multiplex (DYS710, DYS518, DYS385a, DYS385b, DYS644, DYS612, DYS626,
+                    DYS504, DYS481, DYS447 and DYS449). The database provides a search function to evaluate the
+                    frequency of profiles according to metapopulation, ethno-linguistic group, and country. The
+                    implemented haplotype frequency estimation methods are direct count, binomial one-tailed upper
+                    bound and kappa. Similar profiles with up to 2 mismatches can be identified from the database.
+                    Paternity index and probability of paternity can be estimated from 1-step mismatches. Population
+                    data can be evaluated for discrimination.
+                </p>
+                <div class="row">
+                    <div class="col s5 db-release white" style="padding: 0.5rem 0; margin: auto 0.7rem auto 0.7rem">
+                        <span class="task-cat task-cat-emp orange" style="margin-left: 1rem">Release Version</span>
+                        <span class="task-cat task-cat-emp teal">0.01</span>
+                    </div>
+                    <div class="col s6 db-content white" style="padding: 0.5rem 0;">
+                        <span class="task-cat task-cat-emp orange" style="margin-left: 1rem">Profiles Present</span>
+                        <span class="task-cat task-cat-emp teal">2000</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col s12 m5 l4 offset-l1 wow animated">
+                <div class="row" style="padding-top: 30px;">
+                    <div class="map-wrapper trans-effect">
+                        <img th:src="@{/img/africa.png}" style="width: 400px;height:300px"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+<section id="user-actions" class="sec-padded-1x">
+    <div class="container">
+        <div class="row center">
+
+            <div class="col s6 m2 l2" style="margin-right: 2rem">
+
+                <div class="card z-depth-2 wow fadeIn animated" data-wow-delay="0.1s" style="visibility: visible; animation-delay: 0.1s;">
+                    <div class="card-image waves-effect waves-block waves-light">
+                        <!-- Replace 'src' attribute with the path to the team member image  -->
+                        <img src="Volkan%20-%20Onepage%20HTML%20App%20Template_files/team1.jpg" alt="" class="trans-effect circle responsive-img"/>
+                    </div>
+                    <div class="card-content">
+                        <span class="card-title activator grey-text text-darken-4">Database<i class="ion-android-more-vertical right"></i></span>
+                        <p>composition</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col s6 m2 l2" style="margin-right: 2rem">
+                <div class="card z-depth-2 wow fadeIn animated" data-wow-delay="0.1s" style="visibility: visible; animation-delay: 0.1s;">
+                    <div class="card-image waves-effect waves-block waves-light">
+                        <!-- Replace 'src' attribute with the path to the team member image  -->
+                        <img src="Volkan%20-%20Onepage%20HTML%20App%20Template_files/team1.jpg" alt="" class="trans-effect circle responsive-img"/>
+                    </div>
+                    <div class="card-content">
+                        <span class="card-title activator grey-text text-darken-4">Search<i class="ion-android-more-vertical right"></i></span>
+                        <p>profiles</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col s6 m2 l2" style="margin-right: 2rem">
+                <div class="card z-depth-2 wow fadeIn animated" data-wow-delay="0.1s" style="visibility: visible; animation-delay: 0.1s;">
+                    <div class="card-image waves-effect waves-block waves-light">
+                        <!-- Replace 'src' attribute with the path to the team member image  -->
+                        <img src="Volkan%20-%20Onepage%20HTML%20App%20Template_files/team1.jpg" alt="" class="trans-effect circle responsive-img"/>
+                    </div>
+                    <div class="card-content">
+                        <span class="card-title activator grey-text text-darken-4">2-Profiles<i class="ion-android-more-vertical right"></i></span>
+                        <p>Kinship</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col s6 m2 l2" style="margin-right: 2rem">
+                <div class="card z-depth-2 wow fadeIn animated" data-wow-delay="0.1s" style="visibility: visible; animation-delay: 0.1s;">
+                    <div class="card-image waves-effect waves-block waves-light">
+                        <!-- Replace 'src' attribute with the path to the team member image  -->
+                        <img src="Volkan%20-%20Onepage%20HTML%20App%20Template_files/team1.jpg" alt="" class="trans-effect circle responsive-img"/>
+                    </div>
+                    <div class="card-content">
+                        <span class="card-title activator grey-text text-darken-4">Population<i class="ion-android-more-vertical right"></i></span>
+                        <p>parameters</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col s6 m2 l2">
+                <div class="card z-depth-2 wow fadeIn animated" data-wow-delay="0.1s" style="visibility: visible; animation-delay: 0.1s;">
+                    <div class="card-image waves-effect waves-block waves-light">
+                        <!-- Replace 'src' attribute with the path to the team member image  -->
+                        <img src="Volkan%20-%20Onepage%20HTML%20App%20Template_files/team1.jpg" alt="" class="trans-effect circle responsive-img"/>
+                    </div>
+                    <div class="card-content">
+                        <span class="card-title activator grey-text text-darken-4">Forensic<i class="ion-android-more-vertical right"></i></span>
+                        <p>parameters</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- include Vue.js -->
+<!-- we include babel js so that we can write ES6 code in the browser
+     for a more production like setup it is recommended to setup a build process
+     to transpile and minify the code (such as using webpack)
+ -->
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.21.1/babel.min.js"></script>
+<script type="text/babel">
+    Vue.component('player-card', {
+        props: ['player'],
+        template: `<div class="card">
+        <div class="card-body">
+            <h6 class="card-title">
+                {{ player.name }}
+            </h6>
+            <p class="card-text">
+                <div>
+                    {{ player.description }}
+                </div>
+            </p>
+        </div>
+        </div>`
+    });
+
+    var app = new Vue({
+        el: '#contents',
+        data: {
+            players: [
+                { id: "1",
+                    name: "Lionel Messi",
+                    description: "Argentina's superstar" },
+                { id: "2",
+                    name: "Christiano Ronaldo",
+                    description: "World #1-ranked player from Portugal" }
+            ]
+        }
+    });
+</script>
+</body>
+</html>
