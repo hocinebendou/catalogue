@@ -18,3 +18,17 @@
     font-size: 20px;
     font-weight: 300;
 }
+
+.page-footer {
+    background-color: #FCFCFC;
+    border-top: 1px solid;
+    border-top-color: #0288d1;
+}
+
+footer {
+    padding-left: 240px;
+}
+
+.footer-copyright {
+    background-color: #0288d1 !important;
+}
