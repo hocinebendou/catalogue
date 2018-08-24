@@ -1,0 +1,202 @@
+<!doctype html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymleaf/layout"
+      xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="webjars/materializecss/0.99.0/css/materialize.css" type="text/css" media="screen,projection"/>
+    <link rel="stylesheet" href="webjars/material-design-icons/3.0.1/material-icons.css" type="text/css" media="all"/>
+
+    <link rel="stylesheet" type="text/css" media="all" th:href="@{/static/css/style.css}" />
+    <link rel="stylesheet" type="text/css" media="all" th:href="@{/static/css/mystyle.css}" />
+
+</head>
+<body>
+
+<div id="navigation">
+    <nav>
+        <div class="container">
+            <div class="nav-wrapper">
+                <a class="brand-logo" href="#">
+                    <img src="" alt="YSTR"/>
+                </a>
+                <ul class="right main-nav">
+                    <li>
+                        <a class="waves-effect waves-light" href="#login">Register</a>
+                    </li>
+                    <li>
+                        <a class="waves-effect waves-light" href="#login">Login</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>
+
+<main>
+<section id="user-registration" class="sec-padded-1x">
+
+    <div class="container">
+    <div class="card-panel">
+        <form action="/" method="post" enctype="utf8">
+
+            <h4>Registration Form</h4>
+
+            <div class="input-field" >
+                <label for="firstName" th:text="#{label.user.firstName}">first</label>
+                <input id="firstName" name="firstName" class="validate" type="text" required="required"/>
+                <span id="firstNameError" class="col s4" style="display:none"></span>
+            </div>
+            <div class="input-field">
+                <label for="lastName" th:text="#{label.user.lastName}">last</label>
+                <input id="lastName" name="lastName" class="validate" type="text" required="required"/>
+                <span id="lastNameError" class="col s4" style="display:none"></span>
+            </div>
+            <div class="input-field">
+                <label for="email" th:text="#{label.user.email}">email</label>
+                <input id="email" name="email" class="validate" type="email" required="required"/>
+                <span id="emailError" class="col s4" style="display:none"></span>
+
+            </div>
+            <div class="input-field">
+                <label for="password" th:text="#{label.user.password}">password</label>
+                <input id="password" name="password" type="password" class="validate" required="required"/>
+                <span id="passwordError" class="col s4" style="display:none"></span>
+            </div>
+            <div class="input-field">
+                <label for="matchPassword" th:text="#{label.user.confirmPass}">confirm</label>
+                <input id="matchPassword" name="matchingPassword" type="password" class="validate" required="required"/>
+                <span id="globalError" class="col s4" style="display:none"></span>
+            </div>
+            <br/>
+            <button type="submit" class="btn waves-effect waves-light red center" th:text="#{label.form.submit}">submit</button>
+        </form>
+    </div>
+    </div>
+</section>
+</main>
+
+<footer class="page-footer">
+    <div class="container">
+        <div class="row">
+            <div class="col m6 s12">
+                <h4 style="font-weight: bold;margin-left: -10rem" class="blue-grey-text">
+                    YSTR
+                </h4>
+            </div>
+            <div class="col m2 offset-m2 s6">
+                <h6>About</h6>
+                <ul>
+                    <li><a href="http://h3africa-catalogue.readthedocs.io/en/latest/"
+                           class="blue-text text-darken-1">Help</a></li>
+                    <li><a th:href="@{/contact}" class="blue-text text-darken-1">Contact</a></li>
+                </ul>
+            </div>
+            <div class="col m2 s6">
+                <h6>Developer</h6>
+                <ul>
+                    <li>
+                        <a href="https://github.com/h3abionet/h3acatalog.git" class="blue-text text-darken-1">
+                            Source</a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/h3abionet/h3acatalog/issues" class="blue-text text-darken-1">
+                            Contribute</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="footer-copyright">
+        <div class="container">Made by <a href="http://www.sanbi.ac.za/" class="white-text" style="font-weight: bold">SANBI-CBIO Team</a></div>
+    </div>
+</footer>
+
+<script src="/webjars/jquery/3.1.1-1/jquery.min.js"></script>
+<script src="/webjars/materializecss/0.99.0/js/materialize.min.js"></script>
+<script th:src="@{/static/js/pwstrength.js}"></script>
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+var serverContext = [[@{/}]];
+$(document).ready(function () {
+    $('form').submit(function(event) {
+        register(event);
+    });
+
+    $(":password").keyup(function(){
+        if($("#password").val() != $("#matchPassword").val()){
+            $("#globalError").show().html(/*[[#{PasswordMatches.user}]]*/);
+        }else{
+            $("#globalError").html("").hide();
+        }
+    });
+
+    options = {
+        common: {minChar:8},
+        ui: {
+            showVerdictsInsideProgressBar:true,
+            showErrors:true,
+            errorMessages:{
+                wordLength: /*[[#{error.wordLength}]]*/,
+                wordNotEmail: /*[[#{error.wordNotEmail}]]*/,
+                wordSequences: /*[[#{error.wordSequences}]]*/,
+                wordLowercase: /*[[#{error.wordLowercase}]]*/,
+                wordUppercase: /*[[#{error.wordUppercase}]]*/,
+                wordOneNumber: /*[[#{error.wordOneNumber}]]*/,
+                wordOneSpecialChar: /*[[#{error.wordOneSpecialChar}]]*/
+            }
+        }
+    };
+    $('#password').pwstrength(options);
+});
+
+function register(event){
+    event.preventDefault();
+    $(".alert").html("").hide();
+    $(".error-list").html("");
+    if($("#password").val() != $("#matchPassword").val()){
+        $("#globalError").show().html(/*[[#{PasswordMatches.user}]]*/);
+        return;
+    }
+    var formData= $('form').serialize();
+    $.post(serverContext + "user/registration",formData ,function(data){
+        if(data.message == "success"){
+            window.location.href = serverContext + "successRegister.html";
+        }
+
+    })
+    .fail(function(data) {
+        if(data.responseJSON.error.indexOf("MailError") > -1)
+        {
+            window.location.href = serverContext + "emailError.html";
+        }
+        else if(data.responseJSON.error == "UserAlreadyExist"){
+            $("#emailError").show().html(data.responseJSON.message);
+        }
+        else if(data.responseJSON.error.indexOf("InternalError") > -1){
+            window.location.href = serverContext + "login?message=" + data.responseJSON.message;
+        }
+        else{
+            console.log(data.responseJSON.message);
+            console.log("----------------------")
+            var errors = $.parseJSON(data.responseJSON.message);
+            $.each( errors, function( index,item ){
+                if (item.field){
+                    $("#"+item.field+"Error").show().append(item.defaultMessage+"<br/>");
+                }
+                else {
+                    $("#globalError").show().append(item.defaultMessage+"<br/>");
+                }
+
+            });
+        }
+    });
+}
+/*]]>*/
+
+</script>
+
+</body>
+</html>

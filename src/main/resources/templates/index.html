@@ -8,8 +8,8 @@
     <link rel="stylesheet" href="webjars/materializecss/0.99.0/css/materialize.css" type="text/css" media="screen,projection"/>
     <link rel="stylesheet" href="webjars/material-design-icons/3.0.1/material-icons.css" type="text/css" media="all"/>
 
-    <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/style.css}" />
-    <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/mystyle.css}" />
+    <link rel="stylesheet" type="text/css" media="all" th:href="@{/static/css/style.css}" />
+    <link rel="stylesheet" type="text/css" media="all" th:href="@{/static/css/mystyle.css}" />
 
 </head>
 <body>
@@ -23,7 +23,7 @@
                 </a>
                 <ul class="right main-nav">
                     <li>
-                        <a class="waves-effect waves-light" href="#login">Register</a>
+                        <a class="waves-effect waves-light" th:href="@{/registration.html}" th:text="#{label.form.loginSignUp}">Register</a>
                     </li>
                     <li>
                         <a class="waves-effect waves-light" href="#login">Login</a>
@@ -34,6 +34,7 @@
     </nav>
 </div>
 
+<main>
 <section id="home" class="home-section">
     <div class="overlay-shade"></div>
     <div class="container">
@@ -65,7 +66,7 @@
             <div class="col s12 m5 l4 offset-l1 wow animated">
                 <div class="row" style="padding-top: 30px;">
                     <div class="map-wrapper trans-effect">
-                        <img th:src="@{/img/africa.png}" style="width: 400px;height:300px"/>
+                        <img th:src="@{/static/img/africa.png}" style="width: 400px;height:300px"/>
                     </div>
                 </div>
             </div>
@@ -147,6 +148,8 @@
         </div>
     </div>
 </section>
+</main>
+
 <footer class="page-footer">
     <div class="container">
         <div class="row">
@@ -182,13 +185,10 @@
         <div class="container">Made by <a href="http://www.sanbi.ac.za/" class="white-text" style="font-weight: bold">SANBI-CBIO Team</a></div>
     </div>
 </footer>
-<!-- include Vue.js -->
-<!-- we include babel js so that we can write ES6 code in the browser
-     for a more production like setup it is recommended to setup a build process
-     to transpile and minify the code (such as using webpack)
- -->
+
 <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.21.1/babel.min.js"></script>
+
 <script type="text/babel">
     Vue.component('player-card', {
         props: ['player'],

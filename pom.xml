@@ -22,13 +22,15 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
+		<aerogear.version>1.0.0</aerogear.version>
+		<guava.version>20.0</guava.version>
 	</properties>
 
 	<dependencies>
-		<!--<dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
-		</dependency>-->
+		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -45,6 +47,40 @@
 			<artifactId>thymeleaf-extras-springsecurity4</artifactId>
 		</dependency>-->
 
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
+
+		<!-- Neo4j dependencies -->
+		<dependency>
+			<groupId>org.jboss.aerogear</groupId>
+			<artifactId>aerogear-otp-java</artifactId>
+			<version>${aerogear.version}</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>${guava.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-neo4j</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-neo4j</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.neo4j</groupId>
+			<artifactId>neo4j-ogm-bolt-driver</artifactId>
+			<version>2.1.1</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -62,6 +98,12 @@
 			<groupId>org.webjars</groupId>
 			<artifactId>material-design-icons</artifactId>
 			<version>3.0.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>jquery</artifactId>
+			<version>3.1.1-1</version>
 		</dependency>
 
 	</dependencies>
