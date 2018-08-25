@@ -1,5 +1,7 @@
 package bio.tech.ystr.web.controller;
 
+import bio.tech.ystr.persistence.dao.PrivilegeRepository;
+import bio.tech.ystr.persistence.dao.RoleRepository;
 import bio.tech.ystr.persistence.model.Privilege;
 import bio.tech.ystr.persistence.model.Role;
 import bio.tech.ystr.persistence.model.User;
@@ -39,6 +41,12 @@ public class MainController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private RoleRepository roleRepository;
+
+    @Autowired
+    private PrivilegeRepository privilegeRepository;
 
     @Autowired
     private ApplicationEventPublisher eventPublisher;
@@ -93,8 +101,15 @@ public class MainController {
     private void authWithoutPassword(User user) {
         final List<String> privileges = new ArrayList<>();
         final List<Privilege> collection = new ArrayList<>();
+        if (user.getRoles() == null) {
+            user.setRoles(roleRepository.findByUserId(user.getId()));
+        }
         for (final Role role : user.getRoles()) {
-            collection.addAll(role.getPrivileges());
+            if (role.getPrivileges() == null) {
+                collection.addAll(privilegeRepository.findByRoleName(role.getName()));
+            } else {
+                collection.addAll(role.getPrivileges());
+            }
         }
         for (final Privilege item : collection) {
             privileges.add(item.getName());
