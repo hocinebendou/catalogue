@@ -48,10 +48,10 @@
                 </a>
                 <ul class="right main-nav">
                     <li>
-                        <a class="waves-effect waves-light" href="#login">Register</a>
+                        <a class="waves-effect waves-light" th:href="@{/registration.html}">Register</a>
                     </li>
                     <li>
-                        <a class="waves-effect waves-light" href="#login">Login</a>
+                        <a class="waves-effect waves-light" th:href="@{/login.html}">Login</a>
                     </li>
                 </ul>
             </div>
@@ -63,50 +63,36 @@
 <section id="sign-in" class="sec-padded-1x">
 
     <canvas id="bubble-canvas" width="1861" height="558" style="position: fixed; top: 0px; left: 0px; z-index: 1;"></canvas>
-    <form name="login" th:action="@{/login}" method="post" onsubmit="return validate()">
+    <div class="container">
+        <div th:if="${param.message != null}" class="alert orange lighten-2 white-text text-darken-2" th:text="${param.message[0]}">message</div>
+        <div th:if="${param.error != null}" class="alert orange lighten-2 white-text text-darken-2" th:text="${session[SPRING_SECURITY_LAST_EXCEPTION]}">error</div>
+    </div>
+    <form name="f" th:action="@{/login}" method="post" onsubmit="return validate()">
         <div class="row links">
-            <div class="col s6 logo">
-                <img src="assets/_con/images/logo-white.png" alt=""/>
-            </div>
-            <div class="col s6 right-align">
-                <strong>Sign In</strong> / <a href="page-sign-up.html">Sign Up</a>
+            <div class="col s6 push-s6 right-align">
+                <strong>Sign In</strong> / <a th:href="@{/registration.html}">Sign Up</a>
             </div>
         </div>
 
         <div class="card-panel clearfix">
-            <!-- Social Sign Up -->
-            <div class="row socials">
-                <div class="col s4">
-                    <a class="btn blue darken-2 z-depth-0 z-depth-1-hover" href="#">
-                        <i class="fa fa-2x fa-facebook"></i>
-                    </a>
-                </div>
-                <div class="col s4">
-                    <a class="btn blue lighten-2 z-depth-0 z-depth-1-hover" href="#">
-                        <i class="fa fa-2x fa-twitter"></i>
-                    </a>
-                </div>
-                <div class="col s4">
-                    <a class="btn red z-depth-0 z-depth-1-hover" href="#">
-                        <i class="fa fa-2x fa-google-plus"></i>
-                    </a>
-                </div>
+            <div class="alert blue lighten-5 blue-text text-darken-2">
+                <strong><i class="fa fa-css3"></i></strong>&nbsp;
+                Sign in to YSTR database.
             </div>
-            <!-- /Social Sign Up -->
             <div class="row">
                 <div class="col"></div>
             </div>
             <!-- Username -->
             <div class="input-field">
                 <i class="fa fa-user prefix"></i>
-                <input id="username-input" class="validate" type="text"/>
+                <input id="username-input" name="username" class="validate" type="text"/>
                 <label for="username-input" class="">Username</label>
             </div>
             <!-- /Username -->
             <!-- Password -->
             <div class="input-field">
                 <i class="fa fa-unlock-alt prefix"></i>
-                <input id="password-input" class="validate" type="password"/>
+                <input id="password-input" name="password" class="validate" type="password"/>
                 <label for="password-input">Password</label>
             </div>
             <!-- /Password -->
@@ -157,6 +143,9 @@
         <div class="container">Made by <a href="http://www.sanbi.ac.za/" class="white-text" style="font-weight: bold">SANBI-CBIO Team</a></div>
     </div>
 </footer>
+
+<script src="/webjars/jquery/3.1.1-1/jquery.min.js"></script>
+<script src="/webjars/materializecss/0.99.0/js/materialize.min.js"></script>
 
 </body>
 </html>

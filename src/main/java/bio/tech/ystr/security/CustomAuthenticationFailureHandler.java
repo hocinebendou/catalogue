@@ -28,7 +28,6 @@ public class CustomAuthenticationFailureHandler extends SimpleUrlAuthenticationF
                                         final AuthenticationException exception) throws IOException, ServletException {
 
         setDefaultFailureUrl("/login?error=true");
-
         super.onAuthenticationFailure(request, response, exception);
 
         final Locale locale = localeResolver.resolveLocale(request);

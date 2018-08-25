@@ -85,6 +85,11 @@ public class MainController {
         return "redirect:/badUser.html?lang=" + locale.getLanguage();
     }
 
+    @GetMapping(value = "/login")
+    public String loginPage() {
+        return "login";
+    }
+
     private void authWithoutPassword(User user) {
         final List<String> privileges = new ArrayList<>();
         final List<Privilege> collection = new ArrayList<>();
@@ -104,4 +109,6 @@ public class MainController {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
+
+
 }

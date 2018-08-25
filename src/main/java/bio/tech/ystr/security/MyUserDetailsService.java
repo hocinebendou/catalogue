@@ -1,5 +1,7 @@
 package bio.tech.ystr.security;
 
+import bio.tech.ystr.persistence.dao.PrivilegeRepository;
+import bio.tech.ystr.persistence.dao.RoleRepository;
 import bio.tech.ystr.persistence.dao.UserRepository;
 import bio.tech.ystr.persistence.model.Privilege;
 import bio.tech.ystr.persistence.model.Role;
@@ -24,6 +26,9 @@ public class MyUserDetailsService implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private PrivilegeRepository privilegeRepository;
 
     @Autowired
     private LoginAttemptService loginAttemptService;
@@ -68,7 +73,11 @@ public class MyUserDetailsService implements UserDetailsService {
         final List<String> privileges = new ArrayList<>();
         final List<Privilege> collection = new ArrayList<>();
         for (final Role role : roles) {
-            collection.addAll(role.getPrivileges());
+            if (role.getPrivileges() == null) {
+                collection.addAll(privilegeRepository.findByRoleName(role.getName()));
+            } else {
+                collection.addAll(role.getPrivileges());
+            }
         }
         for (final Privilege item : collection) {
             privileges.add(item.getName());
