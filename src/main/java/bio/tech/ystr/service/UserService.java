@@ -3,6 +3,7 @@ package bio.tech.ystr.service;
 import bio.tech.ystr.persistence.dao.RoleRepository;
 import bio.tech.ystr.persistence.dao.UserRepository;
 import bio.tech.ystr.persistence.dao.VerificationTokenRepository;
+import bio.tech.ystr.persistence.model.Role;
 import bio.tech.ystr.persistence.model.User;
 import bio.tech.ystr.persistence.model.VerificationToken;
 import bio.tech.ystr.web.dto.UserDto;
@@ -13,9 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,6 +36,10 @@ public class UserService implements IUserService {
     @Autowired
     private VerificationTokenRepository tokenRepository;
 
+    public static final String TOKEN_INVALID = "invalidToken";
+    public static final String TOKEN_EXPIRED = "expired";
+    public static final String TOKEN_VALID = "valid";
+
     @Override
     public User registerNewUserAccount(UserDto accountDto) {
         if (emailExist(accountDto.getEmail())) {
@@ -48,7 +51,9 @@ public class UserService implements IUserService {
         user.setLastName(accountDto.getLastName());
         user.setPassword(passwordEncoder.encode(accountDto.getPassword()));
         user.setEmail(accountDto.getEmail());
-        user.setRoles(Arrays.asList(roleRepository.findByName("ROLE_USER")));
+        Collection<Role> roles = new ArrayList<>();
+        roles.add(roleRepository.findByName("ROLE_USER"));
+        user.setRoles(roles);
 
         return repository.save(user);
     }
@@ -85,6 +90,27 @@ public class UserService implements IUserService {
     public void createVerificationTokenForUser(final Collection<User> user, final String token){
         final VerificationToken myToken = new VerificationToken(token, user);
         tokenRepository.save(myToken);
+    }
+
+    @Override
+    public String validateVerificationToken(String token) {
+        final VerificationToken verificationToken = tokenRepository.findByToken(token);
+        if (verificationToken == null) {
+            return TOKEN_INVALID;
+        }
+
+        final Collection<User> collection = verificationToken.getUser();
+        final User user = collection.stream().findFirst().orElse(null);
+        final Calendar cal = Calendar.getInstance();
+        if ((verificationToken.getExpiryDate().getTime() - cal.getTime().getTime()) <=0) {
+            tokenRepository.delete(verificationToken);
+            return TOKEN_EXPIRED;
+        }
+
+        user.setEnabled(true);
+        repository.save(user);
+
+        return TOKEN_VALID;
     }
 
     @Override

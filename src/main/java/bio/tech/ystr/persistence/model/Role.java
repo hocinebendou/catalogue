@@ -6,7 +6,7 @@ import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
-import java.util.Collection;
+import java.util.List;
 
 @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
 @NodeEntity
@@ -18,7 +18,7 @@ public class Role {
     private String name;
 
     @Relationship(type = "ROLE_PRIVILEGES")
-    private Collection<Privilege> privileges;
+    private List<Privilege> privileges;
 
     public Role() { super(); }
 
@@ -43,11 +43,11 @@ public class Role {
         this.name = name;
     }
 
-    public Collection<Privilege> getPrivileges() {
+    public List<Privilege> getPrivileges() {
         return privileges;
     }
 
-    public void setPrivileges(Collection<Privilege> privileges) {
+    public void setPrivileges(List<Privilege> privileges) {
         this.privileges = privileges;
     }
 

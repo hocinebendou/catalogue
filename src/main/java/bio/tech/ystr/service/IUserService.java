@@ -29,4 +29,6 @@ public interface IUserService {
     boolean checkIfValidOldPassword(User user, String password);
 
     List<String> getUsersFromSessionRegistry();
+
+    String validateVerificationToken(String token);
 }

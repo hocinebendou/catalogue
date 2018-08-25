@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymleaf/layout"
+      xmlns:th="http://thymeleaf.org">
+<head>
+
+<meta charset="utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<link rel="stylesheet" href="webjars/materializecss/0.99.0/css/materialize.css" type="text/css" media="screen,projection"/>
+<!--<link rel="stylesheet" href="webjars/material-design-icons/3.0.1/material-icons.css" type="text/css" media="all"/>-->
+<link rel="stylesheet" href="webjars/font-awesome/4.5.0/css/font-awesome.min.css" type="text/css" media="all" />
+
+<link rel="stylesheet" type="text/css" media="all" th:href="@{/static/css/style.css}" />
+<link rel="stylesheet" type="text/css" media="all" th:href="@{/static/css/mystyle.css}" />
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+    function validate() {
+        if (document.f.username.value == "" && document.f.password.value == "") {
+            alert(/*[[#{message.username} + #{message.password}]]*/);
+            document.f.username.focus();
+            return false;
+        }
+        if (document.f.username.value == "") {
+            alert(/*[[#{message.username}]]*/);
+            document.f.username.focus();
+            return false;
+        }
+        if (document.f.password.value == "") {
+            alert(/*[[#{message.password}]]*/);
+            document.f.password.focus();
+            return false;
+        }
+    }
+/*]]>*/
+</script>
+
+</head>
+
+<body>
+
+<div id="navigation">
+    <nav>
+        <div class="container">
+            <div class="nav-wrapper">
+                <a class="brand-logo" th:href="@{/}">
+                    <img src="" alt="YSTR"/>
+                </a>
+                <ul class="right main-nav">
+                    <li>
+                        <a class="waves-effect waves-light" href="#login">Register</a>
+                    </li>
+                    <li>
+                        <a class="waves-effect waves-light" href="#login">Login</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>
+
+<main>
+<section id="sign-in" class="sec-padded-1x">
+
+    <canvas id="bubble-canvas" width="1861" height="558" style="position: fixed; top: 0px; left: 0px; z-index: 1;"></canvas>
+    <form name="login" th:action="@{/login}" method="post" onsubmit="return validate()">
+        <div class="row links">
+            <div class="col s6 logo">
+                <img src="assets/_con/images/logo-white.png" alt=""/>
+            </div>
+            <div class="col s6 right-align">
+                <strong>Sign In</strong> / <a href="page-sign-up.html">Sign Up</a>
+            </div>
+        </div>
+
+        <div class="card-panel clearfix">
+            <!-- Social Sign Up -->
+            <div class="row socials">
+                <div class="col s4">
+                    <a class="btn blue darken-2 z-depth-0 z-depth-1-hover" href="#">
+                        <i class="fa fa-2x fa-facebook"></i>
+                    </a>
+                </div>
+                <div class="col s4">
+                    <a class="btn blue lighten-2 z-depth-0 z-depth-1-hover" href="#">
+                        <i class="fa fa-2x fa-twitter"></i>
+                    </a>
+                </div>
+                <div class="col s4">
+                    <a class="btn red z-depth-0 z-depth-1-hover" href="#">
+                        <i class="fa fa-2x fa-google-plus"></i>
+                    </a>
+                </div>
+            </div>
+            <!-- /Social Sign Up -->
+            <div class="row">
+                <div class="col"></div>
+            </div>
+            <!-- Username -->
+            <div class="input-field">
+                <i class="fa fa-user prefix"></i>
+                <input id="username-input" class="validate" type="text"/>
+                <label for="username-input" class="">Username</label>
+            </div>
+            <!-- /Username -->
+            <!-- Password -->
+            <div class="input-field">
+                <i class="fa fa-unlock-alt prefix"></i>
+                <input id="password-input" class="validate" type="password"/>
+                <label for="password-input">Password</label>
+            </div>
+            <!-- /Password -->
+            <div class="switch">
+                <label>
+                    <input checked="checked" type="checkbox"/>
+                    <span class="lever"></span> Remember
+                </label>
+            </div>
+            <button class="waves-effect waves-light btn-large z-depth-0 z-depth-1-hover">Sign In</button>
+        </div>
+    </form>
+</section>
+</main>
+
+<footer class="page-footer">
+    <div class="container">
+        <div class="row">
+            <div class="col m6 s12">
+                <h4 style="font-weight: bold;margin-left: -10rem" class="blue-grey-text">
+                    YSTR
+                </h4>
+            </div>
+            <div class="col m2 offset-m2 s6">
+                <h6>About</h6>
+                <ul>
+                    <li><a href="http://h3africa-catalogue.readthedocs.io/en/latest/"
+                           class="blue-text text-darken-1">Help</a></li>
+                    <li><a th:href="@{/contact}" class="blue-text text-darken-1">Contact</a></li>
+                </ul>
+            </div>
+            <div class="col m2 s6">
+                <h6>Developer</h6>
+                <ul>
+                    <li>
+                        <a href="https://github.com/h3abionet/h3acatalog.git" class="blue-text text-darken-1">
+                            Source</a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/h3abionet/h3acatalog/issues" class="blue-text text-darken-1">
+                            Contribute</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="footer-copyright">
+        <div class="container">Made by <a href="http://www.sanbi.ac.za/" class="white-text" style="font-weight: bold">SANBI-CBIO Team</a></div>
+    </div>
+</footer>
+
+</body>
+</html>

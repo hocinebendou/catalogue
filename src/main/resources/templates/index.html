@@ -18,7 +18,7 @@
     <nav>
         <div class="container">
             <div class="nav-wrapper">
-                <a class="brand-logo" href="#">
+                <a class="brand-logo" th:href="@{/}">
                     <img src="" alt="YSTR"/>
                 </a>
                 <ul class="right main-nav">
@@ -26,7 +26,7 @@
                         <a class="waves-effect waves-light" th:href="@{/registration.html}" th:text="#{label.form.loginSignUp}">Register</a>
                     </li>
                     <li>
-                        <a class="waves-effect waves-light" href="#login">Login</a>
+                        <a class="waves-effect waves-light" th:href="@{/login.html}">Login</a>
                     </li>
                 </ul>
             </div>
