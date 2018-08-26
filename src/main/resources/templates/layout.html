@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymleaf/layout"
+      xmlns:th="http://thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="webjars/materializecss/0.99.0/css/materialize.css" type="text/css" media="screen,projection"/>
+    <link rel="stylesheet" href="webjars/font-awesome/4.5.0/css/font-awesome.min.css" type="text/css" media="all" />
+    <link rel="stylesheet" href="webjars/mdi/2.1.19/css/materialdesignicons.css" type="text/css" media="all" />
+    <!--<link rel="stylesheet" href="webjars/material-design-icons/3.0.1/material-icons.css" type="text/css" media="all"/>-->
+
+    <link rel="stylesheet" type="text/css" media="all" th:href="@{/static/css/style.css}" />
+    <link rel="stylesheet" type="text/css" media="all" th:href="@{/static/css/mystyle.css}" />
+</head>
+
+<body>
+
+<div id="navigation">
+    <nav>
+        <div class="container">
+            <div class="nav-wrapper">
+                <a class="brand-logo" th:href="@{/}">
+                    <img src="" alt="YSTR"/>
+                </a>
+                <ul class="right main-nav">
+                    <li sec:authorize="isAnonymous()">
+                        <a class="waves-effect waves-light" th:href="@{/registration.html}" th:text="#{label.form.loginSignUp}">Register</a>
+                    </li>
+                    <li sec:authorize="isAnonymous()">
+                        <a class="waves-effect waves-light" th:href="@{/login.html}">Login</a>
+                    </li>
+                    <li class="user" sec:authorize="isAuthenticated()">
+                        <a class="dropdown-button" data-activates="user-dropdown" href="#!">
+                            <img class="circle" th:src="@{/img/user.jpg}" alt="Logged User" />
+                            <span sec:authentication="name"></span>
+                            <i class="mdi-menu-down right"></i>
+                        </a>
+                        <ul id="user-dropdown" class="dropdown-content" style="width: 163px; position: absolute; top: 0px; left: 0px; opacity: 1; display: none;">
+                            <li>
+                                <a href="page-profile.html">
+                                    <i class="fa fa-user"></i> Profile
+                                </a>
+                            </li>
+                            <li>
+                                <a href="mail-inbox.html">
+                                    <i class="fa fa-envelope"></i> Messages
+                                    <span class="badge new">2 new</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#!">
+                                    <i class="fa fa-cogs"></i> Settings
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="page-sign-in.html">
+                                    <i class="fa fa-sign-out"></i> Logout
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>
+
+<main>
+    <div layout:fragment="content">
+        <p>Page content goes here</p>
+    </div>
+</main>
+
+<footer class="page-footer">
+    <div class="container">
+        <div class="row">
+            <div class="col m6 s12">
+                <h4 style="font-weight: bold;margin-left: -10rem" class="blue-grey-text">
+                    YSTR
+                </h4>
+            </div>
+            <div class="col m2 offset-m2 s6">
+                <h6>About</h6>
+                <ul>
+                    <li><a href="http://h3africa-catalogue.readthedocs.io/en/latest/"
+                           class="blue-text text-darken-1">Help</a></li>
+                    <li><a th:href="@{/contact}" class="blue-text text-darken-1">Contact</a></li>
+                </ul>
+            </div>
+            <div class="col m2 s6">
+                <h6>Developer</h6>
+                <ul>
+                    <li>
+                        <a href="https://github.com/h3abionet/h3acatalog.git" class="blue-text text-darken-1">
+                            Source</a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/h3abionet/h3acatalog/issues" class="blue-text text-darken-1">
+                            Contribute</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="footer-copyright">
+        <div class="container">Made by <a href="http://www.sanbi.ac.za/" class="white-text" style="font-weight: bold">SANBI-CBIO Team</a></div>
+    </div>
+</footer>
+
+<script src="/webjars/jquery/3.1.1-1/jquery.min.js"></script>
+<script src="/webjars/materializecss/0.99.0/js/materialize.min.js"></script>
+
+</body>
+</html>

@@ -1,88 +1,25 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymleaf/layout"
-      xmlns:th="http://thymeleaf.org">
+      xmlns:th="http://thymeleaf.org"
+      layout:decorator="layout">
+
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII"/>
-    <link rel="stylesheet" href="webjars/materializecss/0.99.0/css/materialize.css" type="text/css" media="screen,projection"/>
-    <link rel="stylesheet" href="webjars/material-design-icons/3.0.1/material-icons.css" type="text/css" media="all"/>
-
-    <link rel="stylesheet" type="text/css" media="all" th:href="@{/static/css/style.css}" />
-    <link rel="stylesheet" type="text/css" media="all" th:href="@{/static/css/mystyle.css}" />
-
     <title th:text="#{label.pages.home.title}">home</title>
 </head>
+
 <body>
-
-<div id="navigation">
-    <nav>
-        <div class="container">
-            <div class="nav-wrapper">
-                <a class="brand-logo" th:href="@{/}">
-                    <img src="" alt="YSTR"/>
-                </a>
-                <ul class="right main-nav">
-                    <li>
-                        <a class="waves-effect waves-light" th:href="@{/registration.html}" th:text="#{label.form.loginSignUp}">Register</a>
-                    </li>
-                    <li>
-                        <a class="waves-effect waves-light" href="#login">Login</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-</div>
-
-<main>
-    <section id="success-registration" class="sec-padded-1x">
-        <div class="container">
-            <div class="card green">
-                <div class="card-content">
-                    <h4 class="white-text">
-                        <i class="mdi-navigation-check"></i>
-                        <span th:text="#{message.sessionExpired}">expired</span>
-                    </h4>
-                </div>
-            </div>
-        </div>
-    </section>
-</main>
-
-<footer class="page-footer">
+<section id="success-registration" layout:fragment="content" class="sec-padded-1x">
     <div class="container">
-        <div class="row">
-            <div class="col m6 s12">
-                <h4 style="font-weight: bold;margin-left: -10rem" class="blue-grey-text">
-                    YSTR
+        <div class="card green">
+            <div class="card-content">
+                <h4 class="white-text">
+                    <i class="mdi-navigation-check"></i>
+                    <span th:text="#{message.sessionExpired}">expired</span>
                 </h4>
             </div>
-            <div class="col m2 offset-m2 s6">
-                <h6>About</h6>
-                <ul>
-                    <li><a href="http://h3africa-catalogue.readthedocs.io/en/latest/"
-                           class="blue-text text-darken-1">Help</a></li>
-                    <li><a th:href="@{/contact}" class="blue-text text-darken-1">Contact</a></li>
-                </ul>
-            </div>
-            <div class="col m2 s6">
-                <h6>Developer</h6>
-                <ul>
-                    <li>
-                        <a href="https://github.com/h3abionet/h3acatalog.git" class="blue-text text-darken-1">
-                            Source</a>
-                    </li>
-                    <li>
-                        <a href="https://github.com/h3abionet/h3acatalog/issues" class="blue-text text-darken-1">
-                            Contribute</a>
-                    </li>
-                </ul>
-            </div>
         </div>
     </div>
-    <div class="footer-copyright">
-        <div class="container">Made by <a href="http://www.sanbi.ac.za/" class="white-text" style="font-weight: bold">SANBI-CBIO Team</a></div>
-    </div>
-</footer>
-
+</section>
 </body>
+
 </html>
