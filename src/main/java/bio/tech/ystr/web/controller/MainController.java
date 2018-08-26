@@ -5,13 +5,19 @@ import bio.tech.ystr.persistence.dao.RoleRepository;
 import bio.tech.ystr.persistence.model.Privilege;
 import bio.tech.ystr.persistence.model.Role;
 import bio.tech.ystr.persistence.model.User;
+import bio.tech.ystr.persistence.model.VerificationToken;
 import bio.tech.ystr.registration.OnRegistrationCompleteEvent;
+import bio.tech.ystr.security.ISecurityUserService;
 import bio.tech.ystr.service.UserService;
+import bio.tech.ystr.web.dto.PasswordDto;
 import bio.tech.ystr.web.dto.UserDto;
 import bio.tech.ystr.web.util.GenericResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.MessageSource;
+import org.springframework.core.env.Environment;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -27,11 +33,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
@@ -41,6 +46,9 @@ public class MainController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private ISecurityUserService securityUserService;
 
     @Autowired
     private RoleRepository roleRepository;
@@ -53,6 +61,12 @@ public class MainController {
 
     @Autowired
     private MessageSource messages;
+
+    @Autowired
+    private JavaMailSender mailSender;
+
+    @Autowired
+    private Environment env;
 
     @GetMapping("/")
     public String index(Model model) {
@@ -96,6 +110,53 @@ public class MainController {
     @GetMapping(value = "/login")
     public String loginPage() {
         return "login";
+    }
+
+    @PostMapping(value = "/user/resetPassword")
+    @ResponseBody
+    public GenericResponse resetPassword(final HttpServletRequest request, @RequestParam("email") final String userEmail) {
+        final User user = userService.findUserByEmail(userEmail);
+        if (user != null) {
+            Collection<User> collection = new ArrayList<>(Arrays.asList(user));
+            final String token = UUID.randomUUID().toString();
+            userService.createPasswordResetTokenForUser(collection, token);
+            mailSender.send(constructResetTokenEmail(getAppUrl(request), request.getLocale(), token, user));
+        }
+        return new GenericResponse(messages.getMessage("message.resetPasswordEmail", null, request.getLocale()));
+    }
+
+    @GetMapping(value = "/user/changePassword")
+    public String showChangePasswordPage(final Locale locale, final Model model, @RequestParam("id") final Long id,
+                                         @RequestParam("token") final String token) {
+        final String result = securityUserService.validatePasswordResetToken(id, token);
+        if (result != null) {
+            model.addAttribute("message", messages.getMessage("auth.message", null, locale));
+            return "redirect:/login?lang=" + locale.getLanguage();
+        }
+        return "redirect:/updatePassword.html?lang=" + locale.getLanguage();
+    }
+
+    @PostMapping(value = "/user/savePassword")
+    @ResponseBody
+    public GenericResponse savePassword(final Locale locale, @Valid PasswordDto passwordDto) {
+        final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        userService.changeUserPassword(user, passwordDto.getNewPassword());
+        return new GenericResponse(messages.getMessage("message.resetPasswordSuc", null, locale));
+    }
+
+    private SimpleMailMessage constructResetTokenEmail(final String contextPath, final Locale locale, final String token, final User user) {
+        final String url = contextPath + "/user/changePassword?id=" + user.getId() + "&token=" + token;
+        final String message = messages.getMessage("message.resetPassword", null, locale);
+        return constructEmail("Reset Password", message + " \r\n" + url, user);
+    }
+
+    private SimpleMailMessage constructEmail(String subject, String body, User user) {
+        final SimpleMailMessage email = new SimpleMailMessage();
+        email.setSubject(subject);
+        email.setText(body);
+        email.setTo(user.getEmail());
+        email.setFrom(env.getProperty("support.mail"));
+        return email;
     }
 
     private void authWithoutPassword(User user) {

@@ -24,6 +24,7 @@
 		<java.version>1.8</java.version>
 		<aerogear.version>1.0.0</aerogear.version>
 		<guava.version>20.0</guava.version>
+		<passay.version>1.0</passay.version>
 	</properties>
 
 	<dependencies>
@@ -116,6 +117,12 @@
 			<groupId>org.webjars</groupId>
 			<artifactId>font-awesome</artifactId>
 			<version>4.5.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.passay</groupId>
+			<artifactId>passay</artifactId>
+			<version>${passay.version}</version>
 		</dependency>
 
 	</dependencies>

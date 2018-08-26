@@ -12,7 +12,7 @@ import java.util.Date;
 
 @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
 @NodeEntity
-public class VerificationToken {
+public class PasswordResetToken {
 
     private static final int EXPIRATION = 60 * 24;
 
@@ -26,11 +26,16 @@ public class VerificationToken {
     @Relationship(type = "USER_TOKEN", direction = "INCOMING")
     private Collection<User> user;
 
-    public VerificationToken() { super(); }
+    public PasswordResetToken() { super(); }
 
-    public VerificationToken(final String token, final Collection<User> user) {
+    public PasswordResetToken(final String token) {
         super();
+        this.token = token;
+        this.expiryDate = calculateExpiryDate(EXPIRATION);
+    }
 
+    public PasswordResetToken(final String token, final Collection<User> user) {
+        super();
         this.token = token;
         this.user = user;
         this.expiryDate = calculateExpiryDate(EXPIRATION);
@@ -38,10 +43,6 @@ public class VerificationToken {
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getToken() {
@@ -75,11 +76,6 @@ public class VerificationToken {
         return new Date(cal.getTime().getTime());
     }
 
-    public void updateToken(final String token) {
-        this.token = token;
-        this.expiryDate = calculateExpiryDate(EXPIRATION);
-    }
-
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -101,13 +97,12 @@ public class VerificationToken {
         if (getClass() != obj.getClass()) {
             return false;
         }
-
-        final VerificationToken other = (VerificationToken) obj;
+        final PasswordResetToken other = (PasswordResetToken) obj;
         if (expiryDate == null) {
             if (other.expiryDate != null) {
                 return false;
             }
-        } else if (! expiryDate.equals(other.expiryDate)) {
+        } else if (!expiryDate.equals(other.expiryDate)) {
             return false;
         }
         if (token == null) {

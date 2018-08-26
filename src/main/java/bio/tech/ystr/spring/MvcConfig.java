@@ -37,6 +37,10 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
         registry.addViewController("/successRegister.html");
         registry.addViewController("/invalidSession.html");
         registry.addViewController("/console.html");
+        registry.addViewController("/forgetPassword.html");
+        registry.addViewController("/updatePassword.html");
+        registry.addViewController("/changePassword.html");
+        registry.addViewController("/logout.html");
     }
 
     @Override
@@ -58,7 +62,7 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
     }
 
     @Bean
-    public LocaleResolver localResolver() {
+    public LocaleResolver localeResolver() {
         final CookieLocaleResolver cookieLocaleResolver = new CookieLocaleResolver();
         cookieLocaleResolver.setDefaultLocale(Locale.ENGLISH);
         return cookieLocaleResolver;

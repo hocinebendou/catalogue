@@ -1,8 +1,10 @@
 package bio.tech.ystr.service;
 
+import bio.tech.ystr.persistence.dao.PasswordResetTokenRepository;
 import bio.tech.ystr.persistence.dao.RoleRepository;
 import bio.tech.ystr.persistence.dao.UserRepository;
 import bio.tech.ystr.persistence.dao.VerificationTokenRepository;
+import bio.tech.ystr.persistence.model.PasswordResetToken;
 import bio.tech.ystr.persistence.model.Role;
 import bio.tech.ystr.persistence.model.User;
 import bio.tech.ystr.persistence.model.VerificationToken;
@@ -36,6 +38,9 @@ public class UserService implements IUserService {
     @Autowired
     private VerificationTokenRepository tokenRepository;
 
+    @Autowired
+    private PasswordResetTokenRepository passwordResetTokenRepository;
+
     public static final String TOKEN_INVALID = "invalidToken";
     public static final String TOKEN_EXPIRED = "expired";
     public static final String TOKEN_VALID = "valid";
@@ -68,6 +73,11 @@ public class UserService implements IUserService {
     }
 
     @Override
+    public VerificationToken getVerificationToken(String verificationToken) {
+        return tokenRepository.findByToken(verificationToken);
+    }
+
+    @Override
     public void saveRegisteredUser(final User user) {
         repository.save(user);
     }
@@ -79,11 +89,12 @@ public class UserService implements IUserService {
             tokenRepository.delete(verificationToken);
         }
 
-        User tmpUser = user.stream().findFirst().orElse(null);
-
-        if (tmpUser != null) {
-            repository.delete(tmpUser);
+        final PasswordResetToken passwordToken = passwordResetTokenRepository.findByUser(user);
+        if (passwordToken != null) {
+            passwordResetTokenRepository.delete(passwordToken);
         }
+
+        user.stream().findFirst().ifPresent(u -> repository.delete(u));
     }
 
     @Override
@@ -137,6 +148,13 @@ public class UserService implements IUserService {
     @Override
     public List<String> getUsersFromSessionRegistry() {
         return sessionRegistry.getAllPrincipals().stream().filter((u) -> !sessionRegistry.getAllSessions(u, false).isEmpty()).map(Object::toString).collect(Collectors.toList());
+    }
+
+    @Override
+    public void createPasswordResetTokenForUser(final Collection<User> user, final String token) {
+        final PasswordResetToken myToken = new PasswordResetToken(token, user);
+        passwordResetTokenRepository.save(myToken);
+
     }
 
     private boolean emailExist(final String email) {

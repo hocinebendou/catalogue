@@ -37,11 +37,6 @@
         <div th:if="${param.error != null}" class="alert orange lighten-2 white-text text-darken-2" th:text="${session[SPRING_SECURITY_LAST_EXCEPTION]}">error</div>
     </div>
     <form name="f" th:action="@{/login}" method="post" onsubmit="return validate()">
-        <div class="row links">
-            <div class="col s6 push-s6 right-align">
-                <strong>Sign In</strong> / <a th:href="@{/registration.html}">Sign Up</a>
-            </div>
-        </div>
 
         <div class="card-panel clearfix">
             <div class="alert blue lighten-5 blue-text text-darken-2">
@@ -72,6 +67,9 @@
                 </label>
             </div>
             <button class="waves-effect waves-light btn-large z-depth-0 z-depth-1-hover">Sign In</button>
+        </div>
+        <div class="links right-align">
+            <a th:href="@{/forgetPassword.html}">Forgot Password?</a>
         </div>
     </form>
 </section>

@@ -49,16 +49,9 @@ footer {
     width: 20%;
 }
 
-.main-nav .user img {
-    width: 35px;
-    margin-right: 10px;
-    vertical-align: middle;
-    background-color: white;
-}
-
 /* Login page */
 
-#forgot-password form, #lock form, #sign-in form, #sign-up form {
+#forgot-password form, #sign-in form, #update-password form {
     position: relative;
     margin: 0 auto;
     max-width: 550px;
@@ -72,19 +65,18 @@ main {
     background: #edf1f7;
 }
 
-#sign-in {
+#sign-in, #forgot-password, #update-password {
     padding-top: 180px;
-
 }
 
-#sign-in button {
+#sign-in button, #forgot-password button, #update-password button {
     margin-top: .5rem;
     width: 100%;
     height: 40px;
     line-height: 40px;
 }
 
-.alert {
+#sign-in .alert, #forgot-password .alert, #update-password .alert {
     padding: 1rem;
     margin: 1rem 0;
     border-radius: 2px;

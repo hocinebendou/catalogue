@@ -13,6 +13,8 @@
 
     <link rel="stylesheet" type="text/css" media="all" th:href="@{/static/css/style.css}" />
     <link rel="stylesheet" type="text/css" media="all" th:href="@{/static/css/mystyle.css}" />
+
+    <script src="/webjars/jquery/3.1.1-1/jquery.min.js"></script>
 </head>
 
 <body>
@@ -38,7 +40,7 @@
                         </a>
                     </li>
                     <li class="user" sec:authorize="isAuthenticated()">
-                        <a class="dropdown-button" href="#!">
+                        <a class="dropdown-button" href="#!" th:if="${#authentication.getDetails() != null}">
                             <i class="fa fa-user"></i>
                             <span sec:authentication="name"></span>
                         </a>
@@ -91,7 +93,6 @@
     </div>
 </footer>
 
-<script src="/webjars/jquery/3.1.1-1/jquery.min.js"></script>
 <script src="/webjars/materializecss/0.99.0/js/materialize.min.js"></script>
 
 </body>
