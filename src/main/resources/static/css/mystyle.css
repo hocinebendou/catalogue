@@ -49,6 +49,13 @@ footer {
     width: 20%;
 }
 
+.main-nav .user img {
+    width: 35px;
+    margin-right: 10px;
+    vertical-align: middle;
+    background-color: white;
+}
+
 /* Login page */
 
 #forgot-password form, #lock form, #sign-in form, #sign-up form {

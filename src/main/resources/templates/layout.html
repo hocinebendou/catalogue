@@ -31,36 +31,17 @@
                     <li sec:authorize="isAnonymous()">
                         <a class="waves-effect waves-light" th:href="@{/login.html}">Login</a>
                     </li>
-                    <li class="user" sec:authorize="isAuthenticated()">
-                        <a class="dropdown-button" data-activates="user-dropdown" href="#!">
-                            <img class="circle" th:src="@{/img/user.jpg}" alt="Logged User" />
-                            <span sec:authentication="name"></span>
-                            <i class="mdi-menu-down right"></i>
+                    <li sec:authorize="isAuthenticated()">
+                        <a th:href="@{/logout}">
+                            <i class="fa fa-sign-out"></i>
+                            <span th:text="#{label.pages.logout}">logout</span>
                         </a>
-                        <ul id="user-dropdown" class="dropdown-content" style="width: 163px; position: absolute; top: 0px; left: 0px; opacity: 1; display: none;">
-                            <li>
-                                <a href="page-profile.html">
-                                    <i class="fa fa-user"></i> Profile
-                                </a>
-                            </li>
-                            <li>
-                                <a href="mail-inbox.html">
-                                    <i class="fa fa-envelope"></i> Messages
-                                    <span class="badge new">2 new</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#!">
-                                    <i class="fa fa-cogs"></i> Settings
-                                </a>
-                            </li>
-                            <li class="divider"></li>
-                            <li>
-                                <a href="page-sign-in.html">
-                                    <i class="fa fa-sign-out"></i> Logout
-                                </a>
-                            </li>
-                        </ul>
+                    </li>
+                    <li class="user" sec:authorize="isAuthenticated()">
+                        <a class="dropdown-button" href="#!">
+                            <i class="fa fa-user"></i>
+                            <span sec:authentication="name"></span>
+                        </a>
                     </li>
                 </ul>
             </div>
