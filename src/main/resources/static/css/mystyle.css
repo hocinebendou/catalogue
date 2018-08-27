@@ -49,9 +49,25 @@ footer {
     width: 20%;
 }
 
+.dropdown-content li > a, .dropdown-content li > span {
+    color: #42A5F5 !important;
+}
+
+.dropdown-content li > a {
+    height: auto !important;
+    line-height: 22px !important;
+    padding: 1rem !important;
+    font-size: 0.8rem !important;
+}
+
+.dropdown-content > li > a > i {
+    font-size: 1rem;
+    margin: 0;
+}
+
 /* Login page */
 
-#forgot-password form, #sign-in form, #update-password form {
+#forgot-password form, #sign-in form, #update-password form, #change-password form {
     position: relative;
     margin: 0 auto;
     max-width: 550px;
@@ -65,18 +81,18 @@ main {
     background: #edf1f7;
 }
 
-#sign-in, #forgot-password, #update-password {
+#sign-in, #forgot-password, #update-password, #change-password {
     padding-top: 180px;
 }
 
-#sign-in button, #forgot-password button, #update-password button {
+#sign-in button, #forgot-password button, #update-password button, #change-password button {
     margin-top: .5rem;
     width: 100%;
     height: 40px;
     line-height: 40px;
 }
 
-#sign-in .alert, #forgot-password .alert, #update-password .alert {
+#sign-in .alert, #forgot-password .alert, #update-password .alert, #change-password .alert {
     padding: 1rem;
     margin: 1rem 0;
     border-radius: 2px;

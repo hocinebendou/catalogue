@@ -21,6 +21,11 @@ public class MyLogoutSuccessHandler implements LogoutSuccessHandler {
             session.removeAttribute("user");
         }
 
-        response.sendRedirect("/logout.html?logSucc=true");
+        String param = request.getParameter("message");
+        if (param != null) {
+            response.sendRedirect("/logout.html?message=" + param);
+        } else {
+            response.sendRedirect("/logout.html?logSucc=true");
+        }
     }
 }

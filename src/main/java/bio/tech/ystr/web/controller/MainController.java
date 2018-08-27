@@ -11,6 +11,7 @@ import bio.tech.ystr.security.ISecurityUserService;
 import bio.tech.ystr.service.UserService;
 import bio.tech.ystr.web.dto.PasswordDto;
 import bio.tech.ystr.web.dto.UserDto;
+import bio.tech.ystr.web.error.InvalidOldPasswordException;
 import bio.tech.ystr.web.util.GenericResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -142,6 +143,19 @@ public class MainController {
         final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         userService.changeUserPassword(user, passwordDto.getNewPassword());
         return new GenericResponse(messages.getMessage("message.resetPasswordSuc", null, locale));
+    }
+
+    @PostMapping(value = "/user/updatePassword")
+    @ResponseBody
+    public GenericResponse changeUserPassword(final Locale locale, @Valid PasswordDto passwordDto) {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        final User user = userService.findUserByEmail(email);
+        if (!userService.checkIfValidOldPassword(user, passwordDto.getOldPassword())) {
+            throw new InvalidOldPasswordException();
+        }
+        userService.changeUserPassword(user, passwordDto.getNewPassword());
+        return new GenericResponse(messages.getMessage("message.updatePasswordSuc", null, locale));
     }
 
     private SimpleMailMessage constructResetTokenEmail(final String contextPath, final Locale locale, final String token, final User user) {
