@@ -24,7 +24,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -95,9 +94,9 @@ public class RegistrationController {
         final String result = userService.validateVerificationToken(token);
         if (result.equals("valid")) {
             final User user = userService.getUser(token);
+            // TODO: DO WE NEED TO AUTHENTICATE WITHOUT PASSWORD HERE (KEEP IT FOR NOW)
             authWithoutPassword(user);
-            model.addAttribute("message", messages.getMessage("message.accountVerified", null, locale));
-            return "redirect:/console.html?lang=" + locale.getLanguage();
+            return "redirect:/logout?message=" + messages.getMessage("message.accountVerified", null, locale);
         }
 
         model.addAttribute("message", messages.getMessage("auth.message." + result, null, locale));
@@ -108,7 +107,7 @@ public class RegistrationController {
 
     @GetMapping(value = "/login")
     public String loginPage() {
-        return "catalog/loginPage";
+        return "login";
     }
 
     @PostMapping(value = "/user/resetPassword")
@@ -199,6 +198,4 @@ public class RegistrationController {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
-
-
 }

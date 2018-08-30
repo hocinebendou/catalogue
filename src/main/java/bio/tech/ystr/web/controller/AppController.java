@@ -7,22 +7,16 @@ import bio.tech.ystr.persistence.dao.*;
 import bio.tech.ystr.persistence.model.*;
 import bio.tech.ystr.service.UserService;
 import bio.tech.ystr.utils.StudyQuery;
-import bio.tech.ystr.web.dto.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.io.File;
 import java.util.*;
 
 @Controller
@@ -129,13 +123,13 @@ public class AppController {
         // this line is needed because createFieldSelections update the form object
         model.addAttribute("searchForm", form);
 
-        return "catalog/homePage";
+        return "home";
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public String advancedSearch(@Valid @ModelAttribute("searchForm") SearchForm searchForm, BindingResult bindingResult) {
         if(bindingResult.hasErrors()){
-            return "homePage";
+            return "home";
         }
 
         searchFormSession.saveForm(searchForm);
@@ -154,7 +148,7 @@ public class AppController {
         int countSamples = (int) specimenRepository.count();
         model.addAttribute("countSamples", countSamples);
 
-        return "catalog/aboutPage";
+        return "about";
     }
 
     /*
@@ -164,7 +158,7 @@ public class AppController {
     @RequestMapping("/contact")
     public String contactPage(@ModelAttribute ContactFrom contactFrom, Model model) {
 
-        return "catalog/contactPage";
+        return "contact";
     }
 
     /*
