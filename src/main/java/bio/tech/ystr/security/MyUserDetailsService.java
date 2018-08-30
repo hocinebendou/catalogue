@@ -1,7 +1,6 @@
 package bio.tech.ystr.security;
 
 import bio.tech.ystr.persistence.dao.PrivilegeRepository;
-import bio.tech.ystr.persistence.dao.RoleRepository;
 import bio.tech.ystr.persistence.dao.UserRepository;
 import bio.tech.ystr.persistence.model.Privilege;
 import bio.tech.ystr.persistence.model.Role;
@@ -57,7 +56,7 @@ public class MyUserDetailsService implements UserDetailsService {
         }
     }
 
-    private final String getClientIP() {
+    private String getClientIP() {
         final String xfHeader = request.getHeader("X-Forwarded-For");
         if (xfHeader == null) {
             return request.getRemoteAddr();

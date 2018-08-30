@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymleaf/layout"
       xmlns:th="http://thymeleaf.org"
-      layout:decorator="layout">
+      layout:decorator="catalog/default">
 <head>
-    <title>Title</title>
+    <title th:text="#{label.pages.logout}"></title>
 </head>
 <body>
-<section id="sign-in" layout:fragment="content" class="sec-padded-1x">
-    <div class="container">
+<div id="sign-out" layout:fragment="content" class="sec-padded-1x">
+    <div class="container" style="width: 60%">
         <h6 id="error" class="alert orange lighten-3 white-text" th:if="${session[SPRING_SECURITY_LAST_EXCEPTION]}" th:text="#{message.logoutError}">error</h6>
 
-        <h6 id="success" class="alert blue lighten-2 white-text" th:if="${param.logSucc}" th:text="#{message.logoutSucc}"> success</h6>
+        <h6 id="success" class="alert orange lighten-2 red-text text-darken-2" th:if="${param.logSucc}" th:text="#{message.logoutSucc}"> success</h6>
 
-        <h6 id="passChange" class="alert green lighten-3 white-text" th:if="${param.message}" th:text="#{message.resetPasswordSuc}"> success</h6>
+        <h6 id="passChange" class="alert orange lighten-3 red-text text-darken-2" th:if="${param.message}" th:text="#{message.resetPasswordSuc}"> success</h6>
     </div>
-</section>
+</div>
 </body>
 </html>

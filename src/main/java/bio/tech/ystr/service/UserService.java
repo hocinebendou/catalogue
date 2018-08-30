@@ -41,19 +41,24 @@ public class UserService implements IUserService {
     @Autowired
     private PasswordResetTokenRepository passwordResetTokenRepository;
 
-    public static final String TOKEN_INVALID = "invalidToken";
-    public static final String TOKEN_EXPIRED = "expired";
-    public static final String TOKEN_VALID = "valid";
+    private static final String TOKEN_INVALID = "invalidToken";
+    private static final String TOKEN_EXPIRED = "expired";
+    private static final String TOKEN_VALID = "valid";
 
     @Override
     public User registerNewUserAccount(UserDto accountDto) {
         if (emailExist(accountDto.getEmail())) {
             throw new UserAlreadyExistException("There is an account with that email adress: " + accountDto.getEmail());
+        } else if (usernameExist(accountDto.getUsername())) {
+            throw new UserAlreadyExistException("There is an account with that username: " + accountDto.getUsername());
         }
+
         final User user = new User();
 
         user.setFirstName(accountDto.getFirstName());
         user.setLastName(accountDto.getLastName());
+        user.setInstitutionName(accountDto.getInstitutionName());
+        user.setUsername(accountDto.getUsername());
         user.setPassword(passwordEncoder.encode(accountDto.getPassword()));
         user.setEmail(accountDto.getEmail());
         Collection<Role> roles = new ArrayList<>();
@@ -118,6 +123,10 @@ public class UserService implements IUserService {
             return TOKEN_EXPIRED;
         }
 
+        if (user == null) {
+            return null;
+        }
+
         user.setEnabled(true);
         repository.save(user);
 
@@ -126,7 +135,14 @@ public class UserService implements IUserService {
 
     @Override
     public User findUserByEmail(final String email) {
+
         return repository.findByEmail(email);
+    }
+
+    @Override
+    public User findUserByUsername(final String username) {
+
+        return repository.findByUsername(username);
     }
 
     @Override
@@ -160,4 +176,10 @@ public class UserService implements IUserService {
     private boolean emailExist(final String email) {
         return repository.findByEmail(email) != null;
     }
+
+    private boolean usernameExist(final String username) {
+        return repository.findByUsername(username) != null;
+    }
+
+
 }

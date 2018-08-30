@@ -1,24 +1,20 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymleaf/layout"
       xmlns:th="http://thymeleaf.org"
-      layout:decorator="layout">
+      layout:decorator="catalog/default">
 <head>
     <title>Success!</title>
 </head>
 <body>
 
-<section id="success-registration" layout:fragment="content" class="sec-padded-1x">
-    <div class="container">
-        <div class="card green">
-            <div class="card-content">
-                <h4 class="white-text">
-                    <i class="mdi-navigation-check"></i>
-                    <span th:text="#{message.regSucc}">Success</span>
-                </h4>
-            </div>
+<div id="success-registration" layout:fragment="content" class="sec-padded-1x">
+    <div class="container" style="width: 60%;">
+        <div class="alert orange lighten-5 red-text text-darken-2">
+            <strong><i class="fa fa-check"></i></strong>&nbsp;
+            <span th:text="#{message.regSucc}" style="font-size: 16px;">Success</span>
         </div>
     </div>
-</section>
+</div>
 
 </body>
 </html>

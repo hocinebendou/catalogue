@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="catalog/default">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Contact</title>
+</head>
+<body>
+
+<div  class="row" layout:fragment="content">
+    <div class="section col push-m1 m10">
+        <p style="font-size: 1.20rem;font-weight: 300;margin-bottom: 20px">
+            Contact us by filling out the form below. Your message will be forwarded to the relevant person.</p>
+        <!--<div class="divider"></div>-->
+        <div class="card red alert-card" th:if="${error}">
+            <div id="errorMessage" class="card-content white-text">
+                <i class="material-icons">error</i>
+                <span th:text="${error}"></span>
+            </div>
+            <button type="button" class="close white-text" data-dismiss="alert" aria-label="Close"
+                    style="position: absolute;top: 10px;font-size: 18px;">
+                <span aria-hidden="true">×</span>
+            </button>
+        </div>
+        <div class="card light-blue alert-card" th:if="${success}">
+            <div id="successMessage" class="card-content white-text">
+                INFO: 
+                <span th:text="${success}"></span>
+            </div>
+            <button type="button" class="close white-text" data-dismiss="alert" aria-label="Close"
+                    style="position: absolute;top: 10px;font-size: 18px;">
+                <span aria-hidden="true">×</span>
+            </button>
+        </div>
+        <div class="card">
+            <div class="card-content">
+                <div class="row">
+                    <div class="col s12 m6">
+                        <form th:action="@{/contact}" method="post" th:object="${contactFrom}">
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <input id="from" type="text" th:field="*{to}" required="required"/>
+                                    <label for="from">Your contact email address</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <input id="subject" type="text" th:field="*{subject}" class="required"/>
+                                    <label for="subject">Subject</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <textarea id="message" th:field="*{text}" class="materialize-textarea required"></textarea>
+                                    <label for="message">Message</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="g-recaptcha" data-sitekey="6LdjqEAUAAAAAOmmIhoHsf79z6b9vacvd642OKve"></div>
+                            </div>
+                            <div class="row">
+                                <button class="cta-blue"
+                                        style="width: auto;"
+                                        type="submit">
+                                    <i class="material-icons tiny left">send</i> Send</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col s12 m6">
+                        <ul class="collapsible collapsible-accordion">
+                            <li>
+                                <div class="collapsible-header">
+                                    <i class="material-icons">insert_emoticon</i>People</div>
+                                <div class="collapsible-body">
+                                    <div class="row">
+                                        <div class="col s10">
+                                            <p style="font-weight: bold;margin-bottom: 1rem">Project Manager</p>
+                                            Prof. Nicola Mulder (nicola.mulder@uct.ac.za)<br/>
+                                            +27 21 406 6058
+                                        </div>
+                                        <div class="col s2">
+                                            <img th:src="@{/static/img/nmulder.png}" class="circle responsive-img valign"/>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col s10">
+                                            <p style="font-weight: bold;margin-bottom: 1rem">Project Coordinator</p>
+                                            Dr. Sumir Panji (sumir.panji@uct.ac.za)<br/>
+                                            +27 021 406 6390
+                                        </div>
+                                        <div class="col s2">
+                                            <img th:src="@{/static/img/sumir.png}" class="circle responsive-img valign"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="active">
+                                <div class="collapsible-header active">
+                                    <i class="material-icons">location_on</i>Address</div>
+                                <div class="collapsible-body" style="display: block;">
+                                    <p class="section" style="font-weight: bold;">Physical Address</p>
+
+                                    H3Africa Coordinating Centre, Computational Biology Group<br/>
+                                    Dept of Integrative Biomedical Sciences<br/>
+                                    Room N1.05, Werner Beit North Building Basement<br/>
+                                    Institute of Infectious Disease and Molecular Medicine<br/>
+                                    Anzio Rd, Observatory 7925 South Africa
+
+                                    <p class="section" style="font-weight: bold;">Postal Address</p>
+
+                                    Computational Biology Group<br/>
+                                    Dept of Integrative Biomedical Sciences<br/>
+                                    Institute of Infectious Disease and Molecular Medicine<br/>
+                                    University of Cape Town Health Sciences Campus<br/>
+                                    Anzio Rd, Observatory, 7925 South Africa<br/>
+
+                                    <p class="section"><span style="font-weight: bold;">Tel:</span> +27 21 406 6176 <br/>
+                                    <span style="font-weight: bold;">Fax:</span> +27 21 406 6068</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

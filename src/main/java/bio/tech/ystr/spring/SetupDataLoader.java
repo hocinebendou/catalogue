@@ -44,19 +44,28 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 
         final Privilege readPrivilege = createPrivilegeIfNotFound("READ_PRIVILEGE");
         final Privilege writePrivilege = createPrivilegeIfNotFound("WRITE_PRIVILEGE");
+        final Privilege dbacPrivilege = createPrivilegeIfNotFound("UDBAC_PRIVILEGE");
+        final Privilege uploadPrivilege = createPrivilegeIfNotFound("UPLOAD_PRIVILEGE");
         final Privilege passwordPrivilege = createPrivilegeIfNotFound("CHANGE_PASSWORD_PRIVILEGE");
 
         final List<Privilege> adminPrivileges = new ArrayList<>(Arrays.asList(readPrivilege, writePrivilege, passwordPrivilege));
+        final List<Privilege> bioArchPrivileges = new ArrayList<>(Arrays.asList(readPrivilege, passwordPrivilege, uploadPrivilege));
+        final List<Privilege> dbacPrivileges = new ArrayList<>(Arrays.asList(readPrivilege, passwordPrivilege, dbacPrivilege));
         final List<Privilege> userPrivileges = new ArrayList<>(Arrays.asList(readPrivilege, passwordPrivilege));
         final Role adminRole = createRoleIfNotFound("ROLE_ADMIN", adminPrivileges);
+        createRoleIfNotFound("ROLE_BIOARCHIVE", bioArchPrivileges);
+        final Role dbacRole = createRoleIfNotFound("ROLE_DBAC", dbacPrivileges);
         createRoleIfNotFound("ROLE_USER", userPrivileges);
 
-        createUserIfNotFound("hocine@sanbi.ac.za", "Hocine", "Bendou", "123", new ArrayList<Role>(Arrays.asList(adminRole)));
+        createUserIfNotFound("hocine@sanbi.ac.za", "Hocine", "Bendou", "benhoc", "123",
+                new ArrayList<Role>(Arrays.asList(adminRole)));
 
+        createUserIfNotFound("rabah@sanbi.ac.za", "Rabah", "Bendou", "rabahben", "123",
+                new ArrayList<Role>(Arrays.asList(dbacRole)));
         alreadySetup = true;
     }
 
-    private final Privilege createPrivilegeIfNotFound(final String name) {
+    private Privilege createPrivilegeIfNotFound(final String name) {
         Privilege privilege = privilegeRepository.findByName(name);
         if (privilege == null) {
             privilege = new Privilege(name);
@@ -65,7 +74,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         return privilege;
     }
 
-    private final Role createRoleIfNotFound(final String name, final List<Privilege> privileges) {
+    private Role createRoleIfNotFound(final String name, final List<Privilege> privileges) {
         Role role = roleRepository.findByName(name);
         if (role == null) {
             role = new Role(name);
@@ -75,13 +84,14 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         return role;
     }
 
-    private final User createUserIfNotFound(final String email, final String firstName, final String lastName,
-                                            final String password, final Collection<Role> roles) {
+    private User createUserIfNotFound(final String email, final String firstName, final String lastName,
+                                      final String username, final String password, final Collection<Role> roles) {
         User user = userRepository.findByEmail(email);
         if (user == null) {
             user = new User();
             user.setFirstName(firstName);
             user.setLastName(lastName);
+            user.setUsername(username);
             user.setPassword(passwordEncoder.encode(password));
             user.setEmail(email);
             user.setEnabled(true);

@@ -19,6 +19,14 @@ public class UserDto {
 
     @NotNull
     @NotEmpty
+    private String institutionName;
+
+    @NotNull
+    @NotEmpty
+    private String username;
+
+    @NotNull
+    @NotEmpty
     private String password;
     private String matchingPassword;
 
@@ -41,6 +49,22 @@ public class UserDto {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getInstitutionName() {
+        return institutionName;
+    }
+
+    public void setInstitutionName(String institutionName) {
+        this.institutionName = institutionName;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {

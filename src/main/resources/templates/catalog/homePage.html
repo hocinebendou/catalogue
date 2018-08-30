@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="catalog/default">
+<head>
+    <title>Home</title>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <div class="row">
+        <div class="col m3">
+            <div class="row">
+                <ul class="collection with-header task-card" style="margin: 0.4rem 0.1rem 0;">
+                    <li class="collection-header h3africa">
+                        <h6 class="task-card-title">Catalogue Content</h6>
+                        <p class="task-card-date">Last release Apr 26, 2017</p>
+                    </li>
+                    <li class="collection-item dismissable" style="background-color: #ececec;">
+                        <label style="text-decoration: none; font-size: 16px; font-weight: normal; padding-bottom: 10px;">
+                            Studies
+                            <span id="total-studies" class="task-cat grey white-text" th:text="${countStudies}" style="font-size: 16px;
+                              padding-left:15px; padding-right: 15px; padding-top: 5px; color:#000; float: right;"></span>
+                        </label>
+                    </li>
+                    <li class="collection-item dismissable" style="background-color: #ececec;">
+                        <label style="text-decoration: none; font-size: 16px; padding-bottom: 10px;">
+                            Datasets
+                            <span id="total-participants" class="task-cat grey white-text" th:text="${countDatasets}" style="font-size: 16px;
+                              padding-left:15px; padding-right: 15px; padding-top: 5px; color:#000; float: right;"></span>
+                        </label>
+                    </li>
+                    <li class="collection-item dismissable" style="background-color: #ececec;">
+                        <label style="text-decoration: none; font-size: 16px; padding-bottom: 10px;">
+                            Biospecimens
+                            <span id="total-samples" class="task-cat grey white-text" th:text="${countSamples}" style="font-size: 16px;
+                              padding-left:15px; padding-right: 12px; padding-top: 5px; color:#000; float: right;"></span>
+                        </label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="row menuItems">
+                <div class="col m6" style="padding-left: 20px;">
+                    <h6>Advance Search</h6>
+                </div>
+                <div class="col m6">
+                    <h6 style="color: dodgerblue;">
+                        <i class="material-icons right tooltipped"
+                           data-position="top"
+                           data-tooltip="Use the form below to construct your query.">help</i>
+                    </h6>
+                </div>
+            </div>
+
+            <div class="row advancedForm">
+                <form th:action="@{/search}" method="post" th:object="${searchForm}">
+                    <div id="responsiveTabsDemo">
+                        <ul>
+                            <li><a href="#tab-1"> Study </a></li>
+                            <li><a href="#tab-2"> Participant </a></li>
+                            <li><a href="#tab-3"> Biospecimen </a></li>
+                        </ul>
+
+                        <div id="tab-1">
+                            <div class="input-field col s6 red-text right" style="display: none;">
+                                <input type="text" id="description_hidden" th:field="${searchForm.descriptionKeys}"/>
+                            </div>
+                            <div class="input-field">
+                                <input id="study-name" type="text" th:field="${searchForm.studyName}" />
+                                <label for="study-name">Study Name</label>
+                            </div>
+                            <div class="input-field">
+                                <select id="study-design" th:field="${searchForm.design}">
+                                    <option value="" selected="selected"></option>
+                                    <option th:each="d : ${searchForm.designs}" th:value="${d.name}" th:text="${d.name}"></option>
+                                </select>
+                                <label for="study-design">Study Design</label>
+                            </div>
+                            <div class="input-field">
+                                <select id="disease" th:field="${searchForm.disease}">
+                                    <option value="" selected="selected"></option>
+                                    <option th:each="d : ${searchForm.diseases}" th:value='${d == null ? "" : d}' th:text="${d}"></option>
+                                </select>
+                                <label for="disease">Disease</label>
+                            </div>
+                            <div class="input-field">
+                                <input id="has-specimens" type="checkbox" th:field="*{hasSpecimens}"/>
+                                <label for="has-specimens">Only studies with Biospecimens</label>
+                            </div>
+                            <div class="input-field">
+                                <input id="has-datasets" type="checkbox" th:field="*{hasDataSets}"/>
+                                <label for="has-datasets">Only studies with datasets</label>
+                            </div>
+                        </div>
+                        <div id="tab-2">
+                            <div class="input-field">
+                                <select id="participant-sex" th:field="${searchForm.gender}">
+                                    <option value="" selected="selected"></option>
+                                    <option th:each="g : ${searchForm.genders}" th:value="${g.name}" th:text="${g.name}"></option>
+                                </select>
+                                <label for="participant-sex">Sex</label>
+                            </div>
+                            <div class="input-field">
+                                <select id="participant-ethnicity" th:field="${searchForm.ethnicity}">
+                                    <option value="" selected="selected"></option>
+                                    <option th:each="e : ${searchForm.ethnicities}" th:value="${e.name}" th:text="${e.name}"></option>
+                                </select>
+                                <label for="participant-character">Ethnicity</label>
+                            </div>
+                            <div class="input-field">
+                                <select id="participant-character" th:field="${searchForm.character}">
+                                    <option value="" selected="selected"></option>
+                                    <option th:each="r : ${searchForm.characters}" th:value="${r.name}" th:text="${r.name}"></option>
+                                </select>
+                                <label for="participant-character">Participant Type</label>
+                            </div>
+                        </div>
+                        <div id="tab-3">
+                            <div class="input-field">
+                                <select id="specimen-country" th:field="${searchForm.country}">
+                                    <option value="" selected="selected"></option>
+                                    <option th:each="c : ${searchForm.countries}" th:value="${c.name}" th:text="${c.name}"></option>
+                                </select>
+                                <label for="specimen-country">Country</label>
+                            </div>
+                            <div class="input-field">
+                                <select id="specimen-type" th:field="${searchForm.specType}">
+                                    <option value="" selected="selected"></option>
+                                    <option th:each="t : ${searchForm.specTypes}" th:value="${t.name}" th:text="${t.name}"></option>
+                                </select>
+                                <label for="specimen-type">Type</label>
+                            </div>
+
+                            <!-- BMI-->
+                            <div class="row">
+                                <div class="input-field col m4">
+                                    <input type="checkbox" id="bmi" th:checked="true" th:disabled="true" />
+                                    <label for="bmi">BMI</label>
+                                </div>
+                                <div class="input-field col m4">
+                                    <select id="bmi-operator" class="operator" th:field="${searchForm.bmiOp}">
+                                        <option value="" selected="selected">operator</option>
+                                        <option value="=" >=</option>
+                                        <option value="&gt;" >&gt;</option>
+                                        <option value="&lt;" >&lt;</option>
+                                    </select>
+                                </div>
+                                <div class="input-field col m4">
+                                    <input type="number" step="0.01" id="bmi-value" th:field="${searchForm.bmiVal}" />
+                                    <label for="bmi-value">Value</label>
+                                </div>
+                            </div>
+
+                            <!--Age-->
+                            <div class="row">
+                                <div class="input-field col m4">
+                                    <input type="checkbox" id="age" th:checked="true" th:disabled="true" />
+                                    <label for="age">Age</label>
+                                </div>
+                                <div class="input-field col m4">
+                                    <select id="age-operator" class="operator" th:field="${searchForm.ageOp}">
+                                        <option value="" selected="selected">operator</option>
+                                        <option value="=" >=</option>
+                                        <option value="&gt;" >&gt;</option>
+                                        <option value="&lt;" >&lt;</option>
+                                    </select>
+                                </div>
+                                <div class="input-field col m4">
+                                    <input type="number" id="age-value" th:field="${searchForm.ageVal}" />
+                                    <label for="age-value">Value</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-right: 10px;">
+                        <button class="btn waves-effect waves-light blue col push-m8 m4" id="submit_advance" type="submit">
+                            <i class="material-icons left">search</i>
+                            Search
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col m9">
+            <!--<div class="row selected_studies_container">
+                <form id="cart-form-study" th:action="@{/request}">
+                    <div class="row" style="margin-bottom: 0;">
+                        <div class="col m10" id="selected_studies">
+                                <h6 id="select_studies_header">Available Studies</h6>
+                        </div>
+                        <div class="col m2">
+                            <a th:href="@{/advance}" class="btn waves-effect right blue white-text shopping-cart">Request</a>
+                        </div>
+                    </div>
+                    <div class="row cart_opts" id="cart-opts">
+                        <div style="margin-top: 10px;">
+                            <a href="#" id="download-cart" class="inline-icon-sm blue-text text-darken-4">
+                                <i class="material-icons tiny">file_download</i> Download
+                            </a>
+                            <a href="#" th:onclick="'document.getElementById(\'cart-form-study\').submit();'"
+                               class="inline-icon-sm blue-text text-darken-4" style="margin-left: 20px;">
+                                <i class="material-icons tiny">email</i> Request
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>-->
+
+            <div class="row">
+                <div class="row" style="margin-bottom: 0;">
+                    <div class="col m10" id="selected_studies">
+                        <h6 id="select_studies_header">Available Studies</h6>
+                    </div>
+                    <div class="col m2">
+                        <a th:href="@{/advance}" class="btn waves-effect right blue white-text shopping-cart">Request</a>
+                    </div>
+                </div>
+            </div>
+            <div class="divider row h3africa"></div>
+            <div class="row">
+                <div th:each="s,iter: ${studies}" th:with="result=${iter.index % 3}">
+                    <div class="col s4">
+                        <div class="card" style="background-color: #ececec;">
+                            <div class="card-content">
+                                <div style="height: 70px; border-bottom: 1px solid white">
+                                    <b class="title-card" th:text="${s.title}"></b>
+                                    <a class="modal-trigger blue-text text-darken-1" th:href="'#desc-modal-'+${iter}">more...</a>
+                                </div>
+                                <p class="studyAttr">
+                                    <span class="studyTitle">Acronym: </span>
+                                    <a class="blue-text" th:href="@{'/study?s=' + ${s.acronym}}" th:text="${s.acronym}"></a>
+                                </p>
+                                <p class="studyAttr">
+                                    <span class="studyTitle">Design: </span>
+                                    <span th:each="d : ${s.designs}" style="font-weight: normal">
+                                    <span th:text="${d.name}"></span>
+                                </span>
+                                </p>
+                                <p class="studyAttr">
+                                    <span class="studyTitle">Specimens with aliquots: </span>
+                                    <span class="badge blue white-text" th:text="${s.searchNoSpecimens}"></span>
+                                </p>
+                                <p class="studyAttr">
+                                    <span class="studyTitle">Participants with data: </span>
+                                    <span class="badge blue white-text" th:text="${s.searchNoParticipants}"></span>
+                                </p>
+                            </div>
+                            <div class="card-action h3africa">
+                                <a th:href="@{'/study?s=' + ${s.acronym}}" class="white-text">
+                                    <i class="material-icons right">visibility</i>View</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div th:id="'desc-modal-'+${iter}" class="modal modal-fixed-footer">
+                        <div class="modal-content">
+                            <h4 th:text="${s.acronym}">Modal Header</h4>
+                            <p th:text="${s.description}">A bunch of text</p>
+                        </div>
+                        <div class="modal-footer">
+                            <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat h3africa white-text">Close</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

@@ -1,20 +1,24 @@
 <!doctype html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymleaf/layout"
       xmlns:th="http://thymeleaf.org"
-      layout:decorator="layout">
+      layout:decorator="catalog/default">
 
 <head>
     <title>Sign Up</title>
 </head>
 
 <body>
-<section id="user-registration" layout:fragment="content" class="sec-padded-1x">
+<div id="user-registration" layout:fragment="content">
 
-    <div class="container">
-        <div class="card-panel">
+    <div class="container" style="width: 63%;">
+        <div class="card-panel clearfix">
             <form action="/" method="post" enctype="utf8">
 
                 <h4>Registration Form</h4>
+                <div class="alert orange lighten-5 red-text text-darken-2">
+                    <strong><i class="fa fa-css3"></i></strong>&nbsp;
+                    Sign up to H3Africa Catalogue database. All fields are required.
+                </div>
 
                 <div class="input-field" >
                     <label for="firstName" th:text="#{label.user.firstName}">first</label>
@@ -27,10 +31,19 @@
                     <span id="lastNameError" class="col s4" style="display:none"></span>
                 </div>
                 <div class="input-field">
+                    <label for="institutionName" th:text="#{label.user.institutionName}">last</label>
+                    <input id="institutionName" name="institutionName" class="validate" type="text" required="required"/>
+                    <span id="institutionNameError" class="col s4" style="display:none"></span>
+                </div>
+                <div class="input-field">
                     <label for="email" th:text="#{label.user.email}">email</label>
                     <input id="email" name="email" class="validate" type="email" required="required"/>
                     <span id="emailError" class="col s4" style="display:none"></span>
-
+                </div>
+                <div class="input-field">
+                    <label for="username" th:text="#{label.user.username}">email</label>
+                    <input id="username" name="username" class="validate" type="text" required="required"/>
+                    <span id="usernameError" class="col s4" style="display:none"></span>
                 </div>
                 <div class="input-field">
                     <label for="password" th:text="#{label.user.password}">password</label>
@@ -47,7 +60,7 @@
             </form>
         </div>
     </div>
-</section>
+
 
 <script th:src="@{/static/js/pwstrength.js}"></script>
 
@@ -56,6 +69,7 @@
 var serverContext = [[@{/}]];
 $(document).ready(function () {
     $('form').submit(function(event) {
+        console.log("--------------------------------")
         register(event);
     });
 
@@ -90,7 +104,7 @@ function register(event){
     event.preventDefault();
     $(".alert").html("").hide();
     $(".error-list").html("");
-    if($("#password").val() != $("#matchPassword").val()){
+    if($("#password").val() !== $("#matchPassword").val()){
         $("#globalError").show().html(/*[[#{PasswordMatches.user}]]*/);
         return;
     }
@@ -113,8 +127,6 @@ function register(event){
             window.location.href = serverContext + "login?message=" + data.responseJSON.message;
         }
         else{
-            console.log(data.responseJSON.message);
-            console.log("----------------------")
             var errors = $.parseJSON(data.responseJSON.message);
             $.each( errors, function( index,item ){
                 if (item.field){
@@ -131,6 +143,7 @@ function register(event){
 /*]]>*/
 
 </script>
+</div>
 
 </body>
 </html>

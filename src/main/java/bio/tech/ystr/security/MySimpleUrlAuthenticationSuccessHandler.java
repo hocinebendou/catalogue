@@ -54,21 +54,34 @@ public class MySimpleUrlAuthenticationSuccessHandler implements AuthenticationSu
 
     protected String determineTargetUrl(final Authentication authentication) {
         boolean isUser = false;
+        boolean isDbac = false;
+        boolean isBioArch = false;
         boolean isAdmin = false;
         final Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         for (final GrantedAuthority grantedAuthority : authorities) {
-            if (grantedAuthority.getAuthority().equals("READ_PRIVILEGE")) {
-                isUser = true;
-            } else if (grantedAuthority.getAuthority().equals("WRITE_PRIVILEGE")) {
-                isAdmin = true;
-                isUser = false;
-                break;
+            switch (grantedAuthority.getAuthority()) {
+                case "READ_PRIVILEGE":
+                    isUser = true;
+                    break;
+                case "UDBAC_PRIVILEGE":
+                    isDbac = true;
+                    isUser = false;
+                    break;
+                case "UPLOAD_PRIVILEGE":
+                    isBioArch = true;
+                    isUser = false;
+                    break;
+                case "WRITE_PRIVILEGE":
+                    isAdmin = true;
+                    isUser = false;
             }
         }
         if (isUser) {
-            return "/index.html?user=" + authentication.getName();
-        } else if (isAdmin) {
-            return "/console.html";
+            return "/advance.html?user=" + authentication.getName();
+        } else if (isDbac) {
+            return "/dbac.html";
+        } else if (isAdmin || isBioArch) {
+            return "/admin.html";
         } else {
             throw new IllegalStateException();
         }

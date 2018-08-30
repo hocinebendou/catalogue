@@ -22,6 +22,10 @@ public class User {
 
     private String lastName;
 
+    private String institutionName;
+
+    private String username;
+
     private String email;
 
     @Size(min=1, max = 10)
@@ -64,6 +68,14 @@ public class User {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getInstitutionName() {
+        return institutionName;
+    }
+
+    public void setInstitutionName(String institutionName) {
+        this.institutionName = institutionName;
     }
 
     public String getEmail() {
@@ -112,6 +124,14 @@ public class User {
 
     public void setRoles(Collection<Role> roles) {
         this.roles = roles;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     @Override

@@ -5,13 +5,13 @@ import bio.tech.ystr.persistence.dao.RoleRepository;
 import bio.tech.ystr.persistence.model.Privilege;
 import bio.tech.ystr.persistence.model.Role;
 import bio.tech.ystr.persistence.model.User;
-import bio.tech.ystr.persistence.model.VerificationToken;
 import bio.tech.ystr.registration.OnRegistrationCompleteEvent;
 import bio.tech.ystr.security.ISecurityUserService;
 import bio.tech.ystr.service.UserService;
 import bio.tech.ystr.web.dto.PasswordDto;
 import bio.tech.ystr.web.dto.UserDto;
 import bio.tech.ystr.web.error.InvalidOldPasswordException;
+import bio.tech.ystr.web.error.UserNotFoundException;
 import bio.tech.ystr.web.util.GenericResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -24,6 +24,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,14 +35,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.UnsupportedEncodingException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Controller
-public class MainController {
+public class RegistrationController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
@@ -69,11 +68,10 @@ public class MainController {
     @Autowired
     private Environment env;
 
-    @GetMapping("/")
+    /*@GetMapping("/")
     public String index(Model model) {
-        model.addAttribute("eventName", "FIFA 2018");
         return "index";
-    }
+    }*/
 
     @PostMapping(value = "/user/registration")
     @ResponseBody
@@ -110,19 +108,20 @@ public class MainController {
 
     @GetMapping(value = "/login")
     public String loginPage() {
-        return "login";
+        return "catalog/loginPage";
     }
 
     @PostMapping(value = "/user/resetPassword")
     @ResponseBody
     public GenericResponse resetPassword(final HttpServletRequest request, @RequestParam("email") final String userEmail) {
         final User user = userService.findUserByEmail(userEmail);
-        if (user != null) {
-            Collection<User> collection = new ArrayList<>(Arrays.asList(user));
-            final String token = UUID.randomUUID().toString();
-            userService.createPasswordResetTokenForUser(collection, token);
-            mailSender.send(constructResetTokenEmail(getAppUrl(request), request.getLocale(), token, user));
+        if (user == null) {
+            throw new UserNotFoundException(messages.getMessage("message.badEmail", null, request.getLocale()));
         }
+        Collection<User> collection = new ArrayList<>(Arrays.asList(user));
+        final String token = UUID.randomUUID().toString();
+        userService.createPasswordResetTokenForUser(collection, token);
+        mailSender.send(constructResetTokenEmail(getAppUrl(request), request.getLocale(), token, user));
         return new GenericResponse(messages.getMessage("message.resetPasswordEmail", null, request.getLocale()));
     }
 
@@ -134,6 +133,7 @@ public class MainController {
             model.addAttribute("message", messages.getMessage("auth.message", null, locale));
             return "redirect:/login?lang=" + locale.getLanguage();
         }
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return "redirect:/updatePassword.html?lang=" + locale.getLanguage();
     }
 

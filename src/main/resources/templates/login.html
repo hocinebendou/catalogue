@@ -31,11 +31,11 @@
 
 <section id="sign-in" layout:fragment="content" class="sec-padded-1x">
 
-    <canvas id="bubble-canvas" width="1861" height="558" style="position: fixed; top: 0px; left: 0px; z-index: 1;"></canvas>
     <div class="container">
         <div th:if="${param.message != null}" class="alert orange lighten-2 white-text text-darken-2" th:text="${param.message[0]}">message</div>
         <div th:if="${param.error != null}" class="alert orange lighten-2 white-text text-darken-2" th:text="${session[SPRING_SECURITY_LAST_EXCEPTION]}">error</div>
     </div>
+
     <form name="f" th:action="@{/login}" method="post" onsubmit="return validate()">
 
         <div class="card-panel clearfix">
