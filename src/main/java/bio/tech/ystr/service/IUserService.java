@@ -1,5 +1,6 @@
 package bio.tech.ystr.service;
 
+import bio.tech.ystr.persistence.model.Role;
 import bio.tech.ystr.persistence.model.User;
 import bio.tech.ystr.persistence.model.VerificationToken;
 import bio.tech.ystr.web.dto.UserDto;
@@ -37,4 +38,6 @@ public interface IUserService {
     String validateVerificationToken(String token);
 
     void createPasswordResetTokenForUser(Collection<User> user, String token);
+
+    Collection<User> findUsersByRole(String role);
 }

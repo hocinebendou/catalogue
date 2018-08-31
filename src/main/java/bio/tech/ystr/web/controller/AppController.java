@@ -8,13 +8,12 @@ import bio.tech.ystr.persistence.model.*;
 import bio.tech.ystr.service.UserService;
 import bio.tech.ystr.utils.StudyQuery;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.*;
@@ -138,32 +137,44 @@ public class AppController {
     }
 
     /*
-     * ABOUT MAPPING
-     */
-
-    @RequestMapping("/about")
-    public String aboutPage(Model model) {
-        int countStudies = studyRepository.countStudies();
-        model.addAttribute("countStudies", countStudies);
-        int countSamples = (int) specimenRepository.count();
-        model.addAttribute("countSamples", countSamples);
-
-        return "about";
-    }
-
-    /*
      * CONTACT MAPPING
      */
 
     @RequestMapping("/contact")
-    public String contactPage(@ModelAttribute ContactFrom contactFrom, Model model) {
+    public String showContactPage(@ModelAttribute ContactFrom contactFrom) {
 
         return "contact";
     }
 
     /*
+     * ADMIN LAYOUT
+     */
+    @GetMapping(value = "/upload")
+    public String uploadFilesPage(Model model) {
+
+        User user = authenticatedUser();
+        model.addAttribute("username", user.getUsername());
+
+        Role role = user.getRoles().stream().findFirst().orElse(null);
+        model.addAttribute("role", role.getName());
+
+        Collection<User> users = userService.findUsersByRole("ROLE_BIOBANK");
+        model.addAttribute("users", users);
+
+
+        return "upload";
+    }
+
+    /*
      * NON API
      */
+
+    private User authenticatedUser() {
+        final org.springframework.security.core.userdetails.User authenticated = (org.springframework.security.core.userdetails.User)
+                SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        return userService.findUserByEmail(authenticated.getUsername());
+    }
 
     private Collection<NeoStudy> showAllStudies (String advance, SearchForm form) {
 

@@ -13,7 +13,7 @@ $(function() {
     ];
     var notNullColumns = [ "UNIQUE SPEC ID", "DE I DENTIFIED PARTICIPANT ID", "STUDY", "SPECIMEN TYPE" ];
     /* Case for archive data */
-    if ($('#parse-csv').hasClass('ARCHIVE')) {
+    if ($('#parse-csv').hasClass('ROLE_ARCHIVE')) {
     	archiveColumns();
     }
     $("#file-type").change(function() {
@@ -23,7 +23,6 @@ $(function() {
     
     function archiveColumns () {
     	var fileType = $("#file-type option:selected").val();
-    	console.log(fileType);
     	switch(fileType) {
 			case "study":
 				header = ["ACRONYM", "TITLE", "STUDY DESIGN", "DESCRIPTION", "TOTAL SPECIMENS", "NO OF CASES",

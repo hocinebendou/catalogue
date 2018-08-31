@@ -173,6 +173,12 @@ public class UserService implements IUserService {
 
     }
 
+    @Override
+    public Collection<User> findUsersByRole(String role) {
+
+        return repository.findAllByRole(role);
+    }
+
     private boolean emailExist(final String email) {
         return repository.findByEmail(email) != null;
     }

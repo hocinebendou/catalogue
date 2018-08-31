@@ -79,9 +79,9 @@ public class MySimpleUrlAuthenticationSuccessHandler implements AuthenticationSu
         if (isUser) {
             return "/advance.html?user=" + authentication.getName();
         } else if (isDbac) {
-            return "/dbac.html";
+            return "/dbac.html?user=" + authentication.getName();
         } else if (isAdmin || isBioArch) {
-            return "/admin.html";
+            return "/upload?user=" + authentication.getName();
         } else {
             throw new IllegalStateException();
         }

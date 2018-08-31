@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      layout:decorator="adminLayout">
+<head>
+    <title>Admin</title>
+</head>
+<body>
+
+<div class="row" layout:fragment="content-admin" style="margin-top: 20px;">
+    <div class="col offset-s2 s9 offset-s1 z-depth-1" style="background: #ececec;">
+
+        <div class="col s12">
+            <ul class="tabs">
+                <li class="tab col s3"><a class="active" href="#check-csv">Check CSV</a></li>
+                <li class="tab col s3 disabled"><a href="#upload-csv">Upload CSV</a></li>
+            </ul>
+        </div>
+        <div id="check-csv" class="col s12">
+            <div class="row">
+                <div class="section"></div>
+                <div class="col s6 offset-s1">
+                    <p class="flow-text"><i class="material-icons">file_upload</i>File</p>
+                    <div class="row">
+                    	<div sec:authorize="hasRole('ROLE_ARCHIVE')" class="input-field col s6">
+	                        <select id="file-type">
+	                            <option value="study" selected="selected">Study</option>
+	                            <option value="individual">Individual</option>
+	                        </select>
+	                        <label for="file-type">Type of the file to upload</label>
+                    	</div>
+                        <div class="input-field col s8" style="border: 1px solid; padding-bottom: 10px; border-radius:1em; border-color: #90caf9;">
+                            <label for="file">Choose an archive csv file to parse:</label>
+                            <div class="section"></div>
+                            <div class="section"></div>
+                            <input type="file" id="file" name="file"/>
+                        </div>
+                    </div>
+                    <div class="row" sec:authorize="hasAuthority('UPLOAD_PRIVILEGE')">
+                        <button th:class="'btn waves-effect waves-light h3africa '+ ${role}" id="parse-csv">
+                            Parse <i class="material-icons right">send</i>
+                        </button>
+                    </div>
+                </div>
+                <div class="col s5">
+                    <p class="flow-text"><i class="material-icons">settings</i>Settings</p>
+                    <div class="row">
+                        <div class="input-field col s3">
+                            <input id="delimiter" name="delimiter" class="validate" type="text" />
+                            <label for="delimiter">Delimiter</label>
+                        </div>
+                        <div class="col s9">
+                            <dfn>The delimiting character. Usually comma or tab. Default is comma</dfn>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s3">
+                            <input id="encoding" name="encoding" class="validate" type="text" />
+                            <label for="encoding">Encoding</label>
+                        </div>
+                        <div class="col s9">
+                            <dfn>Default is specified by the browser (usually UTF-8)</dfn>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                <hr class="col s10 offset-s1"/>
+            <div class="row">
+                <div class="row">
+                    <div class="col s6 offset-s1">
+                        <p class="flow-text"><i class="material-icons">receipt</i>Results</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s10 offset-s1" id="result-parse">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div id="upload-csv" class="col s12">
+            <div class="row">
+                <div class="section"></div>
+                <div class="col s8 offset-s2">
+                    <h4 class="indigo-text"><i class="material-icons">file_upload</i> Upload</h4>
+                    <div class="col s8">
+                        <ul class="collection">
+                            <li class="collection-item avatar" style="min-height: 65px; line-height: 2.5rem;">
+                                <i class="material-icons circle">folder</i>
+                                <span id="file-selected" style="font-size: 16px; "></span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col s4">
+                        <form th:action="@{/upload}" method="post" enctype="multipart/form-data" class="col  s10">
+                            <div id="file-elem" class="input-field" hidden="hidden"></div>
+                            <input id="type-file-selected" hidden="hidden" name="fileType" value="sample" />
+                            <button class="btn indigo waves-effect waves-light" type="submit" name="save"
+                                    style="margin-top: 5px;">
+                                Submit
+                                <i class="material-icons right">send</i>
+                            </button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
