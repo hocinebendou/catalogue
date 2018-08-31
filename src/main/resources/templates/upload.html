@@ -23,7 +23,7 @@
                 <div class="col s6 offset-s1">
                     <p class="flow-text"><i class="material-icons">file_upload</i>File</p>
                     <div class="row">
-                    	<div sec:authorize="hasRole('ROLE_ARCHIVE')" class="input-field col s6">
+                    	<div th:if="${role == 'ROLE_ARCHIVE'}" class="input-field col s6">
 	                        <select id="file-type">
 	                            <option value="study" selected="selected">Study</option>
 	                            <option value="individual">Individual</option>

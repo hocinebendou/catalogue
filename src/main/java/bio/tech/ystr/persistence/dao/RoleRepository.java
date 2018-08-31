@@ -5,7 +5,7 @@ import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 
-import java.util.List;
+import java.util.Collection;
 
 public interface RoleRepository extends PagingAndSortingRepository<Role, Long> {
 
@@ -14,7 +14,7 @@ public interface RoleRepository extends PagingAndSortingRepository<Role, Long> {
     @Query ("MATCH (u:User) WHERE ID(u)={id} " +
             "MATCH (u)-[]->(r:Role) " +
             "RETURN r")
-    List<Role> findByUserId(@Param("id") Long id);
+    Collection<Role> findByUserId(@Param("id") Long id);
 
     @Override
     void delete(Role role);

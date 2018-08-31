@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="adminLayout">
+<head>
+    <title>Admin</title>
+</head>
+<body>
+
+<div class="row" layout:fragment="content-admin">
+    <div class="col offset-s2 s9 offset-s1 z-depth-1" style="height: 700px; margin-top: 20px; background-color: #ececec;">
+        <div class="row">
+            <div class="col s5">
+                <ul class="collection with-header task-card">
+                    <li class="collection-header h3africa">
+                        <h4 class="task-card-title">File to Process</h4>
+                        <p class="task-card-date">Use this panel to delete erroneous files</p>
+                    </li>
+                    <li class="collection-item dismissable li-delete" th:each="f,i : ${ rawFiles }">
+                        <form action="/track" method="post">
+                            <label th:text="${ f.fileName }" style="text-decoration: none;"></label>
+                            <input class="validate" name="delete" th:value="${ f.filePath }" hidden="hidden" />
+                            <input class="validate" name="process" th:value="${ f.filePath }" hidden="hidden" />
+                            <input class="validate" name="fileOwnerRole" th:value="${ f.fileOwner } + '-' + ${f.fileRole} + '-' + ${role}" hidden="hidden" />
+                            <button th:if="${ role } == 'ROLE_ADMIN' " th:id="'process-csv-' + ${i.index}" class="secondary-content indigo" type="submit" style="margin-right: 70px;">process</button>
+                            <button th:id="'delete-csv-' + ${i.index}" class="secondary-content red" type="submit">delete</button>
+                            <!--<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>-->
+                        </form>
+                    </li>
+                </ul>
+            </div>
+            <div class="offset-s1 col s5">
+                <ul class="collection with-header task-card">
+                    <li class="collection-header h3africa">
+                        <h4 class="task-card-title">Processed Files</h4>
+                        <p class="task-card-date">Permission granted only to super admin</p>
+                    </li>
+                    <li class="collection-item dismissable li-delete" th:each="f : ${ processedFiles }">
+                        <form action="/delete" method="post">
+                            <label th:text="${ f.fileName }" style="text-decoration: none;">SSS</label>
+                            <input  class="validate delete-csv" name="delete" th:value="${ f.filePath }" hidden="hidden" />
+                            <button th:if="${ role } == 'ADMIN'" class="secondary-content red" disabled="disabled">delete</button>
+                            <button th:if="${role != 'ADMIN'}" class="secondary-content red lighten-3" disabled="disabled">delete</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
