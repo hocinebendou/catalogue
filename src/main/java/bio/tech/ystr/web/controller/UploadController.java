@@ -26,6 +26,8 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Controller
 public class UploadController {
@@ -51,9 +53,10 @@ public class UploadController {
         Role role = user.getRoles().stream().findFirst().orElse(null);
         model.addAttribute("role", role.getName());
 
-        Collection<User> users = userService.findUsersByRole("ROLE_BIOBANK");
+        Collection<User> bioUsers = userService.findUsersByRole("ROLE_BIOBANK");
+        Collection<User> arcUsers = userService.findUsersByRole("ROLE_ARCHIVE");
+        Collection<User> users = Stream.concat(bioUsers.stream(), arcUsers.stream()).collect(Collectors.toList());
         model.addAttribute("users", users);
-
 
         return "upload";
     }

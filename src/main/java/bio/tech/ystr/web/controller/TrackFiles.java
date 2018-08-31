@@ -143,16 +143,16 @@ public class TrackFiles {
         String fileRole = parameters[1];
         String userRole = parameters[2];
 
-        if (fileRole.isEmpty() || !userRole.equals("ADMIN")) return "redirect:/logout";
+        if (fileRole.isEmpty() || !userRole.equals("ROLE_ADMIN")) return "redirect:/logout";
 
         File file = new File("./" + request.getParameter("process"));
         String path = file.getAbsolutePath();
         User user = userService.findUserByUsername(fileOwner);
         String query = "";
-        if (fileRole.equals("ARCHIVE")) {
+        if (fileRole.equals("ROLE_ARCHIVE")) {
             query = constructArchiveQuery("file:///" + path, file);
             runNeoQuery(query);
-        } else if (fileRole.equals("BIOBANK")) {
+        } else if (fileRole.equals("ROLE_BIOBANK")) {
             csvToNeo.setCsvFilename(path);
             csvToNeo.setToEmail(user.getEmail());
             csvToNeo.setBiobankName(user.getInstitutionName());
