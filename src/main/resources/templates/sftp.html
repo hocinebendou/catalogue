@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="adminLayout">
+<head>
+    <title>SFTP conf</title>
+</head>
+
+<body>
+
+<div align="center" class="row" layout:fragment="content-admin">
+    <div class="row ">
+        <div class="col offset-s2 s9 white">
+            <h4 class="left">SFTP server configuration</h4>
+        </div>
+    </div>
+    <div class="row" th:if="${message != null}">
+        <div id="card-alert" class="col offset-s2 s9 card green">
+            <div class="card-content white-text">
+                <p th:text="${message}"></p>
+            </div>
+        </div>
+    </div>
+    <div class="col offset-s2 s9 offset-s1 z-depth-1" style="background: #f8f8f8;">
+        <form th:action="@{/sftpconf}" th:object="${sftpConf}" method="POST" enctype="utf8">
+            <div class="row">
+                <div class="col s3">
+                    <div style="margin-top: 2rem;"><dfn><b>SFTP local user</b></dfn></div>
+                </div>
+                <div class="input-field col s8">
+                    <p th:each="error: ${#fields.errors('username')}" th:text="${error}">Validation error</p>
+                    <input id="username" class="validate" type="text" th:field="*{sftpUser}"/>
+                    <label for="username">username</label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col s3">
+                    <div style="margin-top: 2rem;"><dfn><b>SFTP local public key</b></dfn></div>
+                </div>
+                <div class="input-field col s8">
+                    <p th:each="error : ${#fields.errors('publicKey')}" th:text="${error}">Validation error</p>
+                    <textarea id="public-key" th:field="*{publicKey}" class="materialize-textarea"
+                              style="background-color: white"></textarea>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col s3">
+                    <div style="margin-top: 2rem;"><dfn><b>SFTP IP address</b></dfn></div>
+                </div>
+                <div class="input-field col s8">
+                    <p th:each="error: ${#fields.errors('ipAddress')}" th:text="${error}">Validation error</p>
+                    <input id="ip-address" class="validate" type="text" th:field="*{ipAddress}"/>
+                    <label for="ip-address">IP</label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col s3">
+                    <div style="margin-top: 2rem;"><dfn><b>SFTP port</b></dfn></div>
+                </div>
+                <div class="input-field col s8">
+                    <p th:each="error: ${#fields.errors('port')}" th:text="${error}">Validation error</p>
+                    <input id="port" class="validate" type="number" th:field="*{port}"/>
+                    <label for="port">Port</label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col s3">
+                    <div style="margin-top: 2rem;"><dfn><b>Path to the SFTP directory</b></dfn></div>
+                </div>
+                <div class="input-field col s8">
+                    <input id="path-dir" type="text" th:field="*{pathDir}"/>
+                    <label for="path-dir">Path://</label>
+                </div>
+            </div>
+
+            <div class="row">
+                <button type="submit" class="btn waves-light waves-effect h3africa right"
+                    style="margin-right: 10rem;">submit</button>
+            </div>
+            <!--<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>-->
+        </form>
+    </div>
+</div>
+</body>
+</html>

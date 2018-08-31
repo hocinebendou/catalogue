@@ -3,6 +3,7 @@
       xmlns:th="http://thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>H3ABioNet Catalog</title>
@@ -95,7 +96,7 @@
     </section>
 </main>
 
-<footer class="page-footer" th:if="${#authorization.expression('isAnonymous()')} or  ${#httpServletRequest.requestURI=='/updatePassword.html'}">
+<footer class="page-footer" th:if="${#authorization.expression('isAnonymous()')} or  ${#httpServletRequest.requestURI=='/updatePassword.html'} or ${#httpServletRequest.requestURI=='/changePassword.html'}">
     <div class="container">
         <div class="row">
             <div class="col m6 s12">

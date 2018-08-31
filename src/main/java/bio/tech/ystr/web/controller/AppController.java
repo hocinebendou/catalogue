@@ -8,7 +8,6 @@ import bio.tech.ystr.persistence.model.*;
 import bio.tech.ystr.service.UserService;
 import bio.tech.ystr.utils.StudyQuery;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -144,25 +143,6 @@ public class AppController {
     public String showContactPage(@ModelAttribute ContactFrom contactFrom) {
 
         return "contact";
-    }
-
-    /*
-     * ADMIN LAYOUT
-     */
-    @GetMapping(value = "/upload")
-    public String uploadFilesPage(Model model) {
-
-        User user = authenticatedUser();
-        model.addAttribute("username", user.getUsername());
-
-        Role role = user.getRoles().stream().findFirst().orElse(null);
-        model.addAttribute("role", role.getName());
-
-        Collection<User> users = userService.findUsersByRole("ROLE_BIOBANK");
-        model.addAttribute("users", users);
-
-
-        return "upload";
     }
 
     /*
