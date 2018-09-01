@@ -60,11 +60,11 @@ let DataSetTable = {
                 :columns="columns"
                 :rows="rows">
                 
-                <th slot="thead-tr">
+                <th slot="thead-tr" v-if="status === 'Pending'">
                     Action
                 </th>
                 <template slot="tbody-tr" slot-scope="props">
-                    <td>
+                    <td v-if="status === 'Pending'">
                         <button class="btn red darken-2 waves-effect waves-light compact-btn"
                                 @click="(e) => deleteRow(props.row, e)">
                             <i class="material-icons white-text">delete</i>
@@ -74,6 +74,7 @@ let DataSetTable = {
             </datatable>
         </div>
     `,
+    props : ['status'],
     data() {
         return {
             name: 'Dataset',
@@ -142,7 +143,7 @@ let CartContent = {
                 </div>
             </div>
             
-            <div class="container">
+            <div class="container" v-if="cartId !== null">
                 <datatable 
                     :name="name" 
                     :title="title"
@@ -172,9 +173,9 @@ let CartContent = {
                 </datatable>
             </div>
             
-            <x-data-table></x-data-table>
+            <x-data-table :status="status" v-if="cartId !== null"></x-data-table>
             
-            <div class="container">
+            <div class="container" v-if="cartId != null">
                 <div class="row" id="work-collections">
                     <div class="col s12 m12 l12">
                         <ul id="projects-collection" class="collection">
@@ -223,7 +224,7 @@ let CartContent = {
             projectId: state.projectId,
             columns: cartColumns,
             saveMessage: null,
-            newCartId: state.selectedCart.cartId
+            // newCartId: state.selectedCart.cartId
         }
     },
     computed: {
@@ -242,6 +243,12 @@ let CartContent = {
         status() {
             if (state.selectedCart !== null)
                 return state.selectedCart.status;
+            return null;
+        },
+        newCartId() {
+            if (state.selectedCart !== null) {
+                return state.selectedCart.cartId
+            }
             return null;
         }
     },
