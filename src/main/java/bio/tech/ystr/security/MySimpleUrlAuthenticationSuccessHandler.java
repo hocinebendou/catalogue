@@ -77,7 +77,7 @@ public class MySimpleUrlAuthenticationSuccessHandler implements AuthenticationSu
             }
         }
         if (isUser) {
-            return "/search.html?user=" + authentication.getName();
+            return "/filter.html?user=" + authentication.getName();
         } else if (isDbac) {
             return "/dbac.html?user=" + authentication.getName();
         } else if (isAdmin || isBioArch) {

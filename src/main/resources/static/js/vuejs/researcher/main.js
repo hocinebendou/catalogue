@@ -297,13 +297,13 @@ let ModalBio = {
 /* ---------------------------------------------------------*
  *      MAIN COMPONENTS                                     *
  * ---------------------------------------------------------*/
-var SideBar = {
+let SideBar = {
     template: '#sidebar',
     props: ['user', 'nbRowSelected']
 };
 
 let routes = [
-    {path: '/advance', component: Filter},
+    {path: '/filter.html', component: Filter},
     {path: '/advance/carts', component: Carts},
     {path: '/advance/carts/cart', component: Cart},
     {path: '/advance/cart', component: YourCart},

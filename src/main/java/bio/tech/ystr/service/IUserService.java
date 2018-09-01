@@ -41,7 +41,7 @@ public interface IUserService {
 
     Collection<User> findUsersByRole(String role);
 
-    User findNeoUserByCartId(Long id);
+    User findUserByCartId(Long id);
 
     Collection<User> findAllUsers();
 }

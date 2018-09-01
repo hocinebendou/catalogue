@@ -127,7 +127,6 @@ let CartContent = {
                             <router-link class="pink-text" to="/advance/carts">Ok</router-link>
                             <a th:href="@{/logout}" class="pink-text">Cancel</a>
                         </div>
-
                     </div>
                 </div>
             </div>

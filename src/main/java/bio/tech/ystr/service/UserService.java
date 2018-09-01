@@ -181,9 +181,9 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User findNeoUserByCartId(Long id) {
+    public User findUserByCartId(Long id) {
 
-        return repository.findNeoUserByCartId(id);
+        return repository.findUserByCartId(id);
     }
 
     @Override

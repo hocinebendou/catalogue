@@ -155,7 +155,7 @@ public class DbacApiController {
 
         JSONObject ret = new JSONObject();
         JSONObject obj = new JSONObject();
-        User user = userService.findNeoUserByCartId(Long.parseLong(id));
+        User user = userService.findUserByCartId(Long.parseLong(id));
 
 
         obj.put("firstName", user.getFirstName());

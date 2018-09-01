@@ -23,9 +23,9 @@ public interface UserRepository extends PagingAndSortingRepository<User, Long> {
             "RETURN u")
     Collection<User> findAllByRole(@Param("role") String role);
 
-    @Query( "MATCH (u:NeoUser)-[]->" +
+    @Query( "MATCH (u:User)-[]->" +
             "(p:NeoProject)-[]->(c:NeoCart) " +
             "WHERE ID(c) = {id} " +
             "RETURN u")
-    User findNeoUserByCartId(@Param("id") Long id);
+    User findUserByCartId(@Param("id") Long id);
 }
