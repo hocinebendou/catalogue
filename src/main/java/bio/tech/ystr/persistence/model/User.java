@@ -35,6 +35,8 @@ public class User {
 
     private boolean enabled;
 
+    private boolean emailEnabled;
+
     private boolean isUsing2FA;
 
     @Relationship(type = "USER_ROLES")
@@ -84,6 +86,14 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public boolean isEmailEnabled() {
+        return emailEnabled;
+    }
+
+    public void setEmailEnabled(boolean emailEnabled) {
+        this.emailEnabled = emailEnabled;
     }
 
     public String getPassword() {

@@ -114,8 +114,8 @@
                             <a class="right blue-text text-darken-1" onclick="if(!confirm('Are you serious!')) return false;"
                                th:href="@{'/remove?username=' + ${u.username}}"><i class="material-icons left">delete_forever</i></a>
                             <a class="right blue-text text-darken-1" href="#"><i class="material-icons left">edit</i></a>
-                            <span th:if="${u.enabled == false}">
-                                <a class="right blue-text text-darken-1" th:href="@{'/validate?username=' + ${u.username}}">
+                            <span th:if="${u.enabled == false and u.emailEnabled == true}">
+                                <a class="right blue-text text-darken-1" th:href="@{'/enable?email=' + ${u.email}}">
                                     <i class="material-icons left">done</i>
                                 </a>
                             </span>

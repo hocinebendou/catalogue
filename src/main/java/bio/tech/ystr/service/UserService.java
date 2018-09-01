@@ -127,7 +127,8 @@ public class UserService implements IUserService {
             return null;
         }
 
-        user.setEnabled(true);
+//        user.setEnabled(true);
+        user.setEmailEnabled(true);
         repository.save(user);
 
         return TOKEN_VALID;

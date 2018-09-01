@@ -159,6 +159,16 @@ public class AppController {
         return "users";
     }
 
+    @RequestMapping("/enable")
+    public String validateUser(@RequestParam("email") String email, Model model) {
+        User user = userService.findUserByEmail(email);
+
+        user.setEnabled(true);
+        userService.saveRegisteredUser(user);
+
+        return "redirect:/users";
+    }
+
     /*
      * NON API
      */
