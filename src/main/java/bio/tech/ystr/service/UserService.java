@@ -179,6 +179,18 @@ public class UserService implements IUserService {
         return repository.findAllByRole(role);
     }
 
+    @Override
+    public User findNeoUserByCartId(Long id) {
+
+        return repository.findNeoUserByCartId(id);
+    }
+
+    @Override
+    public Collection<User> findAllUsers() {
+
+        return repository.findAll();
+    }
+
     private boolean emailExist(final String email) {
         return repository.findByEmail(email) != null;
     }

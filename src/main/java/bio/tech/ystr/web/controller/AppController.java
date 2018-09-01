@@ -7,6 +7,7 @@ import bio.tech.ystr.persistence.dao.*;
 import bio.tech.ystr.persistence.model.*;
 import bio.tech.ystr.service.UserService;
 import bio.tech.ystr.utils.StudyQuery;
+import bio.tech.ystr.web.dto.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -143,6 +144,19 @@ public class AppController {
     public String showContactPage(@ModelAttribute ContactFrom contactFrom) {
 
         return "contact";
+    }
+
+    /*
+     * List users
+     */
+
+    @RequestMapping("/users")
+    public String catalogUsers(@ModelAttribute("registerForm") UserDto registerForm, Model model) {
+
+        Collection<User> users = userService.findAllUsers();
+        model.addAttribute("users", users);
+
+        return "users";
     }
 
     /*

@@ -8,6 +8,7 @@ import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
@@ -41,6 +42,11 @@ public class NeoProject {
 
     @Relationship(type = "HAS_CART")
     private List<NeoCart> carts = new ArrayList<>();
+
+    @Relationship(type = "HAS_USER", direction = "INCOMING")
+    private Collection<User> user;
+
+    public NeoProject() { super(); }
 
     public String getProjectId() {
         return projectId;
@@ -192,5 +198,13 @@ public class NeoProject {
 
     public void addCart(NeoCart cart) {
         this.carts.add(cart);
+    }
+
+    public Collection<User> getUser() {
+        return user;
+    }
+
+    public void setUser(Collection<User> user) {
+        this.user = user;
     }
 }

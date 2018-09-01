@@ -14,7 +14,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.io.*;
-import java.util.Collection;
 
 @Controller
 public class SftpController {

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="adminLayout">
+<head>
+    <title>Users</title>
+</head>
+<body>
+
+<div class="row" layout:fragment="content-admin">
+    <div class="col offset-s2 s9 offset-s1 z-depth-1" style="background: #ececec;height: 700px; margin-top: 20px;">
+        <div class="row">
+            <a class="modal-trigger waves-effect waves-light btn right h3africa" style="margin: 20px 10px 12px;"
+               href="#user-modal">
+                <i class="material-icons left">person_add</i>add user</a>
+        </div>
+        <div id="user-modal" class="modal modal-fixed-footer">
+            <div class="modal-content">
+                <h4>Add a new user</h4>
+                <div class="row">
+                    <form class="col s12" id="user-add" th:action="@{/register}" th:object="${registerForm}" method="post">
+                        <div class="row margin">
+                            <div class="input-field col s12">
+                                <input id="firstname" class="validate" type="text" th:field="*{firstName}"/>
+                                <label for="firstname" class="left-align">First Name</label>
+                                <p th:each="error: ${#fields.errors('firstName')}"
+                                   th:text="${error}">Validation error</p>
+                            </div>
+                        </div>
+                        <div class="row margin">
+                            <div class="input-field col s12">
+                                <input id="lastname" class="validate" type="text" th:field="*{lastName}"/>
+                                <label for="lastname" class="left-align">Last Name</label>
+                                <p th:each="error : ${#fields.errors('lastName')}"
+                                   th:text="${error}">Validation error</p>
+                            </div>
+                        </div>
+                        <div class="row margin">
+                            <div class="input-field col s12">
+                                <i class="material-icons prefix">person_outline</i>
+                                <input class='validate' type='text' id='username' th:field="${registerForm.username}" />
+                                <label for="username" class="left-align">Username</label>
+                                <label th:if="${#fields.hasErrors('username')}" th:text="#{error.size.username}"
+                                       th:class="'error'">Username Error</label>
+                            </div>
+                        </div>
+                        <div class="row margin">
+                            <div class="input-field col s12">
+                                <i class="material-icons prefix">email</i>
+                                <input class="validate" id="email" type="email" th:field="${registerForm.email}" />
+                                <label for="email" class="left-align">Email</label>
+                            </div>
+                        </div>
+                        <div class="row margin">
+                            <div class="input-field col s12">
+                                <i class="material-icons prefix">lock_outline</i>
+                                <input class='validate' type='password' id='password' th:field="${registerForm.password}" />
+                                <label for="password" class="left-align">Password</label>
+                                <label th:if="${#fields.hasErrors('password')}" th:text="#{error.size.password}"
+                                       th:class="'error'">Password Error</label>
+                            </div>
+                        </div>
+                        <div class="row margin">
+                            <div class="input-field col s12">
+                                <i class="material-icons prefix">lock_outline</i>
+                                <input id="matchpass" type="password" th:field="*{matchingPassword}"/>
+                                <label for="matchpass" class="left-align">Confirm Password</label>
+                            </div>
+                        </div>
+                        <div class="row margin">
+                            <div class="input-field col s12">
+                                <i class="material-icons prefix">business</i>
+                                <input class='validate' type='text' id='biobankname' th:field="${registerForm.institutionName}" />
+                                <label for="biobankname" class="left-align">Biobank Name</label>
+                            </div>
+                        </div>
+                        <div class="row margin">
+                            <div class="input-field col s12 ">
+                                <i class="material-icons prefix" style="margin-left:-150px;">warning</i>
+                                <select id="user-role">
+                                    <option value="BIOBANK" selected="selected">Biobank</option>
+                                    <option value="ARCHIVE">Archive</option>
+                                    <option value="DBAC">DBAC</option>
+                                    <option value="ADMIN">Admin</option>
+                                </select>
+                                <label for="user-role">Select a role</label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" form="user-add" name="adduser"
+                        class="modal-action modal-close waves-effect waves-green btn-flat h3africa white-text">
+                    Create</button>
+            </div>
+        </div>
+        <div class="row">
+            <table class="bordered">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Institution name</th>
+                    <th class="right">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="u: ${users}">
+                        <td th:text="${u.username}"></td>
+                        <td th:text="${u.email}"></td>
+                        <td th:text="${u.institutionName}"></td>
+                        <td>
+                            <a class="right blue-text text-darken-1" onclick="if(!confirm('Are you serious!')) return false;"
+                               th:href="@{'/remove?username=' + ${u.username}}"><i class="material-icons left">delete_forever</i></a>
+                            <a class="right blue-text text-darken-1" href="#"><i class="material-icons left">edit</i></a>
+                            <span th:if="${u.enabled == false}">
+                                <a class="right blue-text text-darken-1" th:href="@{'/validate?username=' + ${u.username}}">
+                                    <i class="material-icons left">done</i>
+                                </a>
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -76,8 +76,13 @@
                                 </span>
                             </li>
                             <li>
-                                <span sec:authorize="isAuthenticated()">
+                                <span sec:authorize="hasAuthority('UPLOAD_PRIVILEGE')">
                                     <a th:href="@{/upload}">Upload</a>
+                                </span>
+                            </li>
+                            <li>
+                                <span sec:authorize="hasAuthority('DBAC_PRIVILEGE')">
+                                    <a th:href="@{/dbac.html}">DBAC</a>
                                 </span>
                             </li>
                             <li>

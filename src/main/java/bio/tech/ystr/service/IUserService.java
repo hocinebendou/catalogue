@@ -40,4 +40,8 @@ public interface IUserService {
     void createPasswordResetTokenForUser(Collection<User> user, String token);
 
     Collection<User> findUsersByRole(String role);
+
+    User findNeoUserByCartId(Long id);
+
+    Collection<User> findAllUsers();
 }

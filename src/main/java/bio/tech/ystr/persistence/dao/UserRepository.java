@@ -10,6 +10,8 @@ import java.util.Collection;
 
 public interface UserRepository extends PagingAndSortingRepository<User, Long> {
 
+    Collection<User> findAll();
+
     User findByEmail(String email);
 
     User findByUsername(String username);
@@ -21,4 +23,9 @@ public interface UserRepository extends PagingAndSortingRepository<User, Long> {
             "RETURN u")
     Collection<User> findAllByRole(@Param("role") String role);
 
+    @Query( "MATCH (u:NeoUser)-[]->" +
+            "(p:NeoProject)-[]->(c:NeoCart) " +
+            "WHERE ID(c) = {id} " +
+            "RETURN u")
+    User findNeoUserByCartId(@Param("id") Long id);
 }

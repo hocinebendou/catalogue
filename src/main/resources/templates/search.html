@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="mainLayout">
+<head>
+    <meta charset="UTF-8" />
+    <title>Advanced Search</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link th:href="@{/static/css/datatable.css}" rel="stylesheet" />
+</head>
+<body>
+
+<div layout:fragment="content">
+
+    <script src="webjars/vue/2.5.13/vue.js"></script>
+    <script src="webjars/vue-router/3.0.1/dist/vue-router.js"></script>
+    <script src="webjars/axios/0.18.0/dist/axios.js"></script>
+
+    <div id="root" class="row">
+        <x-sidebar :user="user" :nb-row-selected="nbRowSelected"></x-sidebar>
+        <x-modal :row="row"></x-modal>
+        <x-cart-modal :row="row"></x-cart-modal>
+        <router-view></router-view>
+    </div>
+
+    <script id="alert" type="text/x-template">
+        <div class="row card red" v-if="message" style="margin: 0.3rem 0.8rem;">
+            <div class="card-content white-text">
+                <p>{{ message }}</p>
+            </div>
+        </div>
+    </script>
+
+    <script id="sidebar" type="text/x-template">
+        <div class="col m2">
+            <aside id="left-sidebar-nav">
+                <ul id="slide-out" class="side-nav fixed leftside-navigation ps-container ps-active-y"
+                    style="width: 250px;">
+
+                    <li class="user-details" style="border-bottom: 1px solid #B83F0D; height: 6rem">
+                        <div class="row">
+                            <!--<div class="background">
+                                <img th:src="@{/static/img/background.png}" />
+                            </div>-->
+                            <div class="col s4 m4 l4">
+                                <img class="circle responsive-img valign profile-image" th:src="@{/static/img/login.png}" />
+                            </div>
+                            <div class="col s8 m8 l8">
+                                <a class="btn-flat waves-effect waves-light profile-btn" href=""><b>{{ user.name }}</b></a>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <router-link class="" to="/advance/cart">
+                            <i class="material-icons">add_shopping_cart</i> Your Cart
+                            <span class="cart-amount" style="margin-left: 2rem;">{{ nbRowSelected }}</span>
+                        </router-link>
+                    </li>
+                    <li><div class="divider"></div></li>
+                    <li>
+                        <router-link to="/advance">
+                            <i class="material-icons">filter_list</i> Filter
+                        </router-link>
+                    </li>
+                    <li>
+                        <router-link to="/advance/projects">
+                            <i class="material-icons">local_mall</i> Projects
+                        </router-link>
+                    </li>
+                    <li>
+                        <router-link to="/advance/carts">
+                            <i class="material-icons">shopping_cart</i> Carts
+                        </router-link>
+                    </li>
+                </ul>
+            </aside>
+        </div>
+    </script>
+
+    <script id="filter" type="text/x-template">
+        <section class="col m10" style="margin-left: -3rem">
+            <div class="container">
+                <div class="row">
+                    <div class="col s12 m10 l10">
+                        <h5 class="breadcrumbs-title">Filter Data</h5>
+                        <ol class="breadcrumbs">
+                            <li><a href="index.html" style="color: #00bcd4;">{{ username }}</a></li>
+                            <li class="active">Filter</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+            <div class="container" v-if="cartId === null">
+                <div class="row" style="margin: auto 0.3rem auto 0.1rem">
+                    <div id="card-alert" class="card pink lighten-5">
+
+                        <div class="card-content pink-text darken-1">
+                            <span class="card-title pink-text darken-1">No cart is selected</span>
+                            <p>Select or create a project and a cart before using this search module.</p>
+                        </div>
+                        <div class="card-action pink lighten-4">
+                            <router-link class="pink-text" to="/advance/carts">Ok</router-link>
+                            <a th:href="@{/logout}" class="pink-text">Cancel</a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <x-searchvue :search-data="searchData" :columns="columns" :selected-values="selectedValues"></x-searchvue>
+            <x-biotable :columns="columns" :rows="rows" v-on:row-selected="setRowItem"></x-biotable>
+            <x-datatable></x-datatable>
+        </section>
+    </script>
+
+    <script id="searchvue" type="text/x-template">
+
+        <div class="container">
+            <x-alert></x-alert>
+            <div class="selected_studies_container filter-columns">
+                <div class="row text-long-shadow text-info-filter" style="margin-left: 0rem; margin-right: 0">
+                    <p><i class="material-icons">info_outline</i>
+                        <span>Filter number of biospecimen by using the fields below. A selected field will appear as a column
+                        in the result table.</span></p>
+                </div>
+                <section style="padding: 10px;"></section>
+                <div class="row" style="margin-left: 1rem; margin-right: 0">
+                    <div class="col m2">
+                        <div class="row">
+                            <span class="header-tab">Acronyms</span>
+                        </div>
+                        <div class="row" v-for="acronym in searchData.acronyms">
+                            <div class="input-field">
+                                <input :id="acronym" name="Acronym" type="checkbox"  :value="acronym"
+                                       v-model="selectedValues.acronyms" v-on:change="updateSelectedValue"/>
+                                <label :for="acronym">{{ acronym }}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col m2">
+                        <div class="row">
+                            <span class="header-tab">Study Design</span>
+                        </div>
+                        <div class="row" v-for="design in searchData.designs">
+                            <div class="input-field">
+                                <input :id="design" name="Design" :value="design" type="checkbox"
+                                       v-model="selectedValues.designs" v-on:change="updateSelectedValue"/>
+                                <label :for="design">{{ design }}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col m2">
+                        <div class="row">
+                            <span class="header-tab">Disease</span>
+                        </div>
+                        <div class="row" v-for="disease in searchData.diseases">
+                            <div class="input-field">
+                                <input :id="disease" name="Disease" :value="disease" type="checkbox"
+                                       v-model="selectedValues.diseases" v-on:change="updateSelectedValue"/>
+                                <label :for="disease">{{ disease }}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col m2">
+                        <div class="row">
+                            <span class="header-tab">Sex</span>
+                        </div>
+                        <div class="row" v-for="sex in searchData.sex">
+                            <div class="input-field">
+                                <input :id="sex" name="Sex" :value="sex" type="checkbox" v-model="selectedValues.sex"
+                                       v-on:change="updateSelectedValue"/>
+                                <label :for="sex">{{ sex }}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col m2">
+                        <div class="row">
+                            <span class="header-tab">Ethnicity</span>
+                        </div>
+                        <div class="row" v-for="ethnicity in searchData.ethnicity">
+                            <div class="input-field">
+                                <input :id="ethnicity" name="Ethnicity" :value="ethnicity" type="checkbox"
+                                       v-model="selectedValues.ethnicity" v-on:change="updateSelectedValue"/>
+                                <label :for="ethnicity">{{ ethnicity }}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col m2">
+                        <div class="row">
+                            <span class="header-tab">Sample Type</span>
+                        </div>
+                        <div class="row" v-for="specType in searchData.specTypes">
+                            <div class="input-field">
+                                <input :id="specType" name="SpecType" :value="specType" type="checkbox"
+                                       v-model="selectedValues.specTypes"  v-on:change="updateSelectedValue"/>
+                                <label :for="specType">{{ specType }}</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="divider"></div>
+                <div class="row" style="margin-left: 0.5rem; margin-right: 0">
+                    <div class="col m1"><h6 class="task-cat grey darken-3 selected-columns">Columns:</h6></div>
+                    <div class="col m1" v-for="column in columns">
+                        <h6 class="selected-column">{{ column.label }}</h6>
+                    </div>
+                    <x-searchactions></x-searchactions>
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <script id="searchactions" type="text/x-template">
+        <div class="col m1 right" style="padding: 10px 0 0 0">
+            <form v-on:submit="filter" action="#" method="post">
+                <button class="btn waves-effect waves-light indigo" type="submit">
+                    Filter <i class="material-icons">send</i>
+                </button>
+            </form>
+        </div>
+    </script>
+
+    <script id="shopping-cart" type="text/x-template">
+        <x-cart-content :selected-rows="selectedRows"
+                        :selected-datasets="selectedDatasets"
+                        v-on:row-selected="setCartRow"
+                        v-on:delete-row="deleteRow"></x-cart-content>
+    </script>
+
+    <script id="user-projects" type="text/x-template">
+        <x-project-cards :cards="cards"
+                         :selected-project-id="selectedProjectId"
+                         v-on:card-selected="setProjectId">
+
+        </x-project-cards>
+    </script>
+
+    <script id="project-carts" type="text/x-template">
+        <x-carts :project-id="projectId"></x-carts>
+    </script>
+    <script th:src="@{/static/js/underscore-min.js}"></script>
+    <script th:src="@{/static/js/vuejs/datatable.js}"></script>
+    <script th:src="@{/static/js/vuejs/researcher/state.js}"></script>
+    <script th:src="@{/static/js/vuejs/researcher/project.js}"></script>
+    <script th:src="@{/static/js/vuejs/researcher/cart.js}"></script>
+    <script th:src="@{/static/js/vuejs/researcher/main.js}"></script>
+
+</div>
+
+
+</body>
+</html>
