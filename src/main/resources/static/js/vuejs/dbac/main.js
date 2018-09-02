@@ -302,10 +302,10 @@ let SelectedCart = {
                 </div>
             </div>
             
-            <div class="container" style="background: #ececec;height:auto;">
-                <div class="row" style="margin: 1rem 0.3rem auto 0.1rem" v-if="queries.length > 0">
-                    <p class="request-header">
-                        <i class="material-icons inline-icon">view_module</i> Biospecimen Queries</p>
+            <div class="container" style="background-color:#e0e0e0;height:auto;">
+                <div class="row" style="margin: auto 0.3rem auto 0.1rem;" v-if="queries.length > 0">
+                    <p class="request-header" style="padding-top: 20px">
+                        <i class="material-icons inline-icon">colorize</i> Biospecimen Queries</p>
                      
                     <table class="bordered">
                         <thead style="background-color: #7e7e7e;">
@@ -341,8 +341,10 @@ let SelectedCart = {
                     </table>
                 </div>
                 
-                <div class="row" style="margin: 1rem 0.3rem auto 0.1rem" v-if="dataQueries.length > 0">
-                    <p class="request-header">
+                <div class="row" style="margin: 20px 5px 10px; height: 20px;background-color: white"></div>
+                
+                <div class="row" style="margin: auto 0.3rem auto 0.1rem;" v-if="dataQueries.length > 0">
+                    <p class="request-header" style="padding-top: 20px">
                         <i class="material-icons inline-icon">view_module</i> Dataset Queries</p>
                      
                     <table class="bordered">
@@ -546,16 +548,21 @@ let QuerySpecimens = {
             
             <div class="container" style="background: #ececec;height:auto;">
                 <div class="row" style="padding-top: 1rem">
-                    <div class="col s6 m4 l4">
+                    <div class="col s6 m6 l6">
                         <span class="request-header">
-                            <i class="material-icons inline-icon">view_module</i> Biospecimens</span>
+                            <i class="material-icons inline-icon">colorize</i> Biospecimens</span>
                     </div>
-                    <div class="col s6 m8 l8">
+                    <div class="col s3 m3 l3">
+                        <div class="right" style="margin-right: 2rem">
+                            <span class="task-cat orange task-cat-emp"><b>Assigned</b></span>
+                            <span class="task-cat teal task-cat-emp">{{ nbLinkedSpec }}</span>
+                        </div>
+                    </div>
+                    <div class="col s3 m3 l3">
                         <div class="right" style="margin-right: 2rem">
                             <span class="task-cat orange task-cat-emp"><b>Requested</b></span>
                             <span class="task-cat teal task-cat-emp">{{ nbRequest }}</span>
                         </div>
-                        
                     </div>
                 </div> 
                 <div class="row" style="margin: 1rem 0.2rem">    
@@ -580,6 +587,10 @@ let QuerySpecimens = {
                                 <a class="btn red darken-2 waves-effect waves-light compact-btn" 
                                    @click="linkSpecimenQuery(biospecimen)" v-if="biospecimen.linked === false">
                                    <i class="material-icons">done</i> 
+                                </a>
+                                <a class="btn red darken-2 waves-effect waves-light compact-btn" 
+                                   @click="unlinkSpecimenQuery(biospecimen)" v-if="biospecimen.linked === true">
+                                   <i class="material-icons">close</i> 
                                 </a>
                             </td>
                         </tr>
@@ -607,8 +618,11 @@ let QuerySpecimens = {
         },
         nbRequest() {
             return state.selectedQuery.nbRequest;
+        },
+        nbLinkedSpec() {
+            let temp = state.querySpecimens.filter((s) => s.linked === true);
+            return temp.length;
         }
-
     },
     methods: {
         linkSpecimenQuery(row) {
@@ -620,6 +634,10 @@ let QuerySpecimens = {
             ).then(function (result) {
                 self.message = result.data.message;
                 self.error = result.data.error;
+                if (self.error == null) {
+                    let item = state.querySpecimens.find(item => item.id === row.id);
+                    item.linked = true;
+                }
             })
         },
         findSpecimenQueries(row) {
