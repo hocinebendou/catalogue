@@ -629,7 +629,7 @@ let QuerySpecimens = {
             row['queryId'] = this.queryId;
             row['nbRequest'] = this.nbRequest;
             let self = this;
-            axios.post('/api/dbac/specimen/query',
+            axios.post('/api/dbac/linkSpecimenQuery',
                  row
             ).then(function (result) {
                 self.message = result.data.message;
@@ -637,6 +637,21 @@ let QuerySpecimens = {
                 if (self.error == null) {
                     let item = state.querySpecimens.find(item => item.id === row.id);
                     item.linked = true;
+                }
+            })
+        },
+        unlinkSpecimenQuery(row) {
+            row['queryId'] = this.queryId;
+            row['nbRequest'] = this.nbRequest;
+            let self = this;
+            axios.post('/api/dbac/unlinkSpecimenQuery',
+                row
+            ).then(function (result) {
+                self.message = result.data.message;
+                self.error = result.data.error;
+                if (self.error == null) {
+                    let item = state.querySpecimens.find(item => item.id === row.id);
+                    item.linked = false;
                 }
             })
         },

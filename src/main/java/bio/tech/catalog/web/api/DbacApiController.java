@@ -98,8 +98,8 @@ public class DbacApiController {
         return new ResponseEntity<>(obj, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/dbac/specimen/query", method = RequestMethod.POST)
-    public ResponseEntity<JSONObject> linkBiospecimenToQuery(@RequestBody Map<String, Object> body) {
+    @RequestMapping(value = "/dbac/linkSpecimenQuery", method = RequestMethod.POST)
+    public ResponseEntity<JSONObject> linkBiospecimenQuery(@RequestBody Map<String, Object> body) {
 
         JSONObject obj = new JSONObject();
         String specimenId = (String) body.get("id");
@@ -120,6 +120,27 @@ public class DbacApiController {
             specQueryRepository.save(specQuery);
 
             obj.put("message", "Biospecimen, " + specimenId + ", has been associated to the query, " + queryId);
+            obj.put("error", null);
+        }
+
+        return new ResponseEntity<>(obj, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/dbac/unlinkSpecimenQuery", method = RequestMethod.POST)
+    public ResponseEntity<JSONObject> unlinkSpecimenQuery(@RequestBody Map<String, Object> body) {
+
+        JSONObject obj = new JSONObject();
+        String specimenId = (String) body.get("id");
+        long queryId = (int) body.get("queryId");
+
+        NeoSpecQuery specQuery = specQueryRepository.findNeoSpecQueryBySpecimenIdAndQueryId(specimenId, queryId);
+
+        if (specQuery == null) {
+            obj.put("error", "Biospecimen, " + specimenId + ", has no query, " + queryId  + ", associated!");
+            obj.put("message", null);
+        } else {
+            specQueryRepository.delete(specQuery);
+            obj.put("message", "Biospecimen, " + specimenId + ", has been successfully deassociated from the query, " + queryId);
             obj.put("error", null);
         }
 
