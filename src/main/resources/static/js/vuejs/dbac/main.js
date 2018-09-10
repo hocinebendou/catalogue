@@ -6,7 +6,7 @@ var SideBar = {
 let RequestedCarts = {
     name: 'requestedCarts',
     template: `
-        <section class="col m10" style="margin-left: -3rem">
+        <section id="content" style="margin-left: 240px;">
             <div class="container">
                 <div class="row">
                     <div class="col s12 m12 l12">
@@ -92,7 +92,7 @@ let RequestedCarts = {
 let RejectedCarts = {
     name: 'rejectedCarts',
     template: `
-        <section class="col m10" style="margin-left: -3rem">
+        <section id="content" style="margin-left: 240px;">
             <div class="container">
                 <div class="row">
                     <div class="col s12 m12 l12">
@@ -178,7 +178,7 @@ let RejectedCarts = {
 let ApprovedCarts = {
     name: 'approvedCarts',
     template: `
-        <section class="col m10" style="margin-left: -3rem">
+        <section id="content" style="margin-left: 240px;">
             <div class="container">
                 <div class="row">
                     <div class="col s12 m12 l12">
@@ -264,7 +264,7 @@ let ApprovedCarts = {
 let SelectedCart = {
     name: 'requestedCart',
     template: `
-        <section class="col m10" style="margin-left: -3rem">
+        <section id="content" style="margin-left: 240px;">
             <div class="container">
                 <div class="row">
                     <div class="col s12 m10 l10">
@@ -455,7 +455,7 @@ let SelectedCart = {
 let SpecimenQueries = {
     name: 'specimenQueries',
     template: `
-        <section class="col m10" style="margin-left: -3rem">
+        <section id="content" style="margin-left: 240px;">
             <div class="container">
                 <div class="row">
                     <div class="col s12 m12 l12">
@@ -521,7 +521,7 @@ let SpecimenQueries = {
 let QuerySpecimens = {
     name: 'querySpecimens',
     template: `
-        <section class="col m10" style="margin-left: -3rem">
+        <section id="content" style="margin-left: 240px;">
             <div class="container">
                 <div class="row">
                     <div class="col s12 m12 l12">
@@ -674,7 +674,7 @@ let QuerySpecimens = {
 let ProjectCart = {
     name:'projectCart',
     template: `
-        <section class="col m10" style="margin-left: -3rem">
+        <section id="content" style="margin-left: 240px;">
         
             <div class="container">
                 <div class="row">
@@ -836,7 +836,7 @@ let ProjectCart = {
 let UserCart = {
     name: 'userCart',
     template: `
-        <section class="col m10" style="margin-left: -3rem">
+        <section id="content" style="margin-left: 240px;">
             <div class="container">
                 <div class="row">
                     <div class="col s12 m12 l12">

@@ -29,7 +29,7 @@ let state = {
             html: false
         },
         {
-            label: 'Nb biospec',
+            label: 'Nb-spec',
             field: 'nbSamples',
             numeric: true,
             html:false
