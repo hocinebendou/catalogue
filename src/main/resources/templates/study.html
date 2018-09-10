@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="mainLayout">
+<head>
+    <title>Study-Info</title>
+</head>
+<body>
+<div class="row" layout:fragment="content">
+    <div class="section col push-m1 m10" style="background-color: #ececec;">
+        <div class="col m12 h3africa">
+            <h5 class="white-text header" th:text="${study.acronym} + ' Study'"></h5>
+        </div>
+        <div class="col s12 m6">
+            <div class="section">
+                <h5>Title</h5>
+                <h6 th:text="${study.title}"></h6>
+            </div>
+            <div class="section">
+                <h5>Design</h5>
+                <ul>
+                    <li th:each="design : ${study.designs}">
+                        <h6 th:text="${design.name}"></h6>
+                    </li>
+                </ul>
+            </div>
+            <div class="section">
+                <h5>Description</h5>
+                <h6 th:text="${study.description}" style="line-height: 26px;letter-spacing:.07em;text-align:justify;"></h6>
+            </div>
+            <div class="divider"></div>
+        </div>
+        <div class="col s12 m5">
+            <div class="row">
+                <h6>Summary</h6>
+                <div class="col s4">
+                    <span class="summary-study">Participants</span>
+                    <span class="badge blue white-text right" th:text="${study.participants.size()}">0</span>
+                </div>
+                <div class="col s4 offset-s2">
+                    <span class="summary-study">Specimens</span>
+                    <span class="badge blue white-text right" th:text="${study.noSpecimens}">0</span>
+                </div>
+            </div>
+            <div class="row"></div>
+            <div class="row">
+                <h6>Datasets</h6>
+                <div class="col s12">
+                    <table class="bordered">
+                        <thead style="background-color: #7e7e7e;">
+                        <tr class="white-text">
+                            <th>EGA Access</th>
+                            <th>Data Generation</th>
+                            <th>Technology</th>
+                            <th>File Type</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="d: ${study.dataSets}">
+                            <td>
+                                <a href="#" th:text="${d.egaAccess}" class="blue-text text-darken-1"></a>
+                            </td>
+                            <td th:with="gs=${datagen.get(d.egaAccess)}">
+                                <span th:each="g: ${gs}" th:text="${g.name}"></span>
+                            </td>
+                            <td th:with="tc=${technology.get(d.egaAccess)}">
+                                <span th:each="t: ${tc}" th:text="${t.name}"></span>
+                            </td>
+                            <td th:with="ft=${filetype.get(d.egaAccess)}">
+                                <span th:each="f: ${ft}" th:text="${f.name}"></span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
