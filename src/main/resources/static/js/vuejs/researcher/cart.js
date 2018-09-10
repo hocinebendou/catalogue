@@ -97,7 +97,7 @@ let DataSetTable = {
 
 let CartContent = {
     template: `
-        <section class="col m10" style="margin-left: -3rem">
+        <section id="content" style="margin-left: 240px;">
             <div class="container">
                 <div class="row">
                     <div class="col s12 m10 l10">
@@ -412,7 +412,7 @@ let CartCard = {
 
 let ProjectCarts = {
     template: `
-        <section class="col m10" style="margin-left: -3rem">
+        <section id="content" style="margin-left: 240px;">
             <div class="container">
                 <div class="row">
                     <div class="col s12 m12 l12">
@@ -567,7 +567,7 @@ let Carts = {
 let Cart = {
     name:'cart-create',
     template: `
-        <section class="col m10" style="margin-left: -3rem">
+        <section id="content" style="margin-left: 240px;">
             <div class="container">
                 <div class="row">
                     <div class="col s12 m12 l12">

@@ -17,8 +17,7 @@
 body {
   background-color: #fcfcfc;
 }
-#main,
-footer {
+#main, footer {
   padding-left: 240px;
 }
 .margin {

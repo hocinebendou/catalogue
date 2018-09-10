@@ -16,7 +16,7 @@
     <script src="webjars/vue-router/3.0.1/dist/vue-router.js"></script>
     <script src="webjars/axios/0.18.0/dist/axios.js"></script>
 
-    <div id="root" class="row">
+    <div id="root" class="wrapper">
         <x-sidebar :user="user" :nb-row-selected="nbRowSelected"></x-sidebar>
         <x-modal :row="row"></x-modal>
         <x-cart-modal :row="row"></x-cart-modal>
@@ -32,10 +32,10 @@
     </script>
 
     <script id="sidebar" type="text/x-template">
-        <div class="col m2">
+
             <aside id="left-sidebar-nav">
                 <ul id="slide-out" class="side-nav fixed leftside-navigation ps-container ps-active-y"
-                    style="width: 250px;">
+                    style="width: 240px;">
 
                     <li class="user-details" style="border-bottom: 1px solid #B83F0D; height: 6rem">
                         <div class="row">
@@ -74,11 +74,11 @@
                     </li>
                 </ul>
             </aside>
-        </div>
+
     </script>
 
     <script id="filter" type="text/x-template">
-        <section class="col m10" style="margin-left: -3rem">
+        <section id="content" style="margin-left: 240px;">
             <div class="container">
                 <div class="row">
                     <div class="col s12 m10 l10">
@@ -197,7 +197,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="divider"></div>
+                <div class="divider" style="margin: 2rem 0 0"></div>
                 <div class="row" style="margin-left: 0.5rem; margin-right: 0">
                     <div class="col m1"><h6 class="task-cat grey darken-3 selected-columns">Columns:</h6></div>
                     <div class="col m1" v-for="column in columns">

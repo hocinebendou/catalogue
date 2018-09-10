@@ -332,7 +332,7 @@ new Vue({
                 self.currentUser(result.data);
             })
     },
-    methods :{
+    methods: {
         currentUser(user) {
             state.user = user;
         },
