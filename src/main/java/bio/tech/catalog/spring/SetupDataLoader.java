@@ -69,7 +69,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         createUserIfNotFound("dbac@ac.za", "Dbac", "DBAC", "DBAC","dbacom", "123",
                 new ArrayList<Role>(Arrays.asList(dbaRole)));
 
-        createUserIfNotFound("hocine@ac.za", "Hocine", "Bendou", "SANBI","benhoc", "123",
+        createUserIfNotFound("hocine@sanbi.ac.za", "Hocine", "Bendou", "SANBI","benhoc", "123",
                 new ArrayList<Role>(Arrays.asList(userRole)));
         alreadySetup = true;
     }

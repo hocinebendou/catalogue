@@ -302,7 +302,7 @@ let SelectedCart = {
                 </div>
             </div>
             
-            <div class="container" style="background-color:#e0e0e0;height:auto;">
+            <div class="container" style="background-color:#ececec;height:auto;">
                 <div class="row" style="margin: auto 0.3rem auto 0.1rem;" v-if="queries.length > 0">
                     <p class="request-header" style="padding-top: 20px">
                         <i class="material-icons inline-icon">colorize</i> Biospecimen Queries</p>
@@ -322,7 +322,7 @@ let SelectedCart = {
                         <tr v-for="query in queries">
                             <td>
                                 <a href="#" @click="showQuery(query)">
-                                    <b style="color: #00bcd4;">{{ query.id }}</b>
+                                    <b class="blue-text">{{ query.id }}</b>
                                 </a>
                             </td>
                             <td>{{ query.acronym }}</td>
@@ -341,7 +341,7 @@ let SelectedCart = {
                     </table>
                 </div>
                 
-                <div class="row" style="margin: 20px 5px 10px; height: 20px;background-color: white"></div>
+                <div class="row" style="height: 15px;background-color: white"></div>
                 
                 <div class="row" style="margin: auto 0.3rem auto 0.1rem;" v-if="dataQueries.length > 0">
                     <p class="request-header" style="padding-top: 20px">
@@ -529,7 +529,7 @@ let QuerySpecimens = {
                             <span class="task-cat white-text h3africa"><b>{{ cartId }}</b></span></h5>
                         <ol class="breadcrumbs">
                             <li v-if="status==='Requested'">
-                                <router-link to="/dbac" style="color: #00bcd4;">{{ status }} Carts</router-link>
+                                <router-link to="/dbac.html" style="color: #00bcd4;">{{ status }} Carts</router-link>
                             </li>
                             <li v-if="status==='Approved'">
                                 <router-link to="/dbac/approved" style="color: #00bcd4;">{{ status }} Carts</router-link>
@@ -548,9 +548,15 @@ let QuerySpecimens = {
             
             <div class="container" style="background: #ececec;height:auto;">
                 <div class="row" style="padding-top: 1rem">
-                    <div class="col s6 m6 l6">
+                    <div class="col s3 m3 l3">
                         <span class="request-header">
                             <i class="material-icons inline-icon">colorize</i> Biospecimens</span>
+                    </div>
+                    <div class="col s3 m3 l3">
+                        <div class="right" style="margin-right: 2rem">
+                            <span class="task-cat orange task-cat-emp"><b>Total</b></span>
+                            <span class="task-cat teal task-cat-emp">{{ nbTotalSpec }}</span>
+                        </div>
                     </div>
                     <div class="col s3 m3 l3">
                         <div class="right" style="margin-right: 2rem">
@@ -622,6 +628,9 @@ let QuerySpecimens = {
         nbLinkedSpec() {
             let temp = state.querySpecimens.filter((s) => s.linked === true);
             return temp.length;
+        },
+        nbTotalSpec() {
+            return state.querySpecimens.length;
         }
     },
     methods: {
@@ -682,7 +691,7 @@ let ProjectCart = {
                         <h5 class="breadcrumbs-title">Cart 
                             <span class="task-cat white-text h3africa"><b>{{ cartId }}</b></span></h5>
                         <ol class="breadcrumbs">
-                            <li><a href="index.html" style="color: #00bcd4;">{{ username }}</a></li>
+                            <li><router-link to="/dbac/status/cart" style="color: #00bcd4;">{{ cartId }}</router-link></li>
                             <li class="active">{{ projectId }}</li>
                         </ol>
                     </div>
@@ -843,7 +852,7 @@ let UserCart = {
                         <h5 class="breadcrumbs-title">Cart
                             <span class="task-cat white-text h3africa"><b>{{ cartId }}</b></span></h5>
                         <ol class="breadcrumbs">
-                            <li><a href="index.html" style="color: #00bcd4;">{{ username }}</a></li>
+                            <li><router-link to="/dbac/status/cart" style="color: #00bcd4;">{{ cartId }}</router-link></li>
                             <li class="active">USER</li>
                         </ol>
                     </div>
