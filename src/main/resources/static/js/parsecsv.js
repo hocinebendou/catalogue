@@ -82,6 +82,7 @@ $(function() {
                 var msgCol = "Column " + v + " contains undefined values!";
                 appendToTextarea(msgCol, true);
             }else {
+                errorParsing = false;
                 var msgCol = "Column '" + v + "': <span style=\"color:green;\">OK.</span>";
                 appendToTextarea(msgCol, false);
             }
@@ -91,6 +92,7 @@ $(function() {
     function otherCheck(data) {
         var errHeader = checkHeader(data);
         if (errHeader.length === 0) {
+            errorParsing = false;
             var msgHeader = 'Header columns present: <span style="color:green;">OK.</span>';
             appendToTextarea(msgHeader, false);
             checkColumns(data);

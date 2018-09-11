@@ -31,7 +31,13 @@ let CartModal = {
     computed: {
         rowQuery() {
             let query = {};
-            _.each(this.row.query, function (val, key) {
+            let tempQuery = {};
+            if (!_.isUndefined(this.row.query)) {
+                tempQuery = this.row.query;
+            } else {
+                tempQuery = this.row;
+            }
+            _.each(tempQuery, function (val, key) {
                 switch (key) {
                     case 'sex':
                         if (!_.isUndefined(val)) {

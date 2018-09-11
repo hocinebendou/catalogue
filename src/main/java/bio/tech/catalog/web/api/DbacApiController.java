@@ -232,7 +232,10 @@ public class DbacApiController {
         }
 
         if (ethnicity != null) {
-            ids.retainAll(participantRepository.findByAcronymsAndEthnicity(
+            List<String> p = participantRepository.findByAcronymsAndEthnicity(
+                    new ArrayList<>(Arrays.asList(acronym)),
+                    new ArrayList<>(Arrays.asList(ethnicity)));
+            ids.addAll(participantRepository.findByAcronymsAndEthnicity(
                     new ArrayList<>(Arrays.asList(acronym)),
                     new ArrayList<>(Arrays.asList(ethnicity))));
         }

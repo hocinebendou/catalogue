@@ -58,16 +58,16 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         final Role dbaRole = createRoleIfNotFound("ROLE_DBAC", dbacPrivileges);
         createRoleIfNotFound("ROLE_USER", userPrivileges);
 
-        createUserIfNotFound("hocine@sanbi.ac.za", "Hocine", "Bendou", "benhoc", "123",
+        /*createUserIfNotFound("hocine@sanbi.ac.za", "Hocine", "Bendou", "SANBI","benhoc", "123",
                 new ArrayList<Role>(Arrays.asList(adminRole)));
 
-        createUserIfNotFound("rabah@sanbi.ac.za", "Rabah", "Bendou", "rabahben", "123",
+        createUserIfNotFound("cls@cls.ac.za", "Biobank", "Biobank", "CLS","rabahben", "123",
                 new ArrayList<Role>(Arrays.asList(bioRole)));
 
-        createUserIfNotFound("arezki@sanbi.ac.za", "Arezki", "Bendou", "rezkiben", "123",
+        createUserIfNotFound("archive@archive.ac.za", "Archive", "archive", "ARCHIVE","rezkiben", "123",
                 new ArrayList<Role>(Arrays.asList(arcRole)));
-        createUserIfNotFound("dbac@sanbi.ac.za", "Dbac", "Bendou", "dbacben", "123",
-                new ArrayList<Role>(Arrays.asList(dbaRole)));
+        createUserIfNotFound("dbac@dbac.ac.za", "Dbac", "Bendou", "DBAC","dbacben", "123",
+                new ArrayList<Role>(Arrays.asList(dbaRole)));*/
 
         alreadySetup = true;
     }
@@ -92,12 +92,14 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     }
 
     private User createUserIfNotFound(final String email, final String firstName, final String lastName,
-                                      final String username, final String password, final Collection<Role> roles) {
+                                      final String institutionName, final String username, final String password,
+                                      final Collection<Role> roles) {
         User user = userRepository.findByEmail(email);
         if (user == null) {
             user = new User();
             user.setFirstName(firstName);
             user.setLastName(lastName);
+            user.setInstitutionName(institutionName);
             user.setUsername(username);
             user.setPassword(passwordEncoder.encode(password));
             user.setEmail(email);
