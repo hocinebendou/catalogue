@@ -344,11 +344,14 @@ public class ApiController {
 
 	private List<DatasetForm> datasetStudies(List<RowForm> specimens) {
 		List<DatasetForm> datasets = new ArrayList<>();
-
+		Set<String> egacodes = new HashSet<>();
 		for (RowForm specimen : specimens) {
 			String acronym = specimen.getAcronym();
 			List<NeoDataSet> sets = datasetRepository.findAllByStudyAcronym(acronym);
 			for (NeoDataSet set : sets) {
+				if (egacodes.contains(set.getEgaAccess())) continue;
+
+				egacodes.add(set.getEgaAccess());
 				DatasetForm dataset = new DatasetForm();
 				dataset.setAcronym(acronym);
 				dataset.setEgaAccess(set.getEgaAccess());
