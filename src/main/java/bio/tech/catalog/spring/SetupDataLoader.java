@@ -58,18 +58,18 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         final Role dbaRole = createRoleIfNotFound("ROLE_DBAC", dbacPrivileges);
         final Role userRole = createRoleIfNotFound("ROLE_USER", userPrivileges);
 
-        createUserIfNotFound("admin@ac.za", "Hocine", "Bendou", "SANBI","benhoc", "123",
+        createUserIfNotFound("admin@catalogue.ac.za", "Admin", "Admin", "SANBI","admin", "123",
                 new ArrayList<Role>(Arrays.asList(adminRole)));
 
-        createUserIfNotFound("cls@ac.za", "Biobank", "Biobank", "CLS","clsbio", "123",
+        createUserIfNotFound("cls@catalogue.ac.za", "Biobank", "Biobank", "CLS","clsbio", "123",
                 new ArrayList<Role>(Arrays.asList(bioRole)));
 
-        createUserIfNotFound("archive@ac.za", "Archive", "Archive", "ARCHIVE","cbioarch", "123",
+        createUserIfNotFound("archive@catalogue.ac.za", "Archive", "Archive", "ARCHIVE","cbioarch", "123",
                 new ArrayList<Role>(Arrays.asList(arcRole)));
-        createUserIfNotFound("dbac@ac.za", "Dbac", "DBAC", "DBAC","dbacom", "123",
+        createUserIfNotFound("dbac@catalogue.ac.za", "Dbac", "DBAC", "DBAC","dbacom", "123",
                 new ArrayList<Role>(Arrays.asList(dbaRole)));
 
-        createUserIfNotFound("hocine@sanbi.ac.za", "Hocine", "Bendou", "SANBI","benhoc", "123",
+        createUserIfNotFound("researcher@catalogue.ac.za", "Hocine", "Bendou", "SANBI","benhoc", "123",
                 new ArrayList<Role>(Arrays.asList(userRole)));
         alreadySetup = true;
     }

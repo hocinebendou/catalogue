@@ -424,8 +424,8 @@ let ProjectCarts = {
                     <div class="col s12 m12 l12">
                         <h5 class="breadcrumbs-title">Your Carts</h5>
                         <ol class="breadcrumbs">
-                            <li><a href="index.html" style="color: #00bcd4;">{{ username }}</a></li>
-                            <li><a href="index.html" style="color: #00bcd4;">{{ projectId }}</a></li>
+                            <li><a href="/" style="color: #00bcd4;">Home</a></li>
+                            <li><router-link to="/advance/projects" style="color: #00bcd4;">Projects</router-link></li>
                             <li class="active">Carts</li>
                         </ol>
                     </div>
@@ -543,10 +543,12 @@ let ProjectCarts = {
         },
         getCarts() {
             let self = this;
-            axios.get(`/api/carts/${self.projectId}`)
-                .then(function (result) {
-                    self.setCarts(result.data['cart-queries']);
-                })
+            if (self.projectId !== null) {
+                axios.get(`/api/carts/${self.projectId}`)
+                    .then(function (result) {
+                        self.setCarts(result.data['cart-queries']);
+                    })
+            }
         }
     },
     created() {

@@ -365,7 +365,7 @@ let ProjectCards = {
                     <div class="col s12 m12 l12">
                         <h5 class="breadcrumbs-title">Your Projects</h5>
                         <ol class="breadcrumbs">
-                            <li><a href="index.html" style="color: #00bcd4;">{{ username }}</a></li>
+                            <li><a href="/" style="color: #00bcd4;">Home</a></li>
                             <li class="active">Projects</li>
                         </ol>
                     </div>
@@ -452,7 +452,9 @@ let Projects = {
         setProjectId(projectId) {
             if (this.selectedProjectId === projectId) {
                 this.selectedProjectId = null;
-                state.selectedCart = null
+                state.selectedCart = null;
+                state.selectedRows = null;
+                state.nbRowSelected = 0;
             } else {
                 this.selectedProjectId = projectId;
             }
