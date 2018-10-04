@@ -81,7 +81,7 @@ let Project = {
                                 </p>
                                 <div class="btn h3africa">
                                     <span>Reports</span>
-                                    <input type="file" multiple="multiple" name="reports" accept="application/pdf"/>
+                                    <input type="file" name="reports" accept="application/pdf" id="file" multiple="multiple" />
                                 </div>
                                 <div class="file-path-wrapper">
                                     <input class="file-path validate" type="text" placeholder="Upload one or more files"/>
@@ -171,7 +171,7 @@ let Project = {
                                     <label for="feasibility-yes">Yes, I obtained all approvals required</label>
                                 </p>
                                 <p>
-                                    <input name="group1" id="feasibility-no" type="radio" value="No" v-model="dataForm.consentApprovalsNo"/>
+                                    <input name="group1" id="feasibility-no" type="radio" value="No" v-model="consentApprovalsNo"/>
                                     <label for="feasibility-no">No</label>
                                 </p>
                             </div>
@@ -190,7 +190,7 @@ let Project = {
                                     <label for="bioagree-yes">Yes</label>
                                 </p>
                                 <p>
-                                    <input name="group2" id="bioagree-no" type="radio" value="No" v-model="dataForm.consentBioRequestsNo"/>
+                                    <input name="group2" id="bioagree-no" type="radio" value="No" v-model="consentBioRequestsNo"/>
                                     <label for="bioagree-no">No</label>
                                 </p>
                             </div>
@@ -207,7 +207,7 @@ let Project = {
                                     <label for="dataagree-yes">Yes</label>
                                 </p>
                                 <p>
-                                    <input name="group3" id="dataagree-no" type="radio" value="No" v-model="dataForm.consentDataRequestsNo"/>
+                                    <input name="group3" id="dataagree-no" type="radio" value="No" v-model="consentDataRequestsNo"/>
                                     <label for="dataagree-no">No</label>
                                 </p>
                             </div>
@@ -245,20 +245,31 @@ let Project = {
                 consentApprovals: null,
                 consentBioRequests: null,
                 consentDataRequests: null
-            }
+            },
+            reports: []
         }
     },
     methods: {
         checkForm(e) {
             e.preventDefault();
+            const data = new FormData();
+            let reportFiles = document.querySelector('#file');
+            data.append("project", JSON.stringify(this.dataForm));
+            // data.append("reports", imagefile.files[0]);
+            for (let i = 0; i < reportFiles.files.length; i++) {
+                data.append("reports", reportFiles.files[i]);
+            }
             this.erros = [];
             if (!this.dataForm.projectId) {
                 this.errors.push('Project Id required');
             }
+
             if (this.erros.length === 0) {
                 let self = this;
                 axios.post('/api/create/project',
-                    self.dataForm
+                    data, {headers: {
+                        "Content-Type": "multipart/form-data"
+                    }}
                 ).then(function (result) {
                     self.$router.push("/advance/projects");
                 })

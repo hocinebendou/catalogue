@@ -7,19 +7,28 @@ import bio.tech.catalog.persistence.model.NeoProject;
 import bio.tech.catalog.persistence.model.User;
 import bio.tech.catalog.service.UserService;
 import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.File;
+import java.io.IOException;
 import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -72,15 +81,20 @@ public class ProjectApiConroller {
     }
 
     @RequestMapping(value = "/create/project", method = RequestMethod.POST)
-    public ResponseEntity<Object> createProject(@Valid @RequestBody NeoProject project,
-                                                BindingResult bindingResult) {
+    public ResponseEntity<Object> createProject(@RequestParam("project") String obj,
+                                                @RequestParam("reports") MultipartFile[] reports) throws IOException {
 
-        if (bindingResult.hasErrors()) {
-            System.out.println(bindingResult.getAllErrors());
-        }
-
+        ObjectMapper mapper = new ObjectMapper();
+        NeoProject project = mapper.readValue(obj, NeoProject.class);
         User user = authenticatedUser();
-
+        String path = "/home/hocine/my-projects/hcatalogue/users/" + user.getUsername() + "/" + project.getProjectId();
+        File folder = new File(path);
+        folder.mkdirs();
+        Path pathLocation = Paths.get(folder.getAbsolutePath());
+        for(MultipartFile r : reports) {
+            if (! r.isEmpty())
+                Files.copy(r.getInputStream(), pathLocation.resolve(r.getOriginalFilename()));
+        }
         project.setUser(new ArrayList<>(Arrays.asList(user)));
         NeoProject savedProject = projectRepository.save(project);
 

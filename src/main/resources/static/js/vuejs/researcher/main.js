@@ -147,6 +147,7 @@ let ResultDataTable = {
     methods: {
         addDatasetToCart: function(row, e) {
             addDatasetToCart(row);
+            row['added'] = true;
         }
     }
 };
