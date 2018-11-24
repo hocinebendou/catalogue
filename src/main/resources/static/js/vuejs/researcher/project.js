@@ -223,15 +223,15 @@ let EditProject = {
                         </tr>
                         </thead>
                         <tbody>
-                        <tr v-for="(path, filename,index)  in files">
-                            <td>{{ filename }}</td>
+                        <tr v-for="(row, index)  in rows" :key="index" :row="row">
+                            <td>{{ row }}</td>
                             <td>
                                 <a class="btn red darken-2 waves-effect waves-light compact-btn" 
-                                   @click="openFile(path, filename)">
+                                   @click="openFile(row)">
                                    <i class="material-icons white-text">file_download</i> 
                                 </a>
                                 <a class="btn red darken-2 waves-effect waves-light compact-btn" 
-                                   @click="deleteFile(path, filename)">
+                                   @click="deleteFile(row, index)">
                                    <i class="material-icons white-text">delete</i> 
                                 </a>
                             </td>
@@ -246,6 +246,7 @@ let EditProject = {
     data() {
         return {
             errors: [],
+            rows: Object.keys(this.files),
             consentApprovalsNo: null,
             consentBioRequestsNo: null,
             consentDataRequestsNo: null
@@ -288,26 +289,39 @@ let EditProject = {
             }
         },
 
-        openFile(path, filename) {
-            let self = this;
-            console.log('http://localhost:8080/' + path + '/' + filename)
-            console.log("-----------------+")
+        openFile(filename) {
+            let path = this.files[filename];
+            let url = window.location.protocol + '//' + window.location.host + '/' + path + '/' + filename;
             axios({
-                url: 'http://localhost:8080/' + path + '/' + filename,
+                // url: 'http://localhost:8080/' + path + '/' + filename,
+                url: url,
                 method: 'GET',
                 responseType: 'blob',
             }).then(function (result) {
                 const url = window.URL.createObjectURL(new Blob([result.data]));
                 const link = document.createElement('a');
                 link.href = url;
-                link.setAttribute('download', 'file.pdf');
+                link.setAttribute('download', filename);
                 document.body.appendChild(link);
                 link.click();
             });
         },
 
-        deleteFile(path, filename) {
-            console.log(path);
+        deleteFile(filename, index) {
+            let self = this;
+            console.log(filename);
+            let path = this.files[filename];
+            let fullPath = path + '/' + filename;
+            axios.post('/api/project/delete/file',
+            {
+                'path': fullPath
+            }).then(function (result) {
+                console.log(result);
+                if (result.status === 200) {
+                    delete self.files[filename];
+                    self.rows.splice(index, 1)
+                }
+            })
         }
     }
 };

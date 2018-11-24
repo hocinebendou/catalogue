@@ -155,6 +155,20 @@ public class ProjectApiConroller {
         return ResponseEntity.created(location).build();
     }
 
+    @RequestMapping(value = "/project/delete/file", method = RequestMethod.POST)
+    public ResponseEntity<JSONObject> deleteProjectFile(@RequestBody Map<String, String> body) throws IOException {
+        JSONObject obj = new JSONObject();
+        String path = body.get("path");
+
+        File file = ResourceUtils.getFile("classpath:" + path);
+        String filename = file.getName();
+        file.delete();
+
+        obj.put("delete", filename + " deleted successfully.");
+
+        return new ResponseEntity<>(obj, HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/remove/{id}", method = RequestMethod.GET)
     public ResponseEntity<JSONObject> deleteProject(@PathVariable("id") String projectId) {
 
