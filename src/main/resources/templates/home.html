@@ -219,6 +219,11 @@
             </div>
             <div class="divider row h3africa"></div>
             <div class="row">
+                <div class="row" th:if="${studies.size() == 0}">
+                    <div class="alert orange grey-text lighten-5 text-darken-2" style="padding: 1rem 0 0.3rem 1rem">
+                        <p style="font-size: 16px">No studies found for the specified query.</p>
+                    </div>
+                </div>
                 <div th:each="s,iter: ${studies}" th:with="result=${iter.index % 3}">
                     <div class="col s4">
                         <div class="card" style="background-color: #ececec;">

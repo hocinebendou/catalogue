@@ -309,7 +309,8 @@ let routes = [
     {path: '/advance/carts/cart', component: Cart},
     {path: '/advance/cart', component: YourCart},
     {path: '/advance/projects', component: Projects},
-    {path: '/advance/projects/project', component: Project}
+    {path: '/advance/projects/project', component: Project},
+    {path: '/advance/projects/editProject', name: 'edit-project', component: EditProject, props: true}
 ];
 
 let router = new VueRouter({

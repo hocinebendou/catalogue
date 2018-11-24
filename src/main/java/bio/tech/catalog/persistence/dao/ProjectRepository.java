@@ -16,7 +16,13 @@ public interface ProjectRepository extends PagingAndSortingRepository<NeoProject
     Long deleteByProjectId(@Param("projectId") String projectId);
 
     @Query( "MATCH (u:User {username: {username}}) " +
-            "-[r:HAS_USER]-> (p:NeoProject) " +
+            "-[]-> (p:NeoProject {projectId: {projectId}}) " +
+            "RETURN p")
+    NeoProject findProjectByProjectIdAndUsername(@Param("username") String username,
+                                                 @Param("projectId") String projectId);
+
+    @Query( "MATCH (u:User {username: {username}}) " +
+            "-[]-> (p:NeoProject) " +
             "RETURN p")
     List<NeoProject> userProjects(@Param("username") String username);
 
