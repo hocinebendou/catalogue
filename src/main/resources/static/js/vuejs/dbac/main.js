@@ -1,4 +1,4 @@
-var SideBar = {
+let SideBar = {
     template: '#sidebar',
     props: ['user']
 };
@@ -261,6 +261,80 @@ let ApprovedCarts = {
     }
 };
 
+let CartModal = {
+    name: "modal-query",
+    template: `
+    <div id="query-modal" class="modal modal-fixed-footer">
+        <div class="modal-content"> 
+            <div class="row">
+                <div class="col m8">
+                    <h5>Query values</h5>
+                </div>
+            </div>
+            <div class="divider"></div>
+            <div class="row" v-for="(value, key) in rowQuery">
+                <div class="col m5">
+                    <h5>{{ key }}</h5> 
+                </div>
+                <div class="col m7">
+                    <h6>{{ value }}</h6>
+                </div>
+                
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a class="btn waves-effect waves-red modal-close h3africa white-text" href="#">Close</a>
+        </div>    
+    </div>
+    `,
+    props: ['query'],
+    computed: {
+        rowQuery() {
+            let modifiedQuery = {};
+            _.each(this.query, function (val, key) {
+                switch (key) {
+                    case 'acronym':
+                        if (!_.isUndefined(val) && val !== null) {
+                            modifiedQuery['Acronym'] = val;
+                        }
+                        break;
+                    case 'design':
+                        if (!_.isUndefined(val) && val !== null) {
+                            modifiedQuery['Design'] = val;
+                        }
+                        break;
+                    case 'disease':
+                        if (!_.isUndefined(val) && val !== null) {
+                            modifiedQuery['Disease'] = val;
+                        }
+                        break;
+                    case 'sex':
+                        if (!_.isUndefined(val) && val !== null) {
+                            modifiedQuery['Sex'] = val;
+                        }
+                        break;
+                    case 'ethnicity':
+                        if (!_.isUndefined(val) && val !== null) {
+                            modifiedQuery['Ethnicity'] = val;
+                        }
+                        break;
+                    case 'country':
+                        if (!_.isUndefined(val) && val !== null) {
+                            modifiedQuery['Country'] = val;
+                        }
+                        break;
+                    case 'specimenType':
+                        if (!_.isUndefined(val) && val !== null) {
+                            modifiedQuery['Specimen Type'] = val;
+                        }
+                        break;
+                }
+            });
+            return modifiedQuery;
+        }
+    }
+};
+
 let SelectedCart = {
     name: 'requestedCart',
     template: `
@@ -312,8 +386,8 @@ let SelectedCart = {
                         <tr class="white-text">
                             <th>Query ID</th>
                             <th>Acronym</th>
-                            <th>Design</th>
-                            <th>Disease</th>
+                            <!--<th>Design</th>-->
+                            <!--<th>Disease</th>-->
                             <th>Nb Request</th>
                             <th>Query</th>
                         </tr>
@@ -321,18 +395,18 @@ let SelectedCart = {
                         <tbody>
                         <tr v-for="query in queries">
                             <td>
-                                <a href="#" @click="showQuery(query)">
+                                <a href="#" @click="queryBiospecimens(query)">
                                     <b class="blue-text">{{ query.id }}</b>
                                 </a>
                             </td>
                             <td>{{ query.acronym }}</td>
-                            <td>{{ query.design }}</td>
-                            <td>{{ query.disease}}</td>
+                            <!--<td>{{ query.design }}</td>-->
+                            <!--<td>{{ query.disease}}</td>-->
                             <td><b class="task-cat red darken-2 white-text" style="font-size: 14px;padding: 0.2rem 0.6rem">
                                 {{ query.nbRequest }}</b></td>
                             <td>
                                 <a class="btn red darken-2 waves-effect waves-light compact-btn modal-trigger"
-                                    @click="(e) => showQuery(props.row, e)" href="#query-modal">
+                                    @click="(e) => showQuery(query, e)" href="#query-modal">
                                     <i class="material-icons">description</i>
                                 </a>
                             </td>
@@ -390,7 +464,7 @@ let SelectedCart = {
             status: state.selectedCart.status,
             queries: state.selectedCart.queries,
             dataQueries: state.selectedCart.dataQueries,
-            statusMessage: null,
+            statusMessage: null
         }
     },
     methods: {
@@ -436,7 +510,7 @@ let SelectedCart = {
                     self.status = 'Requested'
                 })
         },
-        showQuery(query) {
+        queryBiospecimens(query) {
             state.selectedQuery = query;
             axios.get(`/api/dbac/query/biospecimens/${query.id}`)
                 .then(function (result) {
@@ -445,6 +519,9 @@ let SelectedCart = {
                     }
                 });
             this.$router.push('/dbac/query/specimens')
+        },
+        showQuery(query, e) {
+            this.$parent.showQuery(query);
         },
         closeMessage() {
             this.statusMessage = null
@@ -940,6 +1017,7 @@ new Vue({
     router: router,
     components: {
         'x-sidebar': SideBar,
+        'x-modal': CartModal
     },
     beforeCreate() {
         let self = this;
@@ -951,6 +1029,9 @@ new Vue({
     methods :{
         currentUser(user) {
             state.user = user;
-        }
+        },
+        showQuery(query) {
+            state.query = query;
+        },
     }
 });

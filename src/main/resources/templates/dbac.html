@@ -17,6 +17,7 @@
 
     <div id="root" class="wrapper">
         <x-sidebar :user="user"></x-sidebar>
+        <x-modal :query="query"></x-modal>
         <router-view></router-view>
     </div>
 
@@ -53,7 +54,7 @@
             </ul>
         </aside>
     </script>
-
+    <script th:src="@{/static/js/underscore-min.js}"></script>
     <script th:src="@{/static/js/vuejs/dbac/state.js}"></script>
     <script th:src="@{/static/js/vuejs/dbac/main.js}"></script>
 </div>

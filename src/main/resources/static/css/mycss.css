@@ -457,7 +457,7 @@ div.text-info-filter p i {
     font-size: 0.9rem;
 }
 
-#request-modal, #query-modal { width: 30% !important ; height: 30% !important ; transform: translateY(80%) !important;}
+#request-modal, #query-modal { width: 40% !important ; height: 40% !important ; transform: translateY(80%) !important;}
 
 /*-------------------------------------
     breadcrumbs

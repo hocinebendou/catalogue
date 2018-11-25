@@ -10,5 +10,6 @@ state = {
     selectedQuery: null,
     querySpecimens: [],
     specimenQueries: [],
-    statusCarts: null
+    statusCarts: null,
+    query: {}
 };
