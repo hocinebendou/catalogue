@@ -151,6 +151,18 @@ function adjustRow(row) {
             case 'disease':
                 tempRow['disease'] = val;
                 break;
+            case 'sex':
+                tempRow['sex'] = val;
+                break;
+            case 'ethnicity':
+                tempRow['ethnicity'] = val;
+                break;
+            case 'country':
+                tempRow['country'] = val;
+                break;
+            case 'specType':
+                tempRow['specType'] = val;
+                break;
         }
     });
     return tempRow;
