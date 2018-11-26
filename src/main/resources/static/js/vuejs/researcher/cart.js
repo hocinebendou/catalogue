@@ -8,7 +8,7 @@ let CartModal = {
         <div class="modal-content"> 
             <div class="row">
                 <div class="col m8">
-                    <h5>Query values</h5>
+                    <h5>Query Values</h5>
                 </div>
             </div>
             <div class="divider"></div>
@@ -37,16 +37,41 @@ let CartModal = {
             } else {
                 tempQuery = this.row;
             }
-            _.each(tempQuery, function (val, key) {
+            _.each(this.row, function (val, key) {
                 switch (key) {
+                    case 'acronym':
+                        if (!_.isUndefined(val) && val !== null) {
+                            query['Acronym'] = val;
+                        }
+                        break;
+                    case 'design':
+                        if (!_.isUndefined(val) && val !== null) {
+                            query['Design'] = val;
+                        }
+                        break;
+                    case 'disease':
+                        if (!_.isUndefined(val) && val !== null) {
+                            query['Disease'] = val;
+                        }
+                        break;
                     case 'sex':
-                        if (!_.isUndefined(val)) {
+                        if (!_.isUndefined(val) && val !== null) {
                             query['Sex'] = val;
                         }
                         break;
                     case 'ethnicity':
-                        if (!_.isUndefined(val)) {
+                        if (!_.isUndefined(val) && val !== null) {
                             query['Ethnicity'] = val;
+                        }
+                        break;
+                    case 'country':
+                        if (!_.isUndefined(val) && val !== null) {
+                            query['Country'] = val;
+                        }
+                        break;
+                    case 'specimenType':
+                        if (!_.isUndefined(val) && val !== null) {
+                            query['Specimen Type'] = val;
                         }
                         break;
                 }

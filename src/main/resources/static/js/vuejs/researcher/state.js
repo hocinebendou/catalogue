@@ -67,7 +67,7 @@ let cartColumns = [
         numeric: false,
         html: false
     },
-    {
+    /*{
         label: 'Design',
         field: 'design',
         numeric: false,
@@ -78,7 +78,7 @@ let cartColumns = [
         field: 'disease',
         numeric: false,
         html: false
-    },
+    },*/
     {
         label: 'Nb Request',
         field: 'nbRequest',
