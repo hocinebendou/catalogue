@@ -552,3 +552,9 @@ div.text-info-filter p i {
     color: #E53935;
 }
 
+/* ------------------------------------------- */
+#acronym-select input, #design-select input, #disease-select input,
+#sex-select input, #ethnicity-select input, #specType-select input{
+    height: 2rem;
+    display: block !important;
+}

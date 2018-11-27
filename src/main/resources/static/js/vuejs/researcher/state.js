@@ -106,7 +106,7 @@ function removeElement (arr, item) {
 /*
  * Add the checked value and its corresponding column
  */
-function addSelectedValue(arr, value, label, field) {
+function addSelectedValue(arr, label, field) {
     // arr.push(value);
     if (label !== "Acronym") {
         if (arr.length === 1) {
@@ -124,13 +124,15 @@ function addSelectedValue(arr, value, label, field) {
 /*
  * Remove the unchecked value and its corresponding column
  */
-function removeSelectedValue(arr, value, label) {
+function removeSelectedValue(arr, label) {
     // removeElement(arr, value);
     if (label !== "Acronym") {
         if (arr.length === 0) {
             const item = state.columns.find(item => item.label === label);
-            state.columns.splice(state.columns.indexOf(item), 1);
-            state.selectedValues.columns.splice(state.selectedValues.columns.indexOf(label), 1);
+            if (item && typeof item.label !== 'undefined') {
+                state.columns.splice(state.columns.indexOf(item), 1);
+                state.selectedValues.columns.splice(state.selectedValues.columns.indexOf(label), 1);
+            }
         }
     }
 }

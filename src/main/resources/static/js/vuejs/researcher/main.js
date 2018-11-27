@@ -1,3 +1,5 @@
+Vue.component('v-select', VueSelect.VueSelect);
+
 let Alert = {
     template: '#alert',
     data: function() {
@@ -46,11 +48,23 @@ let SearchVue = {
         'x-searchactions': SearchActions,
     },
     methods: {
+        designColumn(arr) {
+            this.$parent.updateColumns("Design", arr);
+        },
+        diseaseColumn(arr) {
+            this.$parent.updateColumns("Disease", arr);
+        },
+        sexColumn(arr) {
+            this.$parent.updateColumns("Sex", arr);
+        },
+        ethnicityColumn(arr) {
+            this.$parent.updateColumns("Ethnicity", arr);
+        },
+        specTypeColumn(arr) {
+            this.$parent.updateColumns("SpecType", arr);
+        },
         setSearchData(result) {
             this.$parent.setSearchData(result);
-        },
-        updateSelectedValue(event) {
-            this.$parent.updateSelectedValue(event);
         },
         updateRows(result) {
             this.$parent.updateRows(result);
@@ -188,43 +202,43 @@ let Filter = {
             this.rows = result;
             state.specimenRows = this.rows;
         },
-        updateSelectedValue(event) {
-            switch (event.target.name) {
+        updateColumns(column, arr) {
+            switch (column) {
                 case "Acronym":
-                    if (event.target.checked)
-                        addSelectedValue(state.selectedValues.acronyms, event.target.value, "Acronym", "acronym");
+                    if (arr.length > 0)
+                        addSelectedValue(state.selectedValues.acronyms, "Acronym", "acronym");
                     else
-                        removeSelectedValue(state.selectedValues.acronyms, event.target.value, "Acronym");
+                        removeSelectedValue(state.selectedValues.acronyms, "Acronym");
                     break;
                 case "Design":
-                    if (event.target.checked)
-                        addSelectedValue(state.selectedValues.designs, event.target.value, "Design", "design");
+                    if (arr.length > 0)
+                        addSelectedValue(state.selectedValues.designs, "Design", "design");
                     else
-                        removeSelectedValue(state.selectedValues.designs, event.target.value, "Design");
+                        removeSelectedValue(state.selectedValues.designs, "Design");
                     break;
                 case "Disease":
-                    if (event.target.checked)
-                        addSelectedValue(state.selectedValues.diseases, event.target.value, "Disease", "disease");
+                    if (arr.length > 0)
+                        addSelectedValue(state.selectedValues.diseases, "Disease", "disease");
                     else
-                        removeSelectedValue(state.selectedValues.diseases, event.target.value, "Disease");
+                        removeSelectedValue(state.selectedValues.diseases, "Disease");
                     break;
                 case "Sex":
-                    if (event.target.checked)
-                        addSelectedValue(state.selectedValues.sex, event.target.value, "Sex", "sex");
+                    if (arr.length > 0)
+                        addSelectedValue(state.selectedValues.sex, "Sex", "sex");
                     else
-                        removeSelectedValue(state.selectedValues.sex, event.target.value, "Sex");
+                        removeSelectedValue(state.selectedValues.sex, "Sex");
                     break;
                 case "Ethnicity":
-                    if (event.target.checked)
-                        addSelectedValue(state.selectedValues.ethnicity, event.target.value, "Ethnicity", "ethnicity");
+                    if (arr.length > 0)
+                        addSelectedValue(state.selectedValues.ethnicity, "Ethnicity", "ethnicity");
                     else
-                        removeSelectedValue(state.selectedValues.ethnicity, event.target.value, "Ethnicity");
+                        removeSelectedValue(state.selectedValues.ethnicity, "Ethnicity");
                     break;
                 case "SpecType":
-                    if (event.target.checked)
-                        addSelectedValue(state.selectedValues.specTypes, event.target.value, "SpecType", "specType");
+                    if (arr.length > 0)
+                        addSelectedValue(state.selectedValues.specTypes, "SpecType", "specType");
                     else
-                        removeSelectedValue(state.selectedValues.specTypes, event.target.value, "SpecType");
+                        removeSelectedValue(state.selectedValues.specTypes, "SpecType");
                     break;
             }
         },

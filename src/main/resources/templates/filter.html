@@ -15,6 +15,7 @@
     <script src="webjars/vue/2.5.13/vue.js"></script>
     <script src="webjars/vue-router/3.0.1/dist/vue-router.js"></script>
     <script src="webjars/axios/0.18.0/dist/axios.js"></script>
+    <script th:src="@{/static/js/vuejs/vue-select.js}"></script>
 
     <div id="root" class="wrapper">
         <x-sidebar :user="user" :nb-row-selected="nbRowSelected"></x-sidebar>
@@ -123,7 +124,72 @@
                         in the result table.</span></p>
                 </div>
                 <section style="padding: 10px;"></section>
-                <div class="row" style="margin-left: 1rem; margin-right: 0">
+                <div class="row" style="margin-left: 1rem; margin-right: 0;">
+                    <div class="input-field col s6 m4 l4">
+                        <div class="row">
+                            <div class="col s3">
+                                <p>Acronyms</p>
+                            </div>
+                            <div class="col s8" id="acronym-select">
+                                <v-select v-model="selectedValues.acronyms" multiple="multiple" :options="searchData.acronyms"></v-select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-field col s6 m4 l4">
+                        <div class="row">
+                            <div class="col s3">
+                                <p>Study Design</p>
+                            </div>
+                            <div class="col s8" id="design-select">
+                                <v-select v-model="selectedValues.designs" :on-change="designColumn" multiple="multiple" :options="searchData.designs"></v-select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-field col s6 m4 l4">
+                        <div class="row">
+                            <div class="col s3">
+                                <p>Diseases</p>
+                            </div>
+                            <div class="col s8" id="disease-select">
+                                <v-select v-model="selectedValues.diseases" :on-change="diseaseColumn" multiple="multiple" :options="searchData.diseases"></v-select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <section style="padding: 10px;"></section>
+                <div class="row" style="margin-left: 1rem; margin-right: 0;">
+                    <div class="input-field col s6 m4 l4">
+                        <div class="row">
+                            <div class="col s3">
+                                <p>Sex</p>
+                            </div>
+                            <div class="col s8" id="sex-select">
+                                <v-select v-model="selectedValues.sex" :on-change="sexColumn" multiple="multiple" :options="searchData.sex"></v-select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-field col s6 m4 l4">
+                        <div class="row">
+                            <div class="col s3">
+                                <p>Ethnicity</p>
+                            </div>
+                            <div class="col s8" id="ethnicity-select">
+                                <v-select v-model="selectedValues.ethnicity" :on-change="ethnicityColumn" multiple="multiple" :options="searchData.ethnicity"></v-select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-field col s6 m4 l4">
+                        <div class="row">
+                            <div class="col s3">
+                                <p>Sample Type</p>
+                            </div>
+                            <div class="col s8" id="specType-select">
+                                <v-select v-model="selectedValues.specTypes" :on-change="specTypeColumn" multiple="multiple" :options="searchData.specTypes"></v-select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--<div class="row" style="margin-left: 1rem; margin-right: 0">
                     <div class="col m2">
                         <div class="row">
                             <span class="header-tab">Acronyms</span>
@@ -196,7 +262,8 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>-->
+
                 <div class="divider" style="margin: 2rem 0 0"></div>
                 <div class="row" style="margin-left: 0.5rem; margin-right: 0">
                     <div class="col m1"><h6 class="task-cat grey darken-3 selected-columns">Columns:</h6></div>
