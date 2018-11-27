@@ -167,6 +167,9 @@ function adjustRow(row) {
                 tempRow['specType'] = val;
                 break;
         }
+        if (state.selectedValues.smoking) {
+            tempRow['smoking'] = true;
+        }
     });
     return tempRow;
 }
@@ -202,7 +205,7 @@ function addIfNotExistsObjectArray(arr, row) {
     if (_.isUndefined(item) && !_.isUndefined(selectedRow)) {
         state.nbRowSelected += 1;
         selectedRow['nbRequest'] = row.nbRequest;
-        selectedRow['query'] = otherColumns(row);
+        // selectedRow['query'] = otherColumns(row);
         arr.push(selectedRow);
     } else {
         item.nbRequest = row.nbRequest;

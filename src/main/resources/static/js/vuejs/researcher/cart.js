@@ -74,6 +74,11 @@ let CartModal = {
                             query['Specimen Type'] = val;
                         }
                         break;
+                    case 'smoking':
+                        if (val === true) {
+                            query['Smoking'] = 'Yes';
+                        }
+                        break;
                 }
             });
             return query;
