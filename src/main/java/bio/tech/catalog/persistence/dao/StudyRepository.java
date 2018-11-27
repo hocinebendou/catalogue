@@ -36,6 +36,19 @@ public interface StudyRepository extends PagingAndSortingRepository<NeoStudy, Lo
 			"RETURN s" )
     List<NeoStudy> findByAcronyms(@Param("acronyms") List<String> acronyms);
 
+	// query by a study attribute (ex: smoking, diet, etc.)
+	@Query( "Match (s:NeoStudy) " +
+			"-[]-> (a:NeoStudyAttribute{name:{name}}) " +
+			"RETURN s.acronym" )
+	List<String> findStudiesByAttribute(@Param("name") String name);
+
+	// query by acronyms and a study attribute
+	@Query( "MATCH (s:NeoStudy) " +
+			"WHERE s.acronym IN {acronyms} " +
+			"MATCH (s)-[]->(a:NeoStudyAttribute{name:{name}}) " +
+			"RETURN s.acronym")
+	List<String> findStudiesByAcronymsAndAttribute(@Param("acronyms") List<String> acronyms,
+												   @Param("name") String name);
 	// query by diseases
 	@Query( "MATCH (s:NeoStudy) " +
 			"WHERE s.disease IN {diseases} " +

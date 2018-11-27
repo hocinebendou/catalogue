@@ -111,7 +111,7 @@ public class ApiController {
     }
 
     @RequestMapping(value = "/filter", method = RequestMethod.POST)
-	public ResponseEntity<JSONObject> filterStudies(@RequestBody Map<String, List<String>> body) {
+	public ResponseEntity<JSONObject> filterStudies(@RequestBody Map<String, Object> body) {
 		JSONObject obj = new JSONObject();
 		List<String> acronyms = new ArrayList<>();
 		List<String> designList = new ArrayList<>();
@@ -124,52 +124,66 @@ public class ApiController {
 		boolean acronymField = false, designField = false, diseaseField = false;
 		boolean sexField = false, ethnicityField = false;
 		boolean typeField = false, countryField = false;
-		for (Map.Entry<String, List<String>> entry: body.entrySet()) {
+		boolean smoking = false;
+		for (Map.Entry<String, Object> entry: body.entrySet()) {
 
 			switch (entry.getKey()) {
 				case "acronyms":
-					acronyms = entry.getValue();
+					acronyms = (List<String>) entry.getValue();
 					if (acronyms.size() > 0)
 						acronymField = true;
 					break;
 				case "designs":
-					designList = entry.getValue();
+					designList = (List<String>) entry.getValue();
 					if (designList.size() > 0)
 						designField = true;
 					break;
 				case "diseases":
-					diseaseList = entry.getValue();
+					diseaseList = (List<String>) entry.getValue();
 					if (diseaseList.size() > 0)
 						diseaseField = true;
 					break;
 				case "sex":
-					sexList = entry.getValue();
+					sexList = (List<String>) entry.getValue();
 					if (sexList.size() > 0)
 						sexField = true;
 					break;
 				case "ethnicity":
-					ethnicityList = entry.getValue();
+					ethnicityList = (List<String>) entry.getValue();
 					if (ethnicityList.size() > 0)
 						ethnicityField = true;
 					break;
 				case "specTypes":
-					typeList = entry.getValue();
+					typeList = (List<String>) entry.getValue();
 					if (typeList.size() > 0)
 						typeField = true;
 					break;
 				case "country":
-					countryList = entry.getValue();
+					countryList = (List<String>) entry.getValue();
 					if (countryList.size() > 0)
 						countryField = true;
 					break;
+				case "smoking":
+					smoking = (boolean) entry.getValue();
+					break;
 				case "columns":
-					groupByColumns = entry.getValue();
+					groupByColumns = (List<String>) entry.getValue();
 					break;
 			}
 		}
 
 		// find study acronyms
 		List<String> acronymList = new ArrayList<>();
+		if (smoking)  {
+			if (acronymField)
+				acronyms = studyRepository.findStudiesByAcronymsAndAttribute(acronyms, "smoking");
+			else
+				acronyms = studyRepository.findStudiesByAttribute("smoking");
+		}
+
+		if (!acronyms.isEmpty() && ! acronymField)
+			acronymField = true;
+
 		if (acronymField && diseaseField && designField) {
 			acronymList = studyRepository.findByAcronymsAndDiseasesAndDesigns(acronyms, diseaseList, designList);
 		} else if (acronymField && diseaseField) {

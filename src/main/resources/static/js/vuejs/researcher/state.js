@@ -18,6 +18,7 @@ let state = {
         "sex": [],
         "ethnicity": [],
         "specTypes": [],
+        "smoking": false,
         "columns": []
     },
     errorMessage: "",
