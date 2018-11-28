@@ -194,7 +194,21 @@ public class CartApiController {
                     case "nbRequest":
                         query.setNbRequest((String)entry.getValue());
                         break;
-                    case "query":
+                    case "sex":
+                        query.setSex((String)entry.getValue());
+                        break;
+                    case "ethnicity":
+                        query.setEthnicity((String)entry.getValue());
+                        break;
+                    case "country":
+                        query.setCountry((String)entry.getValue());
+                        break;
+                    case "specType":
+                        query.setSpecimenType((String)entry.getValue());
+                        break;
+                    case "smoking":
+                        query.setSmoking((boolean)entry.getValue());
+                    /*case "query":
                         Map<String, Object> val = (LinkedHashMap<String, Object>) entry.getValue();
 
                         for (Map.Entry<String, Object> e : val.entrySet()) {
@@ -213,6 +227,7 @@ public class CartApiController {
                                     break;
                             }
                         }
+                    */
                 }
             }
             queries.add(query);

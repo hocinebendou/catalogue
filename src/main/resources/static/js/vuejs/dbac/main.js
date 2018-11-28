@@ -328,6 +328,11 @@ let CartModal = {
                             modifiedQuery['Specimen Type'] = val;
                         }
                         break;
+                    case 'smoking':
+                        if (val === true) {
+                            modifiedQuery['Smoking'] = 'Yes';
+                        }
+                        break;
                 }
             });
             return modifiedQuery;

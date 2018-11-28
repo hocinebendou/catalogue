@@ -21,6 +21,8 @@ public class NeoQuery {
     private String specimenType;
     private String nbRequest;
 
+    private boolean smoking;
+
     public Long getId() {
         return id;
     }
@@ -83,6 +85,14 @@ public class NeoQuery {
 
     public void setSpecimenType(String specimenType) {
         this.specimenType = specimenType;
+    }
+
+    public boolean isSmoking() {
+        return smoking;
+    }
+
+    public void setSmoking(boolean smoking) {
+        this.smoking = smoking;
     }
 
     public String getNbRequest() {
