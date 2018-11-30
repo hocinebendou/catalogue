@@ -185,6 +185,10 @@ function adjustRow(row) {
             tempRow['bmiOp'] = state.selectedValues.bmiOp;
             tempRow['bmiVal'] = state.selectedValues.bmiVal;
         }
+        if (state.selectedValues.ageOp && state.selectedValues.ageVal) {
+            tempRow['ageOp'] = state.selectedValues.ageOp;
+            tempRow['ageVal'] = state.selectedValues.ageVal;
+        }
     });
     return tempRow;
 }

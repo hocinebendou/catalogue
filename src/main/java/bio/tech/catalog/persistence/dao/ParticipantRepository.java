@@ -27,7 +27,7 @@ public interface ParticipantRepository extends PagingAndSortingRepository<NeoPar
             "WHERE p.participantId IN {ids} AND " +
             "toFloat(p.bmi) = toFloat({value}) " +
             "RETURN p.participantId")
-    List<String> findParticipantsByIdsAndEqualThanBmi(@Param("ids") List<String> ids,
+    List<String> findParticipantsByIdsAndEqualsToBmi(@Param("ids") List<String> ids,
                                                       @Param("value") String value);
 
     @Query( "MATCH (p:NeoParticipant) " +
@@ -45,12 +45,49 @@ public interface ParticipantRepository extends PagingAndSortingRepository<NeoPar
     @Query( "MATCH (p:NeoParticipant) " +
             "WHERE toFloat(p.bmi) = toFloat({value}) " +
             "RETURN p.participantId")
-    List<String> findParticipantsByEqualThanBmi(@Param("value") String value);
+    List<String> findParticipantsByEqualsToBmi(@Param("value") String value);
 
     @Query( "MATCH (p:NeoParticipant) " +
             "WHERE toFloat(p.bmi) < toFloat({value}) " +
             "RETURN p.participantId")
     List<String> findParticipantsByLessThanBmi(@Param("value") String value);
+
+    // AGE
+    @Query( "MATCH (p:NeoParticipant) " +
+            "WHERE p.participantId IN {ids} AND " +
+            "toInt(p.age) = toInt({value}) " +
+            "RETURN p.participantId")
+    List<String> findParticipantsByIdsAndEqualsToAge(@Param("ids") List<String> ids,
+                                                     @Param("value") String value);
+
+    @Query( "MATCH (p:NeoParticipant) " +
+            "WHERE p.participantId IN {ids} AND " +
+            "toInt(p.age) > toInt({value}) " +
+            "RETURN p.participantId")
+    List<String> findParticipantsByIdsAndGreaterThanAge(@Param("ids") List<String> ids,
+                                                     @Param("value") String value);
+
+    @Query( "MATCH (p:NeoParticipant) " +
+            "WHERE p.participantId IN {ids} AND " +
+            "toInt(p.age) < toInt({value}) " +
+            "RETURN p.participantId")
+    List<String> findParticipantsByIdsAndLessThanAge(@Param("ids") List<String> ids,
+                                                     @Param("value") String value);
+
+    @Query( "MATCH (p:NeoParticipant) " +
+            "WHERE toInt(p.age) < toInt({value}) " +
+            "RETURN p.participantId")
+    List<String> findParticipantsByEqualsToAge(@Param("value") String value);
+
+    @Query( "MATCH (p:NeoParticipant) " +
+            "WHERE toInt(p.age) > toInt({value}) " +
+            "RETURN p.participantId")
+    List<String> findParticipantsByGreaterThanAge(@Param("value") String value);
+
+    @Query( "MATCH (p:NeoParticipant) " +
+            "WHERE toInt(p.age) < toInt({value}) " +
+            "RETURN p.participantId")
+    List<String> findParticipantsByLessThanAge(@Param("value") String value);
 
     // query participant ids by gender
     @Query( "MATCH (p:NeoParticipant) -[]->(g:NeoGender) " +

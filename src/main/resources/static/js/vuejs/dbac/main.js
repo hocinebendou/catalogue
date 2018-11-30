@@ -335,7 +335,12 @@ let CartModal = {
                         break;
                     case 'bmiOp':
                         if (this.query['bmiVal']) {
-                            modifiedQuery['Bmi'] = val this.query['bmiVal'];
+                            modifiedQuery['Bmi'] = val + ' ' + this.query['bmiVal'];
+                        }
+                        break;
+                    case 'ageOp':
+                        if (this.query['ageVal']) {
+                            modifiedQuery['Age'] = val + ' ' + this.query['ageVal'];
                         }
                         break;
                 }

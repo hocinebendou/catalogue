@@ -39,6 +39,8 @@ let CartModal = {
             }
             let bmiOperator = null;
             let bmiValue = null;
+            let ageOperator = null;
+            let ageValue = null;
             _.each(this.row, function (val, key) {
                 switch (key) {
                     case 'acronym':
@@ -91,11 +93,25 @@ let CartModal = {
                             bmiValue = val;
                         }
                         break;
+                    case 'ageOp':
+                        if (!_.isUndefined(val) && val !== null) {
+                            ageOperator = val;
+                        }
+                        break;
+                    case 'ageVal':
+                        if (!_.isUndefined(val) && val !== null) {
+                            ageValue = val;
+                        }
+                        break;
                 }
             });
             if (bmiOperator && bmiValue) {
                 query['Bmi'] = bmiOperator + ' ' + bmiValue;
-            } 
+            }
+
+            if (ageOperator && ageValue) {
+                query['Age'] = ageOperator + ' ' + ageValue;
+            }
             return query;
         }
     }

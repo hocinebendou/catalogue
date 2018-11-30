@@ -128,6 +128,7 @@ public class ApiController {
 		boolean sexField = false, ethnicityField = false;
 		boolean typeField = false, countryField = false;
 		boolean smoking = false; String bmiOp = ""; String bmiVal = "";
+		String ageOp = ""; String ageVal = "";
 		for (Map.Entry<String, Object> entry: body.entrySet()) {
 
 			switch (entry.getKey()) {
@@ -167,10 +168,24 @@ public class ApiController {
 						countryField = true;
 					break;
 				case "bmiOp":
-					bmiOp = (String) entry.getValue();
+					String tempBmiOp = (String) entry.getValue();
+					if (!tempBmiOp.equals("Operator"))
+						bmiOp = tempBmiOp;
 					break;
 				case "bmiVal":
-					bmiVal = (String) entry.getValue();
+					String tempBmiVal = (String) entry.getValue();
+					if (tempBmiVal != null && !tempBmiVal.equals(""))
+						bmiVal = tempBmiVal;
+					break;
+				case "ageOp":
+					String tempAgeOp = (String) entry.getValue();
+					if (!tempAgeOp.equals("Operator"))
+						ageOp = tempAgeOp;
+					break;
+				case "ageVal":
+					String tempAgeVal = (String) entry.getValue();
+					if (tempAgeVal != null && !tempAgeVal.equals(""))
+						ageVal = tempAgeVal;
 					break;
 				case "smoking":
 					smoking = (boolean) entry.getValue();
@@ -229,7 +244,7 @@ public class ApiController {
 		if (!participantIds.isEmpty() && !bmiOp.equals("") && !bmiVal.equals("")) {
 			switch (bmiOp){
 				case "=":
-					participantIds = participantRepository.findParticipantsByIdsAndEqualThanBmi(participantIds, bmiVal);
+					participantIds = participantRepository.findParticipantsByIdsAndEqualsToBmi(participantIds, bmiVal);
 					break;
 				case ">":
 					participantIds = participantRepository.findParticipantsByIdsAndGreaterThanBmi(participantIds, bmiVal);
@@ -241,13 +256,39 @@ public class ApiController {
 		} else if (!bmiOp.equals("") && !bmiVal.equals("")) {
 			switch (bmiOp) {
 				case "=":
-					participantIds = participantRepository.findParticipantsByEqualThanBmi(bmiVal);
+					participantIds = participantRepository.findParticipantsByEqualsToBmi(bmiVal);
 					break;
 				case ">":
 					participantIds = participantRepository.findParticipantsByGreaterThanBmi(bmiVal);
 					break;
 				case "<":
 					participantIds = participantRepository.findParticipantsByLessThanBmi(bmiVal);
+					break;
+			}
+		}
+
+		if (!participantIds.isEmpty() && !ageOp.equals("") && !ageVal.equals("")) {
+			switch (ageOp){
+				case "=":
+					participantIds = participantRepository.findParticipantsByIdsAndEqualsToAge(participantIds, ageVal);
+					break;
+				case ">":
+					participantIds = participantRepository.findParticipantsByIdsAndGreaterThanAge(participantIds, ageVal);
+					break;
+				case "<":
+					participantIds = participantRepository.findParticipantsByIdsAndLessThanAge(participantIds, ageVal);
+					break;
+			}
+		} else if (!ageOp.equals("") && !ageVal.equals("")) {
+			switch (ageOp) {
+				case "=":
+					participantIds = participantRepository.findParticipantsByEqualsToAge(ageVal);
+					break;
+				case ">":
+					participantIds = participantRepository.findParticipantsByGreaterThanAge(ageVal);
+					break;
+				case "<":
+					participantIds = participantRepository.findParticipantsByLessThanAge(ageVal);
 					break;
 			}
 		}
