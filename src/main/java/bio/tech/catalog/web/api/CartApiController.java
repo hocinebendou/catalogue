@@ -208,26 +208,15 @@ public class CartApiController {
                         break;
                     case "smoking":
                         query.setSmoking((boolean)entry.getValue());
-                    /*case "query":
-                        Map<String, Object> val = (LinkedHashMap<String, Object>) entry.getValue();
+                    case "diet":
+                        query.setDiet((boolean)entry.getValue());
+                    case "hivStatus":
+                        query.setHivStatus((boolean)entry.getValue());
+                    case "bloodPressure":
+                        query.setBloodPressure((boolean)entry.getValue());
+                    case "alcoholUse":
+                        query.setAlcoholUse((boolean)entry.getValue());
 
-                        for (Map.Entry<String, Object> e : val.entrySet()) {
-                            switch (e.getKey()) {
-                                case "sex":
-                                    query.setSex((String)e.getValue());
-                                    break;
-                                case "ethnicity":
-                                    query.setEthnicity((String)e.getValue());
-                                    break;
-                                case "country":
-                                    query.setCountry((String)e.getValue());
-                                    break;
-                                case "specimenType":
-                                    query.setSpecimenType((String)e.getValue());
-                                    break;
-                            }
-                        }
-                    */
                 }
             }
             queries.add(query);

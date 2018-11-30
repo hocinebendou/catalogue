@@ -127,7 +127,9 @@ public class ApiController {
 		boolean acronymField = false, designField = false, diseaseField = false;
 		boolean sexField = false, ethnicityField = false;
 		boolean typeField = false, countryField = false;
-		boolean smoking = false; String bmiOp = ""; String bmiVal = "";
+		boolean smoking = false; boolean diet = false;
+		boolean hivStatus = false; boolean bloodPressure = false; boolean alcoholUse = false;
+		String bmiOp = ""; String bmiVal = "";
 		String ageOp = ""; String ageVal = "";
 		for (Map.Entry<String, Object> entry: body.entrySet()) {
 
@@ -190,6 +192,18 @@ public class ApiController {
 				case "smoking":
 					smoking = (boolean) entry.getValue();
 					break;
+				case "diet":
+					diet = (boolean) entry.getValue();
+					break;
+				case "hivStatus":
+					hivStatus = (boolean) entry.getValue();
+					break;
+				case "bloodPressure":
+					bloodPressure = (boolean) entry.getValue();
+					break;
+				case "alcoholUse":
+					alcoholUse = (boolean) entry.getValue();
+					break;
 				case "columns":
 					groupByColumns = (List<String>) entry.getValue();
 					break;
@@ -198,11 +212,44 @@ public class ApiController {
 
 		// find study acronyms
 		List<String> acronymList = new ArrayList<>();
-		if (smoking)  {
+		boolean findByAcronyms = false;
+		if (smoking) {
 			if (acronymField)
 				acronyms = studyRepository.findStudiesByAcronymsAndAttribute(acronyms, "smoking");
 			else
 				acronyms = studyRepository.findStudiesByAttribute("smoking");
+			findByAcronyms = true;
+		}
+
+		if (diet) {
+			if (acronymField || findByAcronyms)
+				acronyms = studyRepository.findStudiesByAcronymsAndAttribute(acronyms, "diet");
+			else
+				acronyms = studyRepository.findStudiesByAttribute("diet");
+			findByAcronyms = true;
+		}
+
+		if (hivStatus) {
+			if (acronymField || findByAcronyms)
+				acronyms = studyRepository.findStudiesByAcronymsAndAttribute(acronyms, "HIV status");
+			else
+				acronyms = studyRepository.findStudiesByAttribute("HIV status");
+			findByAcronyms = true;
+		}
+
+		if (bloodPressure) {
+			if (acronymField || findByAcronyms)
+				acronyms = studyRepository.findStudiesByAcronymsAndAttribute(acronyms, "blood_pressure");
+			else
+				acronyms = studyRepository.findStudiesByAttribute("blood_pressure");
+			findByAcronyms = true;
+		}
+
+		if (alcoholUse) {
+			if (acronymField || findByAcronyms)
+				acronyms = studyRepository.findStudiesByAcronymsAndAttribute(acronyms, "alcohol_use");
+			else
+				acronyms = studyRepository.findStudiesByAttribute("alcohol_use");
 		}
 
 		if (!acronyms.isEmpty() && ! acronymField)
@@ -267,6 +314,10 @@ public class ApiController {
 			}
 		}
 
+		boolean findByIds = false;
+		if (!bmiOp.equals("") && !bmiVal.equals(""))
+			findByIds = true;
+
 		if (!participantIds.isEmpty() && !ageOp.equals("") && !ageVal.equals("")) {
 			switch (ageOp){
 				case "=":
@@ -279,7 +330,7 @@ public class ApiController {
 					participantIds = participantRepository.findParticipantsByIdsAndLessThanAge(participantIds, ageVal);
 					break;
 			}
-		} else if (!ageOp.equals("") && !ageVal.equals("")) {
+		} else if (!ageOp.equals("") && !ageVal.equals("") && !findByIds) {
 			switch (ageOp) {
 				case "=":
 					participantIds = participantRepository.findParticipantsByEqualsToAge(ageVal);

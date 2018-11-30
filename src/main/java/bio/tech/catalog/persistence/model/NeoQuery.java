@@ -22,6 +22,10 @@ public class NeoQuery {
     private String nbRequest;
 
     private boolean smoking;
+    private boolean diet;
+    private boolean hivStatus;
+    private boolean bloodPressure;
+    private boolean alcoholUse;
 
     public Long getId() {
         return id;
@@ -93,6 +97,38 @@ public class NeoQuery {
 
     public void setSmoking(boolean smoking) {
         this.smoking = smoking;
+    }
+
+    public boolean isDiet() {
+        return diet;
+    }
+
+    public void setDiet(boolean diet) {
+        this.diet = diet;
+    }
+
+    public boolean isHivStatus() {
+        return hivStatus;
+    }
+
+    public void setHivStatus(boolean hivStatus) {
+        this.hivStatus = hivStatus;
+    }
+
+    public boolean isBloodPressure() {
+        return bloodPressure;
+    }
+
+    public void setBloodPressure(boolean bloodPressure) {
+        this.bloodPressure = bloodPressure;
+    }
+
+    public boolean isAlcoholUse() {
+        return alcoholUse;
+    }
+
+    public void setAlcoholUse(boolean alcoholUse) {
+        this.alcoholUse = alcoholUse;
     }
 
     public String getNbRequest() {

@@ -181,6 +181,18 @@ function adjustRow(row) {
         if (state.selectedValues.smoking) {
             tempRow['smoking'] = true;
         }
+        if (state.selectedValues.diet) {
+            tempRow['diet'] = true;
+        }
+        if (state.selectedValues.hivStatus) {
+            tempRow['hivStatus'] = true;
+        }
+        if (state.selectedValues.bloodPressure) {
+            tempRow['bloodPressure'] = true;
+        }
+        if (state.selectedValues.alcoholUse) {
+            tempRow['alcoholUse'] = true;
+        }
         if (state.selectedValues.bmiOp && state.selectedValues.bmiVal) {
             tempRow['bmiOp'] = state.selectedValues.bmiOp;
             tempRow['bmiVal'] = state.selectedValues.bmiVal;

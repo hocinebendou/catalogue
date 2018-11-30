@@ -83,6 +83,26 @@ let CartModal = {
                             query['Smoking'] = 'Yes';
                         }
                         break;
+                    case 'diet':
+                        if (val === true) {
+                            query['Diet'] = 'Yes';
+                        }
+                        break;
+                    case 'hivStatus':
+                        if (val === true) {
+                            query['Hiv Status'] = 'Yes';
+                        }
+                        break;
+                    case 'bloodPressure':
+                        if (val === true) {
+                            query['Blood Pressure'] = 'Yes';
+                        }
+                        break;
+                    case 'alcoholUse':
+                        if (val === true) {
+                            query['Alcohol Use'] = 'Yes';
+                        }
+                        break;
                     case 'bmiOp':
                         if (!_.isUndefined(val) && val !== null) {
                             bmiOperator = val;

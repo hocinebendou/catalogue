@@ -333,6 +333,26 @@ let CartModal = {
                             modifiedQuery['Smoking'] = 'Yes';
                         }
                         break;
+                    case 'diet':
+                        if (val === true) {
+                            modifiedQuery['Diet'] = 'Yes';
+                        }
+                        break;
+                    case 'hivStatus':
+                        if (val === true) {
+                            modifiedQuery['HIV Status'] = 'Yes';
+                        }
+                        break;
+                    case 'bloodPressure':
+                        if (val === true) {
+                            modifiedQuery['Blood Pressure'] = 'Yes';
+                        }
+                        break;
+                    case 'alcoholUse':
+                        if (val === true) {
+                            modifiedQuery['Alcohol Use'] = 'Yes';
+                        }
+                        break;
                     case 'bmiOp':
                         if (this.query['bmiVal']) {
                             modifiedQuery['Bmi'] = val + ' ' + this.query['bmiVal'];
