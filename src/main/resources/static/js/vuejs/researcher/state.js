@@ -9,7 +9,8 @@ let state = {
         "diseases": [],
         "sex": [],
         "ethnicity": [],
-        "specTypes": []
+        "specTypes": [],
+        "countries": []
     },
     selectedValues: {
         "acronyms": [],
@@ -18,7 +19,14 @@ let state = {
         "sex": [],
         "ethnicity": [],
         "specTypes": [],
+        "countries": [],
+        "bmiOp": null,
+        "bmiVal": null,
         "smoking": false,
+        "diet": false,
+        "hivStatus": false,
+        "bloodPressure": false,
+        "alcoholUse": false,
         "columns": []
     },
     errorMessage: "",
@@ -58,7 +66,8 @@ let state = {
     selectedDatasets: [],
     nbRowSelected: 0,
     projectId: null,
-    selectedCart: null
+    selectedCart: null,
+    selected: ''
 };
 
 let cartColumns = [

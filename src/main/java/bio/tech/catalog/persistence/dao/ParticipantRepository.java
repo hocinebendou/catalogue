@@ -16,6 +16,42 @@ public interface ParticipantRepository extends PagingAndSortingRepository<NeoPar
 
     Collection<NeoParticipant> findNeoParticipantByAcronymLike(@Param("acronym") String acronym);
 
+    @Query( "MATCH (p:NeoParticipant) " +
+            "WHERE p.participantId IN {ids} AND " +
+            "toFloat(p.bmi) > toFloat({value}) " +
+            "RETURN p.participantId")
+    List<String> findParticipantsByIdsAndGreaterThanBmi(@Param("ids") List<String> ids,
+                                            @Param("value") String value);
+
+    @Query( "MATCH (p:NeoParticipant) " +
+            "WHERE p.participantId IN {ids} AND " +
+            "toFloat(p.bmi) = toFloat({value}) " +
+            "RETURN p.participantId")
+    List<String> findParticipantsByIdsAndEqualThanBmi(@Param("ids") List<String> ids,
+                                                      @Param("value") String value);
+
+    @Query( "MATCH (p:NeoParticipant) " +
+            "WHERE p.participantId IN {ids} AND " +
+            "toFloat(p.bmi) < toFloat({value}) " +
+            "RETURN p.participantId")
+    List<String> findParticipantsByIdsAndLessThanBmi(@Param("ids") List<String> ids,
+                                                     @Param("value") String value);
+
+    @Query( "MATCH (p:NeoParticipant) " +
+            "WHERE toFloat(p.bmi) > toFloat({value}) " +
+            "RETURN p.participantId")
+    List<String> findParticipantsByGreaterThanBmi(@Param("value") String value);
+
+    @Query( "MATCH (p:NeoParticipant) " +
+            "WHERE toFloat(p.bmi) = toFloat({value}) " +
+            "RETURN p.participantId")
+    List<String> findParticipantsByEqualThanBmi(@Param("value") String value);
+
+    @Query( "MATCH (p:NeoParticipant) " +
+            "WHERE toFloat(p.bmi) < toFloat({value}) " +
+            "RETURN p.participantId")
+    List<String> findParticipantsByLessThanBmi(@Param("value") String value);
+
     // query participant ids by gender
     @Query( "MATCH (p:NeoParticipant) -[]->(g:NeoGender) " +
             "WHERE g.name IN  {names} " +

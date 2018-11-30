@@ -47,6 +47,11 @@ let SearchVue = {
         'x-alert': Alert,
         'x-searchactions': SearchActions,
     },
+    data() {
+        return {
+            selected: state.selected
+        }
+    },
     methods: {
         designColumn(arr) {
             this.$parent.updateColumns("Design", arr);
@@ -63,11 +68,17 @@ let SearchVue = {
         specTypeColumn(arr) {
             this.$parent.updateColumns("SpecType", arr);
         },
+        countryColumn(arr) {
+            this.$parent.updateColumns("Country", arr);
+        },
         setSearchData(result) {
             this.$parent.setSearchData(result);
         },
         updateRows(result) {
             this.$parent.updateRows(result);
+        },
+        updateBmiOp(val) {
+            this.$parent.updateBmiOp(val);
         }
     },
     created() {
@@ -76,6 +87,15 @@ let SearchVue = {
             .then(function (result) {
                 self.setSearchData(result.data);
             })
+    },
+    mounted() {
+        let self = this;
+        $('select').change(function () {
+            let val = $(this).val();
+            if (val) {
+                self.updateBmiOp(val);
+            }
+        })
     }
 };
 
@@ -240,10 +260,19 @@ let Filter = {
                     else
                         removeSelectedValue(state.selectedValues.specTypes, "SpecType");
                     break;
+                case "Country":
+                    if (arr.length > 0)
+                        addSelectedValue(state.selectedValues.countries, "Country", "country");
+                    else
+                        removeSelectedValue(state.selectedValues.countries, "Country");
+                    break;
             }
         },
         setRowItem(row) {
             this.$parent.setRowItem(row);
+        },
+        updateBmiOp(val) {
+            state.selectedValues.bmiOp = val;
         }
     }
 };

@@ -554,7 +554,8 @@ div.text-info-filter p i {
 
 /* ------------------------------------------- */
 #acronym-select input, #design-select input, #disease-select input,
-#sex-select input, #ethnicity-select input, #specType-select input{
+#sex-select input, #ethnicity-select input, #specType-select input,
+#country-select input {
     height: 2rem;
     display: block !important;
 }

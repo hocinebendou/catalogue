@@ -107,13 +107,16 @@ public class ApiController {
 		Collection<String> specTypeNames = typeRepository.findAllSpecimenTypeNames();
 		obj.put("specTypes", specTypeNames);
 
+		Collection<String> countries = countryRepository.findAllCountryNames();
+		obj.put("countries", countries);
+
         return new ResponseEntity<>(obj, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/filter", method = RequestMethod.POST)
 	public ResponseEntity<JSONObject> filterStudies(@RequestBody Map<String, Object> body) {
 		JSONObject obj = new JSONObject();
-		List<String> acronyms = new ArrayList<>();
+ 		List<String> acronyms = new ArrayList<>();
 		List<String> designList = new ArrayList<>();
 		List<String> diseaseList = new ArrayList<>();
 		List<String> sexList = new ArrayList<>();
@@ -124,7 +127,7 @@ public class ApiController {
 		boolean acronymField = false, designField = false, diseaseField = false;
 		boolean sexField = false, ethnicityField = false;
 		boolean typeField = false, countryField = false;
-		boolean smoking = false;
+		boolean smoking = false; String bmiOp = ""; String bmiVal = "";
 		for (Map.Entry<String, Object> entry: body.entrySet()) {
 
 			switch (entry.getKey()) {
@@ -162,6 +165,12 @@ public class ApiController {
 					countryList = (List<String>) entry.getValue();
 					if (countryList.size() > 0)
 						countryField = true;
+					break;
+				case "bmiOp":
+					bmiOp = (String) entry.getValue();
+					break;
+				case "bmiVal":
+					bmiVal = (String) entry.getValue();
 					break;
 				case "smoking":
 					smoking = (boolean) entry.getValue();
@@ -215,6 +224,32 @@ public class ApiController {
 			participantIds = participantRepository.findBySex(sexList);
 		} else if (ethnicityField) {
 			participantIds = participantRepository.findByEthnicity(ethnicityList);
+		}
+
+		if (!participantIds.isEmpty() && !bmiOp.equals("") && !bmiVal.equals("")) {
+			switch (bmiOp){
+				case "=":
+					participantIds = participantRepository.findParticipantsByIdsAndEqualThanBmi(participantIds, bmiVal);
+					break;
+				case ">":
+					participantIds = participantRepository.findParticipantsByIdsAndGreaterThanBmi(participantIds, bmiVal);
+					break;
+				case "<":
+					participantIds = participantRepository.findParticipantsByIdsAndLessThanBmi(participantIds, bmiVal);
+					break;
+			}
+		} else if (!bmiOp.equals("") && !bmiVal.equals("")) {
+			switch (bmiOp) {
+				case "=":
+					participantIds = participantRepository.findParticipantsByEqualThanBmi(bmiVal);
+					break;
+				case ">":
+					participantIds = participantRepository.findParticipantsByGreaterThanBmi(bmiVal);
+					break;
+				case "<":
+					participantIds = participantRepository.findParticipantsByLessThanBmi(bmiVal);
+					break;
+			}
 		}
 
 		// find biospecimens
