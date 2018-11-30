@@ -37,6 +37,8 @@ let CartModal = {
             } else {
                 tempQuery = this.row;
             }
+            let bmiOperator = null;
+            let bmiValue = null;
             _.each(this.row, function (val, key) {
                 switch (key) {
                     case 'acronym':
@@ -79,8 +81,21 @@ let CartModal = {
                             query['Smoking'] = 'Yes';
                         }
                         break;
+                    case 'bmiOp':
+                        if (!_.isUndefined(val) && val !== null) {
+                            bmiOperator = val;
+                        }
+                        break;
+                    case 'bmiVal':
+                        if (!_.isUndefined(val) && val !== null) {
+                            bmiValue = val;
+                        }
+                        break;
                 }
             });
+            if (bmiOperator && bmiValue) {
+                query['Bmi'] = bmiOperator + ' ' + bmiValue;
+            } 
             return query;
         }
     }

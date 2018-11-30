@@ -333,6 +333,11 @@ let CartModal = {
                             modifiedQuery['Smoking'] = 'Yes';
                         }
                         break;
+                    case 'bmiOp':
+                        if (this.query['bmiVal']) {
+                            modifiedQuery['Bmi'] = val this.query['bmiVal'];
+                        }
+                        break;
                 }
             });
             return modifiedQuery;

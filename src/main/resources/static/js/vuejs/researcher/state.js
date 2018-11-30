@@ -20,8 +20,10 @@ let state = {
         "ethnicity": [],
         "specTypes": [],
         "countries": [],
-        "bmiOp": null,
+        "bmiOp": "Operator",
         "bmiVal": null,
+        "ageOp": "Operator",
+        "ageVal": null,
         "smoking": false,
         "diet": false,
         "hivStatus": false,
@@ -178,6 +180,10 @@ function adjustRow(row) {
         }
         if (state.selectedValues.smoking) {
             tempRow['smoking'] = true;
+        }
+        if (state.selectedValues.bmiOp && state.selectedValues.bmiVal) {
+            tempRow['bmiOp'] = state.selectedValues.bmiOp;
+            tempRow['bmiVal'] = state.selectedValues.bmiVal;
         }
     });
     return tempRow;

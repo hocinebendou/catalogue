@@ -76,9 +76,6 @@ let SearchVue = {
         },
         updateRows(result) {
             this.$parent.updateRows(result);
-        },
-        updateBmiOp(val) {
-            this.$parent.updateBmiOp(val);
         }
     },
     created() {
@@ -88,7 +85,7 @@ let SearchVue = {
                 self.setSearchData(result.data);
             })
     },
-    mounted() {
+    /*mounted() {
         let self = this;
         $('select').change(function () {
             let val = $(this).val();
@@ -96,7 +93,7 @@ let SearchVue = {
                 self.updateBmiOp(val);
             }
         })
-    }
+    }*/
 };
 
 let ResultBioTable = {
@@ -270,9 +267,6 @@ let Filter = {
         },
         setRowItem(row) {
             this.$parent.setRowItem(row);
-        },
-        updateBmiOp(val) {
-            state.selectedValues.bmiOp = val;
         }
     }
 };

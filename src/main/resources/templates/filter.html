@@ -206,14 +206,8 @@
                             <div class="col s3">
                                 <p>BMI</p>
                             </div>
-                            <div class="input-field col m4" style="margin-top: -5px">
-                                <!--<v-select v-model="selectedValues.bmiOp" :options="['=','&gt;', '&lt;']"></v-select>-->
-                                <select v-model="selectedValues.bmiOp">
-                                    <option selected="selected" value="">Operator</option>
-                                    <option value="=" >=</option>
-                                    <option value="&gt;" >&gt;</option>
-                                    <option value="&lt;" >&lt;</option>
-                                </select>
+                            <div id="operators-bmi" class="input-field col m4" style="margin-top: -5px">
+                                <v-select v-model="selectedValues.bmiOp" :options="['Operator', '=','&gt;', '&lt;']"></v-select>
                             </div>
                             <div class="input-field col m4" style="margin-top: -5px">
                                 <input type="number" step="0.01" id="bmi-value" v-model="selectedValues.bmiVal" />
@@ -226,17 +220,12 @@
                             <div class="col s3">
                                 <p>Age</p>
                             </div>
-                            <div class="input-field col m4" style="margin-top: -5px">
-                                <select id="age-operator" class="operator">
-                                    <option value="" selected="selected">operator</option>
-                                    <option value="=" >=</option>
-                                    <option value="&gt;" >&gt;</option>
-                                    <option value="&lt;" >&lt;</option>
-                                </select>
+                            <div id="operators-age" class="input-field col m4" style="margin-top: -5px">
+                                <v-select v-model="selectedValues.ageOp" :options="['Operator', '=','&gt;', '&lt;']"></v-select>
                             </div>
                             <div class="input-field col m4" style="margin-top: -5px">
                                 <input type="number" id="age-value" />
-                                <label for="age-value">Value</label>
+                                <label for="age-value" v-model="selectedValues.ageVal">Value</label>
                             </div>
                         </div>
                     </div>
