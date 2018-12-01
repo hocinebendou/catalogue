@@ -384,82 +384,101 @@ public class ApiController {
 			acronymList = studyRepository.findAllStudyAcronyms();
 
 		List<RowForm> groupedSpecimens;
-		if (groupByColumns.contains("SpecType") && groupByColumns.contains("Ethnicity") &&
-				groupByColumns.contains("Country") && groupByColumns.contains("Disease"))
-			groupedSpecimens = groupByTypeAndEthnicityAndCountryAndDisease(specimens,
-					acronymList, allSpecimenTypes, allEthnicities, allCountries, diseaseList);
-		else if (groupByColumns.contains("SpecType") && groupByColumns.contains("Ethnicity") &&
-				groupByColumns.contains("Country"))
-			groupedSpecimens = groupByTypeAndEthnicityAndCountry(specimens, acronymList, allSpecimenTypes,
-					allEthnicities, allCountries);
-		else if (groupByColumns.contains("Ethnicity") && groupByColumns.contains("Country") &&
-				groupByColumns.contains("Disease"))
-			groupedSpecimens = groupByEthnicityAndCountryAndDisease(specimens, acronymList, allEthnicities,
-					allCountries, diseaseList);
-		else if (groupByColumns.contains("SpecType") && groupByColumns.contains("Country") &&
-				groupByColumns.contains("Disease"))
-			groupedSpecimens = groupByTypeAndCountryAndDisease(specimens, acronymList, allSpecimenTypes,
-					allCountries, diseaseList);
-		else if (groupByColumns.contains("SpecType") && groupByColumns.contains("Ethnicity") &&
-				groupByColumns.contains("Disease"))
-			groupedSpecimens = groupByTypeAndEthnicityAndDisease(specimens, acronymList, allSpecimenTypes,
-					allEthnicities, diseaseList);
-		else if (groupByColumns.contains("Design") && groupByColumns.contains("Ethnicity") &&
-				groupByColumns.contains("SpecType"))
-			groupedSpecimens = groupByDesignAndEthnicityAndType(specimens, acronymList, designList,
-					allEthnicities, allSpecimenTypes);
-		else if (groupByColumns.contains("Design") && groupByColumns.contains("Sex") &&
-				groupByColumns.contains("SpecType"))
-			groupedSpecimens = groupByDesignAndSexAndType(specimens, acronymList, designList,
-					sexList, allSpecimenTypes);
-		else if (groupByColumns.contains("Design") && groupByColumns.contains("Disease") &&
-				groupByColumns.contains("Sex"))
-			groupedSpecimens = groupByDesignAndSexAndDisease(specimens, acronymList, designList, sexList,
-					diseaseList);
-		else if (groupByColumns.contains("Design") && groupByColumns.contains("Sex") &&
-				groupByColumns.contains("Ethnicity"))
-			groupedSpecimens = groupByDesignAndSexAndEthnicity(specimens, acronymList, designList, sexList,
-					allEthnicities);
+
+		// 4
+		if ( groupByColumns.contains("Disease") && groupByColumns.contains("Ethnicity") && groupByColumns.contains("SpecType") && groupByColumns.contains("Country"))
+			groupedSpecimens = groupByTypeAndEthnicityAndCountryAndDisease(specimens, acronymList, allSpecimenTypes, allEthnicities, allCountries, diseaseList);
+
+		else if (groupByColumns.contains("Design") && groupByColumns.contains("Disease") && groupByColumns.contains("Sex") && groupByColumns.contains("Ethnicity"))
+			groupedSpecimens = groupByDesignAndDiseaseAndSexAndEthnicity(specimens, acronymList, designList, diseaseList, sexList, allEthnicities);
+
+		else if (groupByColumns.contains("Design") && groupByColumns.contains("Disease") && groupByColumns.contains("Sex") && groupByColumns.contains("SpecType"))
+			groupedSpecimens = groupByDesignAndDiseaseAndSexAndType(specimens, acronymList, designList, diseaseList, sexList, allSpecimenTypes);
+
+		else if (groupByColumns.contains("Design") && groupByColumns.contains("Disease") && groupByColumns.contains("Sex") && groupByColumns.contains("Country"))
+			groupedSpecimens = groupByDesignAndDiseaseAndSexAndCountry(specimens, acronymList, designList, diseaseList, sexList, allCountries);
+
+		// 3
+		else if (groupByColumns.contains("SpecType") && groupByColumns.contains("Ethnicity") && groupByColumns.contains("Country"))
+			groupedSpecimens = groupByTypeAndEthnicityAndCountry(specimens, acronymList, allSpecimenTypes, allEthnicities, allCountries);
+
+		else if (groupByColumns.contains("Ethnicity") && groupByColumns.contains("Country") && groupByColumns.contains("Disease"))
+			groupedSpecimens = groupByEthnicityAndCountryAndDisease(specimens, acronymList, allEthnicities, allCountries, diseaseList);
+
+		else if (groupByColumns.contains("SpecType") && groupByColumns.contains("Country") && groupByColumns.contains("Disease"))
+			groupedSpecimens = groupByTypeAndCountryAndDisease(specimens, acronymList, allSpecimenTypes, allCountries, diseaseList);
+
+		else if (groupByColumns.contains("SpecType") && groupByColumns.contains("Ethnicity") && groupByColumns.contains("Disease"))
+			groupedSpecimens = groupByTypeAndEthnicityAndDisease(specimens, acronymList, allSpecimenTypes, allEthnicities, diseaseList);
+
+		else if (groupByColumns.contains("Design") && groupByColumns.contains("Ethnicity") && groupByColumns.contains("SpecType"))
+			groupedSpecimens = groupByDesignAndEthnicityAndType(specimens, acronymList, designList, allEthnicities, allSpecimenTypes);
+
+		else if (groupByColumns.contains("Design") && groupByColumns.contains("Sex") &&	groupByColumns.contains("SpecType"))
+			groupedSpecimens = groupByDesignAndSexAndType(specimens, acronymList, designList, sexList, allSpecimenTypes);
+
+		else if (groupByColumns.contains("Design") && groupByColumns.contains("Disease") && groupByColumns.contains("Sex"))
+			groupedSpecimens = groupByDesignAndSexAndDisease(specimens, acronymList, designList, sexList, diseaseList);
+
+		else if (groupByColumns.contains("Design") && groupByColumns.contains("Sex") && groupByColumns.contains("Ethnicity"))
+			groupedSpecimens = groupByDesignAndSexAndEthnicity(specimens, acronymList, designList, sexList, allEthnicities);
+
+		else if (groupByColumns.contains("Disease") && groupByColumns.contains("Sex") && groupByColumns.contains("Ethnicity"))
+			groupedSpecimens = groupByDiseaseAndSexAndEthnicity(specimens, acronymList, diseaseList, sexList, allEthnicities);
+
+		// 2
+		else if (groupByColumns.contains("Disease") && 	groupByColumns.contains("Sex"))
+			groupedSpecimens = groupByDiseaseAndSex(specimens, acronymList, diseaseList, sexList);
+
 		else if (groupByColumns.contains("Sex") && 	groupByColumns.contains("Ethnicity"))
 			groupedSpecimens = groupBySexAndEthnicity(specimens, acronymList, sexList, allEthnicities);
+
 		else if (groupByColumns.contains("SpecType") && groupByColumns.contains("Ethnicity"))
-			groupedSpecimens = groupByTypeAndEthnicity(specimens, acronymList, allSpecimenTypes,
-					allEthnicities);
+			groupedSpecimens = groupByTypeAndEthnicity(specimens, acronymList, allSpecimenTypes, allEthnicities);
+
 		else if (groupByColumns.contains("SpecType") && groupByColumns.contains("Country"))
-			groupedSpecimens = groupByTypeAndCountry(specimens, acronymList, allSpecimenTypes,
-					allCountries);
+			groupedSpecimens = groupByTypeAndCountry(specimens, acronymList, allSpecimenTypes, allCountries);
+
 		else if (groupByColumns.contains("SpecType") && groupByColumns.contains("Disease"))
-			groupedSpecimens = groupByTypeAndDisease(specimens, acronymList, allSpecimenTypes,
-					diseaseList);
+			groupedSpecimens = groupByTypeAndDisease(specimens, acronymList, allSpecimenTypes, diseaseList);
+
 		else if (groupByColumns.contains("Ethnicity") && groupByColumns.contains("Country"))
-			groupedSpecimens = groupByEthnicityAndCountry(specimens, acronymList, allEthnicities,
-					allCountries);
+			groupedSpecimens = groupByEthnicityAndCountry(specimens, acronymList, allEthnicities, allCountries);
+
 		else if (groupByColumns.contains("Ethnicity") && groupByColumns.contains("Disease"))
-			groupedSpecimens = groupByEthnicityAndDisease(specimens, acronymList, allEthnicities,
-					diseaseList);
+			groupedSpecimens = groupByEthnicityAndDisease(specimens, acronymList, allEthnicities, diseaseList);
+
 		else if (groupByColumns.contains("Country") && groupByColumns.contains("Disease"))
-			groupedSpecimens = groupByCountryAndDisease(specimens, acronymList, allCountries,
-					diseaseList);
+			groupedSpecimens = groupByCountryAndDisease(specimens, acronymList, allCountries, diseaseList);
+
 		else if (groupByColumns.contains("Design") && groupByColumns.contains("Disease"))
-			groupedSpecimens = groupByDesignAndDisease(specimens, acronymList, designList,
-					diseaseList);
+			groupedSpecimens = groupByDesignAndDisease(specimens, acronymList, designList, diseaseList);
+
 		else if (groupByColumns.contains("SpecType") && groupByColumns.contains("Design"))
-			groupedSpecimens = groupByDesignAndType(specimens, acronymList, allSpecimenTypes,
-					designList);
+			groupedSpecimens = groupByDesignAndType(specimens, acronymList, allSpecimenTypes, designList);
+
 		else if (groupByColumns.contains("Design") && groupByColumns.contains("Sex"))
 			groupedSpecimens = groupByDesignAndSex(specimens, acronymList, designList, sexList);
+
+		// 1
 		else if (groupByColumns.contains("SpecType"))
 			groupedSpecimens = groupByType(specimens, acronymList, allSpecimenTypes);
+
 		else if (groupByColumns.contains("Ethnicity"))
 			groupedSpecimens = groupByEthnicity(specimens, acronymList, allEthnicities);
+
 		else if (groupByColumns.contains("Country"))
 			groupedSpecimens = groupByCountry(specimens, acronymList, allCountries);
+
 		else if (groupByColumns.contains("Disease"))
 			groupedSpecimens = groupByDisease(specimens, acronymList, diseaseList);
+
 		else if (groupByColumns.contains("Design"))
 			groupedSpecimens = groupByDesign(specimens, acronymList, designList);
+
 		else if (groupByColumns.contains("Sex"))
 			groupedSpecimens = groupBySex(specimens, acronymList, sexList);
+
 		else
 			groupedSpecimens = groupByAcronym(specimens, acronymList);
 
@@ -1055,6 +1074,88 @@ public class ApiController {
 		return groupedSpecimens;
 	}
 
+	private List<RowForm> groupByDiseaseAndSex(List<NeoSpecimen> specimens,
+											   List<String> acronyms,
+											   List<String> diseases,
+											   List<String> sexList) {
+		List<RowForm> groupedSpecimens = new ArrayList<>();
+		for (String acronym : acronyms) {
+			for (String disease : diseases)
+				for (String sex : sexList) {
+					RowForm row = new RowForm();
+					row.setAcronym(acronym);
+					row.setDisease(disease);
+					row.setSex(sex);
+					HashSet<String> biobanks = new HashSet<>();
+					int nbSamples = 0;
+					for (NeoSpecimen specimen : specimens)
+						if (specimen.getAcronym().equals(acronym) &&
+								specimen.getDisease().equals(disease) &&
+								specimen.getSex().equals(sex)) {
+
+							nbSamples += 1;
+							if (specimen.getNoAliquots() > 0)
+								biobanks.add(specimen.getBiobankName());
+						}
+					if (nbSamples > 0) {
+						row.setNbSamples(nbSamples);
+						row.setBiobanks(new ArrayList<>(biobanks));
+						groupedSpecimens.add(row);
+					}
+				}
+		}
+
+		return groupedSpecimens;
+	}
+
+	private List<RowForm> groupByDesignAndDiseaseAndSexAndEthnicity(List<NeoSpecimen> specimens,
+																	List<String> acronyms,
+																	List<String> designs,
+																	List<String> diseases,
+																	List<String> sexList,
+																	List<String> ethnicities) {
+		List<RowForm> groupedSpecimens = new ArrayList<>();
+		HashMap<String, NeoStudy> studies = studyHashMap();
+		for (String acronym : acronyms) {
+			for (String design : designs) {
+				NeoStudy study = studies.get(acronym);
+				List<String> studyDesigns = new ArrayList<>();
+				study.getDesigns().forEach(item -> studyDesigns.add(item.getName()));
+				for (String disease : diseases) {
+					for (String sex: sexList) {
+						for (String ethinicity : ethnicities) {
+							RowForm row = new RowForm();
+							row.setAcronym(acronym);
+							row.setDesign(design);
+							row.setDisease(disease);
+							row.setSex(sex);
+							row.setEthnicity(ethinicity);
+							HashSet<String> biobanks = new HashSet<>();
+							int nbSamples = 0;
+							for (NeoSpecimen specimen : specimens) {
+								if (specimen.getAcronym().equals(acronym) &&
+										studyDesigns.contains(design) &&
+										specimen.getDisease().equals(disease) &&
+										specimen.getSex().equals(sex) &&
+										specimen.getEthnicity().equals(ethinicity)) {
+									nbSamples += 1;
+									if (specimen.getNoAliquots() > 0)
+										biobanks.add(specimen.getBiobankName());
+								}
+							}
+							if (nbSamples > 0) {
+								row.setNbSamples(nbSamples);
+								row.setBiobanks(new ArrayList<>(biobanks));
+								groupedSpecimens.add(row);
+							}
+						}
+					}
+				}
+			}
+		}
+		return groupedSpecimens;
+	}
+
 	private List<RowForm> groupByDesignAndSexAndEthnicity(List<NeoSpecimen> specimens,
 													 List<String> acronyms,
 													 List<String> designs,
@@ -1098,6 +1199,7 @@ public class ApiController {
 		return groupedSpecimens;
 	}
 
+
 	private List<RowForm> groupByDesignAndSexAndType(List<NeoSpecimen> specimens,
 														   List<String> acronyms,
 														   List<String> designs,
@@ -1136,6 +1238,142 @@ public class ApiController {
 							groupedSpecimens.add(row);
 						}
 					}
+			}
+		}
+
+		return groupedSpecimens;
+	}
+
+	private List<RowForm> groupByDiseaseAndSexAndEthnicity(List<NeoSpecimen> specimens,
+														   List<String> acronyms,
+														   List<String> diseases,
+														   List<String> sexList,
+														   List<String> ethnicities) {
+		List<RowForm> groupedSpecimens = new ArrayList<>();
+		HashMap<String, NeoStudy> studies = studyHashMap();
+		for (String acronym : acronyms) {
+				for (String disease : diseases) {
+					for (String sex: sexList) {
+						for (String ethinicity : ethnicities) {
+							RowForm row = new RowForm();
+							row.setAcronym(acronym);
+							row.setDisease(disease);
+							row.setSex(sex);
+							row.setEthnicity(ethinicity);
+							HashSet<String> biobanks = new HashSet<>();
+							int nbSamples = 0;
+							for (NeoSpecimen specimen : specimens) {
+								if (specimen.getAcronym().equals(acronym) &&
+										specimen.getDisease().equals(disease) &&
+										specimen.getSex().equals(sex) &&
+										specimen.getEthnicity().equals(ethinicity)) {
+									nbSamples += 1;
+									if (specimen.getNoAliquots() > 0)
+										biobanks.add(specimen.getBiobankName());
+								}
+							}
+							if (nbSamples > 0) {
+								row.setNbSamples(nbSamples);
+								row.setBiobanks(new ArrayList<>(biobanks));
+								groupedSpecimens.add(row);
+							}
+						}
+					}
+				}
+		}
+		return groupedSpecimens;
+	}
+
+	private List<RowForm> groupByDesignAndDiseaseAndSexAndType(List<NeoSpecimen> specimens,
+														       List<String> acronyms,
+														       List<String> designs,
+														       List<String> diseases,
+														       List<String> sexList,
+														       List<String> specimenTypes) {
+		List<RowForm> groupedSpecimens = new ArrayList<>();
+		HashMap<String, NeoStudy> studies = studyHashMap();
+		for (String acronym : acronyms) {
+			for (String design : designs) {
+				NeoStudy study = studies.get(acronym);
+				List<String> studyDesigns = new ArrayList<>();
+				study.getDesigns().forEach(item -> studyDesigns.add(item.getName()));
+				for (String sex: sexList)
+					for (String disease : diseases)
+						for (String type : specimenTypes) {
+							NeoSpecType specType = typeRepository.findNeoSpecTypeByName(type);
+							RowForm row = new RowForm();
+							row.setAcronym(acronym);
+							row.setDesign(design);
+							row.setDisease(disease);
+							row.setSex(sex);
+							row.setSpecType(type);
+							HashSet<String> biobanks = new HashSet<>();
+							int nbSamples = 0;
+							for (NeoSpecimen specimen : specimens)
+								if (specimen.getAcronym().equals(acronym) &&
+										studyDesigns.contains(design) &&
+										specimen.getDisease().equals(disease) &&
+										specimen.getSex().equals(sex) &&
+										specimen.getSpecType().getName().equals(specType.getName())) {
+
+									nbSamples += 1;
+									if (specimen.getNoAliquots() > 0)
+										biobanks.add(specimen.getBiobankName());
+								}
+							if (nbSamples > 0) {
+								row.setNbSamples(nbSamples);
+								row.setBiobanks(new ArrayList<>(biobanks));
+								groupedSpecimens.add(row);
+							}
+						}
+			}
+		}
+
+		return groupedSpecimens;
+	}
+
+	private List<RowForm> groupByDesignAndDiseaseAndSexAndCountry(List<NeoSpecimen> specimens,
+														       	  List<String> acronyms,
+														          List<String> designs,
+														          List<String> diseases,
+														          List<String> sexList,
+														          List<String> countries) {
+		List<RowForm> groupedSpecimens = new ArrayList<>();
+		HashMap<String, NeoStudy> studies = studyHashMap();
+		for (String acronym : acronyms) {
+			for (String design : designs) {
+				NeoStudy study = studies.get(acronym);
+				List<String> studyDesigns = new ArrayList<>();
+				study.getDesigns().forEach(item -> studyDesigns.add(item.getName()));
+				for (String sex: sexList)
+					for (String disease : diseases)
+						for (String country : countries) {
+							NeoCountry findCountry = countryRepository.findNeoCountryByName(country);
+							RowForm row = new RowForm();
+							row.setAcronym(acronym);
+							row.setDesign(design);
+							row.setDisease(disease);
+							row.setSex(sex);
+							row.setCountry(country);
+							HashSet<String> biobanks = new HashSet<>();
+							int nbSamples = 0;
+							for (NeoSpecimen specimen : specimens)
+								if (specimen.getAcronym().equals(acronym) &&
+										studyDesigns.contains(design) &&
+										specimen.getDisease().equals(disease) &&
+										specimen.getSex().equals(sex) &&
+										specimen.getCountry().getName().equals(findCountry.getName())) {
+
+									nbSamples += 1;
+									if (specimen.getNoAliquots() > 0)
+										biobanks.add(specimen.getBiobankName());
+								}
+							if (nbSamples > 0) {
+								row.setNbSamples(nbSamples);
+								row.setBiobanks(new ArrayList<>(biobanks));
+								groupedSpecimens.add(row);
+							}
+						}
 			}
 		}
 
