@@ -389,6 +389,9 @@ public class ApiController {
 		if ( groupByColumns.contains("Disease") && groupByColumns.contains("Ethnicity") && groupByColumns.contains("SpecType") && groupByColumns.contains("Country"))
 			groupedSpecimens = groupByTypeAndEthnicityAndCountryAndDisease(specimens, acronymList, allSpecimenTypes, allEthnicities, allCountries, diseaseList);
 
+		else if ( groupByColumns.contains("Disease") && groupByColumns.contains("Sex") && groupByColumns.contains("Ethnicity") && groupByColumns.contains("SpecType"))
+			groupedSpecimens = groupByDiseaseAndSexAndEthnicityAndType(specimens, acronymList, diseaseList, sexList,allEthnicities, allSpecimenTypes);
+
 		else if (groupByColumns.contains("Design") && groupByColumns.contains("Disease") && groupByColumns.contains("Sex") && groupByColumns.contains("Ethnicity"))
 			groupedSpecimens = groupByDesignAndDiseaseAndSexAndEthnicity(specimens, acronymList, designList, diseaseList, sexList, allEthnicities);
 
@@ -1277,6 +1280,51 @@ public class ApiController {
 								row.setBiobanks(new ArrayList<>(biobanks));
 								groupedSpecimens.add(row);
 							}
+						}
+					}
+				}
+		}
+		return groupedSpecimens;
+	}
+
+	private List<RowForm> groupByDiseaseAndSexAndEthnicityAndType(List<NeoSpecimen> specimens,
+														   		  List<String> acronyms,
+														   		  List<String> diseases,
+														   		  List<String> sexList,
+														   		  List<String> ethnicities,
+																  List<String> specimenTypes) {
+		List<RowForm> groupedSpecimens = new ArrayList<>();
+		HashMap<String, NeoStudy> studies = studyHashMap();
+		for (String acronym : acronyms) {
+				for (String disease : diseases) {
+					for (String sex: sexList) {
+						for (String ethinicity : ethnicities)
+							for (String type : specimenTypes) {
+								NeoSpecType specType = typeRepository.findNeoSpecTypeByName(type);
+								RowForm row = new RowForm();
+								row.setAcronym(acronym);
+								row.setDisease(disease);
+								row.setSex(sex);
+								row.setEthnicity(ethinicity);
+								row.setSpecType(type);
+								HashSet<String> biobanks = new HashSet<>();
+								int nbSamples = 0;
+								for (NeoSpecimen specimen : specimens) {
+									if (specimen.getAcronym().equals(acronym) &&
+											specimen.getDisease().equals(disease) &&
+											specimen.getSex().equals(sex) &&
+											specimen.getEthnicity().equals(ethinicity) &&
+											specimen.getSpecType().getName().equals(specType.getName())) {
+										nbSamples += 1;
+										if (specimen.getNoAliquots() > 0)
+											biobanks.add(specimen.getBiobankName());
+									}
+								}
+								if (nbSamples > 0) {
+									row.setNbSamples(nbSamples);
+									row.setBiobanks(new ArrayList<>(biobanks));
+									groupedSpecimens.add(row);
+								}
 						}
 					}
 				}
