@@ -441,6 +441,9 @@ public class ApiController {
 		else if (groupByColumns.contains("Design") && groupByColumns.contains("Sex") && groupByColumns.contains("Ethnicity"))
 			groupedSpecimens = groupByDesignAndSexAndEthnicity(specimens, acronymList, designList, sexList, allEthnicities);
 
+		else if (groupByColumns.contains("Design") && groupByColumns.contains("Disease") && groupByColumns.contains("SpecType"))
+			groupedSpecimens = groupByDesignAndDiseaseType(specimens, acronymList, designList, diseaseList, allSpecimenTypes);
+
 		else if (groupByColumns.contains("Disease") && groupByColumns.contains("Sex") && groupByColumns.contains("Ethnicity"))
 			groupedSpecimens = groupByDiseaseAndSexAndEthnicity(specimens, acronymList, diseaseList, sexList, allEthnicities);
 
@@ -791,6 +794,51 @@ public class ApiController {
 						row.setNbSamples(nbSamples);
 						row.setBiobanks(new ArrayList<>(biobanks));
 						groupedSpecimens.add(row);
+					}
+				}
+			}
+		return groupedSpecimens;
+	}
+
+	private List<RowForm> groupByDesignAndDiseaseType(List<NeoSpecimen> specimens,
+													  List<String> acronyms,
+													  List<String> designs,
+													  List<String> diseases,
+													  List<String> specimenTypes) {
+		List<RowForm> groupedSpecimens = new ArrayList<>();
+		HashMap<String, NeoStudy> studies = studyHashMap();
+		for (String acronym : acronyms)
+			for (String design : designs) {
+				NeoStudy study = studies.get(acronym);
+				List<String> studyDesigns = new ArrayList<>();
+				study.getDesigns().forEach(item -> studyDesigns.add(item.getName()));
+
+				for (String type : specimenTypes) {
+					NeoSpecType specType = typeRepository.findNeoSpecTypeByName(type);
+					for (String disease : diseases) {
+						JSONObject object = new JSONObject();
+						RowForm row = new RowForm();
+						row.setAcronym(acronym);
+						row.setDesign(design);
+						row.setSpecType(type);
+						row.setDisease(disease);
+						HashSet<String> biobanks = new HashSet<>();
+						int nbSamples = 0;
+						for (NeoSpecimen specimen : specimens)
+							if (specimen.getAcronym().equals(acronym) &&
+									studyDesigns.contains(design) &&
+									specimen.getSpecType().getName().equals(specType.getName()) &&
+									specimen.getDisease().equals(disease)) {
+
+								nbSamples += 1;
+								if (specimen.getNoAliquots() > 0)
+									biobanks.add(specimen.getBiobankName());
+							}
+						if (nbSamples > 0) {
+							row.setNbSamples(nbSamples);
+							row.setBiobanks(new ArrayList<>(biobanks));
+							groupedSpecimens.add(row);
+						}
 					}
 				}
 			}
