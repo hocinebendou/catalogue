@@ -416,6 +416,9 @@ public class ApiController {
 		else if (groupByColumns.contains("Design") && groupByColumns.contains("Disease") && groupByColumns.contains("Sex") && groupByColumns.contains("Country"))
 			groupedSpecimens = groupByDesignAndDiseaseAndSexAndCountry(specimens, acronymList, designList, diseaseList, sexList, allCountries);
 
+		else if (groupByColumns.contains("Design") && groupByColumns.contains("Disease") && groupByColumns.contains("SpecType") && groupByColumns.contains("Country"))
+			groupedSpecimens = groupByDesignAndDiseaseTypeAndCountry(specimens, acronymList, designList, diseaseList, allSpecimenTypes, allCountries);
+
 		// 3
 		else if (groupByColumns.contains("SpecType") && groupByColumns.contains("Ethnicity") && groupByColumns.contains("Country"))
 			groupedSpecimens = groupByTypeAndEthnicityAndCountry(specimens, acronymList, allSpecimenTypes, allEthnicities, allCountries);
@@ -838,6 +841,57 @@ public class ApiController {
 							row.setNbSamples(nbSamples);
 							row.setBiobanks(new ArrayList<>(biobanks));
 							groupedSpecimens.add(row);
+						}
+					}
+				}
+			}
+		return groupedSpecimens;
+	}
+
+	private List<RowForm> groupByDesignAndDiseaseTypeAndCountry(List<NeoSpecimen> specimens,
+													  			List<String> acronyms,
+													  			List<String> designs,
+													  			List<String> diseases,
+													  			List<String> specimenTypes,
+																List<String> countries) {
+		List<RowForm> groupedSpecimens = new ArrayList<>();
+		HashMap<String, NeoStudy> studies = studyHashMap();
+		for (String acronym : acronyms)
+			for (String design : designs) {
+				NeoStudy study = studies.get(acronym);
+				List<String> studyDesigns = new ArrayList<>();
+				study.getDesigns().forEach(item -> studyDesigns.add(item.getName()));
+
+				for (String type : specimenTypes) {
+					NeoSpecType specType = typeRepository.findNeoSpecTypeByName(type);
+					for (String country : countries) {
+						NeoCountry findCountry = countryRepository.findNeoCountryByName(country);
+						for (String disease : diseases) {
+							JSONObject object = new JSONObject();
+							RowForm row = new RowForm();
+							row.setAcronym(acronym);
+							row.setDesign(design);
+							row.setSpecType(type);
+							row.setCountry(country);
+							row.setDisease(disease);
+							HashSet<String> biobanks = new HashSet<>();
+							int nbSamples = 0;
+							for (NeoSpecimen specimen : specimens)
+								if (specimen.getAcronym().equals(acronym) &&
+										studyDesigns.contains(design) &&
+										specimen.getSpecType().getName().equals(specType.getName()) &&
+										specimen.getCountry().getName().equals(findCountry.getName()) &&
+										specimen.getDisease().equals(disease)) {
+
+									nbSamples += 1;
+									if (specimen.getNoAliquots() > 0)
+										biobanks.add(specimen.getBiobankName());
+								}
+							if (nbSamples > 0) {
+								row.setNbSamples(nbSamples);
+								row.setBiobanks(new ArrayList<>(biobanks));
+								groupedSpecimens.add(row);
+							}
 						}
 					}
 				}
