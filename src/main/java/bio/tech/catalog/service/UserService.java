@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -62,7 +63,21 @@ public class UserService implements IUserService {
         user.setPassword(passwordEncoder.encode(accountDto.getPassword()));
         user.setEmail(accountDto.getEmail());
         Collection<Role> roles = new ArrayList<>();
-        roles.add(roleRepository.findByName("ROLE_USER"));
+        if (accountDto.getRole() == null || accountDto.getRole().equals("ROLE_USER")) {
+            roles.add(roleRepository.findByName("ROLE_USER"));
+        } else {
+            roles.add(roleRepository.findByName(accountDto.getRole()));
+            user.setEmailEnabled(true);
+            user.setEnabled(true);
+            if (accountDto.getRole().equals("ROLE_ARCHIVE") || accountDto.getRole().equals("ROLE_BIOBANK")) {
+                String rawPath = "./users/" + accountDto.getUsername() + "/raw";
+                String processedPath = "./users/" + accountDto.getUsername() + "/processed";
+                File rawDir = new File(rawPath);
+                File processedDir = new File(processedPath);
+                rawDir.mkdirs();
+                processedDir.mkdirs();
+            }
+        }
         user.setRoles(roles);
 
         return repository.save(user);

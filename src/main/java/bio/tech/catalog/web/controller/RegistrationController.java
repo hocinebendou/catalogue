@@ -13,6 +13,7 @@ import bio.tech.catalog.web.dto.UserDto;
 import bio.tech.catalog.web.error.InvalidOldPasswordException;
 import bio.tech.catalog.web.error.UserNotFoundException;
 import bio.tech.catalog.web.util.GenericResponse;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.MessageSource;
@@ -35,6 +36,8 @@ import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.File;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.*;
 
@@ -67,18 +70,14 @@ public class RegistrationController {
     @Autowired
     private Environment env;
 
-    /*@GetMapping("/")
-    public String index(Model model) {
-        return "index";
-    }*/
-
     @PostMapping(value = "/user/registration")
     @ResponseBody
     public GenericResponse registerUserAccount(@Valid final UserDto accountDto, final HttpServletRequest request) {
         LOGGER.debug("Registering user account with information: {}", accountDto);
 
         final User registered = userService.registerNewUserAccount(accountDto);
-        eventPublisher.publishEvent(new OnRegistrationCompleteEvent(registered, request.getLocale(), getAppUrl(request)));
+        if (registered.getRoles().stream().findFirst().equals("ROLE_USER"))
+            eventPublisher.publishEvent(new OnRegistrationCompleteEvent(registered, request.getLocale(), getAppUrl(request)));
         return new GenericResponse("success");
     }
 
@@ -155,6 +154,23 @@ public class RegistrationController {
         }
         userService.changeUserPassword(user, passwordDto.getNewPassword());
         return new GenericResponse(messages.getMessage("message.updatePasswordSuc", null, locale));
+    }
+
+    @GetMapping("/user/delete")
+    public String removeUser(@RequestParam("username") String username, Model model) throws IOException {
+        User user = userService.findUserByUsername(username);
+
+        for (Role role : user.getRoles()) {
+            if (role.getName().equals("ROLE_ARCHIVE") || role.getName().equals("ROLE_BIOBANK")) {
+                String path = "./users/" + user.getUsername();
+                File dir = new File(path);
+                FileUtils.deleteDirectory(dir);
+            }
+        }
+
+        userService.deleteUser(Arrays.asList(user));
+
+        return "redirect:/users";
     }
 
     private SimpleMailMessage constructResetTokenEmail(final String contextPath, final Locale locale, final String token, final User user) {

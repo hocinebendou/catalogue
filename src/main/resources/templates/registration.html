@@ -41,7 +41,7 @@
                     <span id="emailError" class="col s4" style="display:none"></span>
                 </div>
                 <div class="input-field">
-                    <label for="username" th:text="#{label.user.username}">email</label>
+                    <label for="username" th:text="#{label.user.username}">username</label>
                     <input id="username" name="username" class="validate" type="text" required="required"/>
                     <span id="usernameError" class="col s4" style="display:none"></span>
                 </div>
@@ -69,7 +69,6 @@
 var serverContext = [[@{/}]];
 $(document).ready(function () {
     $('form').submit(function(event) {
-        console.log("--------------------------------")
         register(event);
     });
 
