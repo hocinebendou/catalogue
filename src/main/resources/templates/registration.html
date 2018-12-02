@@ -109,7 +109,7 @@ function register(event){
     }
     var formData= $('form').serialize();
     $.post(serverContext + "user/registration",formData ,function(data){
-        if(data.message == "success"){
+        if(data.message === "success"){
             window.location.href = serverContext + "successRegister.html";
         }
 

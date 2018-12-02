@@ -48,7 +48,7 @@ public class SecSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/", "/about*", "/contact",  "/search*","/login*", "/logout*", "/signin/**",
                         "/signup/**", "/study*", "/user/registration*", "/user/resetPassword*", "/user/changePassword*",
-                        "registrationConfirm*", "/registration*", "/forgetPassword*").permitAll()
+                        "registrationConfirm*", "/registration*", "/forgetPassword*", "/successRegister*").permitAll()
                 .antMatchers("/invalidSession*").anonymous()
                 .antMatchers("/user/updatePassword*", "/user/savePassword*",
                         "/updatePassword*").hasAuthority("CHANGE_PASSWORD_PRIVILEGE")
