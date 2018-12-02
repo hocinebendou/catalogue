@@ -27,6 +27,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -76,8 +77,12 @@ public class RegistrationController {
         LOGGER.debug("Registering user account with information: {}", accountDto);
 
         final User registered = userService.registerNewUserAccount(accountDto);
-        if (registered.getRoles().stream().findFirst().equals("ROLE_USER"))
-            eventPublisher.publishEvent(new OnRegistrationCompleteEvent(registered, request.getLocale(), getAppUrl(request)));
+        for (Role role : registered.getRoles()) {
+            if (role.getName().equals("ROLE_USER")) {
+                eventPublisher.publishEvent(new OnRegistrationCompleteEvent(registered, request.getLocale(), getAppUrl(request)));
+                break;
+            }
+        }
         return new GenericResponse("success");
     }
 
@@ -163,8 +168,12 @@ public class RegistrationController {
         for (Role role : user.getRoles()) {
             if (role.getName().equals("ROLE_ARCHIVE") || role.getName().equals("ROLE_BIOBANK")) {
                 String path = "./users/" + user.getUsername();
-                File dir = new File(path);
-                FileUtils.deleteDirectory(dir);
+                File folder = new File(path);
+                FileUtils.deleteDirectory(folder);
+            } else if (role.getName().equals("ROLE_USER")){
+                String path = ResourceUtils.getFile("classpath:static/users") + "/" + user.getUsername();
+                File folder = new File(path);
+                FileUtils.deleteDirectory(folder);
             }
         }
 

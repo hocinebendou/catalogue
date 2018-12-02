@@ -91,9 +91,10 @@ public class ProjectApiConroller {
         ObjectMapper mapper = new ObjectMapper();
         NeoProject project = mapper.readValue(obj, NeoProject.class);
         User user = authenticatedUser();
-        String path = "/home/hocine/my-projects/hcatalogue/users/" + user.getUsername() + "/" + project.getProjectId();
+        //  String path = "/home/hocine/my-projects/hcatalogue/users/" + user.getUsername() + "/" + project.getProjectId();
+        String path = ResourceUtils.getFile("classpath:static/users") + "/" + user.getUsername() + "/" + project.getProjectId();
         File folder = new File(path);
-        folder.mkdirs();
+        folder.mkdir();
         Path pathLocation = Paths.get(folder.getAbsolutePath());
         for(MultipartFile r : reports) {
             if (! r.isEmpty())

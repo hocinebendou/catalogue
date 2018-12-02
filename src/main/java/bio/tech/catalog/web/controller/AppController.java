@@ -8,14 +8,18 @@ import bio.tech.catalog.persistence.model.*;
 import bio.tech.catalog.service.UserService;
 import bio.tech.catalog.utils.StudyQuery;
 import bio.tech.catalog.web.dto.UserDto;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.ResourceUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 @Controller
@@ -160,9 +164,15 @@ public class AppController {
     }
 
     @RequestMapping("/enable")
-    public String validateUser(@RequestParam("email") String email, Model model) {
+    public String validateUser(@RequestParam("email") String email, Model model) throws IOException {
         User user = userService.findUserByEmail(email);
-
+        for (Role role : user.getRoles()) {
+            if (role.getName().equals("ROLE_USER")) {
+                String path = ResourceUtils.getFile("classpath:static/users") + "/" + user.getUsername();
+                File folder = new File(path);
+                folder.mkdir();
+            }
+        }
         user.setEnabled(true);
         userService.saveRegisteredUser(user);
 
