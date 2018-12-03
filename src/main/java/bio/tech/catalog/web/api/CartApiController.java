@@ -121,7 +121,7 @@ public class CartApiController {
         return new ResponseEntity<>(obj, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "cart/remove/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/cart/remove/{id}", method = RequestMethod.GET)
     public ResponseEntity<JSONObject> deleteCart(@PathVariable("id") String cartId) {
 
         NeoCart cart = cartRepository.findOne(Long.parseLong(cartId));
@@ -129,6 +129,20 @@ public class CartApiController {
         String successMessage = null;
         String failureMessage = null;
         if (cart.getStatus().equals("Pending")) {
+
+            // delete linked queries
+            List<NeoQuery> queries = queryRepository.cartQueries(cart.getId());
+            for (NeoQuery query : queries) {
+                queryRepository.delete(query);
+            }
+
+            // delete linked data queries
+            List<NeoDataQuery> dataQueries = dataQueryRepository.cartQueries(cart.getId());
+            for (NeoDataQuery query : dataQueries) {
+                dataQueryRepository.delete(query);
+            }
+
+            // delete cart
             cartRepository.delete(cart);
             successMessage = "Cart, " + cart.getCartId() + ", has been successfully deleted.";
         } else {
