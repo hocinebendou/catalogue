@@ -173,12 +173,17 @@ public class ProjectApiConroller {
     @RequestMapping(value = "/remove/{id}", method = RequestMethod.GET)
     public ResponseEntity<JSONObject> deleteProject(@PathVariable("id") String projectId) {
 
-        NeoProject project = projectRepository.findNeoProjectByProjectId(projectId);
-        // TODO: don't delete if the project has validated carts (to decide).
-        projectRepository.deleteByProjectId(projectId);
+        User user = authenticatedUser();
+        NeoProject project = projectRepository.projectByUsernameAndProjectId(user.getUsername(), projectId);
+        List<NeoCart> carts = cartRepository.projectCarts(project.getId());
 
         JSONObject obj = new JSONObject();
-        obj.put("message", "Project with id " + projectId + " has been deleted");
+        if (!carts.isEmpty()) {
+            obj.put("error", "Project with id " + projectId + " is linked to Cart objects. Delete first the carts!");
+        } else {
+            projectRepository.deleteByProjectId(projectId);
+            obj.put("message", "Project with id " + projectId + " has been deleted");
+        }
 
         return new ResponseEntity<>(obj, HttpStatus.OK);
     }

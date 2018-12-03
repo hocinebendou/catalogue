@@ -693,8 +693,11 @@ let ProjectCard = {
             axios.get(
                 `/api/remove/${this.projectId}`
             ).then(function (result) {
-                //Todo: add an alert message
-                self.$emit('card-deleted');
+                if (result.data.error) {
+                    alert(result.data.error);
+                } else {
+                    self.$emit('card-deleted');
+                }
             });
         }
     }
