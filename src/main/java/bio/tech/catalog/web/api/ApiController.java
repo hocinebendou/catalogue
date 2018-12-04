@@ -490,6 +490,9 @@ public class ApiController {
 		else if (groupByColumns.contains("Design") && groupByColumns.contains("Sex"))
 			groupedSpecimens = groupByDesignAndSex(specimens, acronymList, designList, sexList);
 
+		else if (groupByColumns.contains("Design") && groupByColumns.contains("Country"))
+			groupedSpecimens = groupByDesignAndCountry(specimens, acronymList, designList, allCountries);
+
 		// 1
 		else if (groupByColumns.contains("SpecType"))
 			groupedSpecimens = groupByType(specimens, acronymList, allSpecimenTypes);
@@ -1087,6 +1090,44 @@ public class ApiController {
 					}
 				}
 
+		return groupedSpecimens;
+	}
+
+	private List<RowForm> groupByDesignAndCountry(List<NeoSpecimen> specimens,
+												  List<String> acronyms,
+												  List<String> designs,
+												  List<String> countries) {
+		List<RowForm> groupedSpecimens = new ArrayList<>();
+		HashMap<String, NeoStudy> studies = studyHashMap();
+		for (String acronym : acronyms) {
+			NeoStudy study = studies.get(acronym);
+			List<String> studyDesigns = new ArrayList<>();
+			study.getDesigns().forEach(item -> studyDesigns.add(item.getName()));
+			for (String design : designs)
+				for (String country : countries) {
+					NeoCountry findCountry = countryRepository.findNeoCountryByName(country);
+					RowForm row = new RowForm();
+					row.setAcronym(acronym);
+					row.setDesign(design);
+					row.setCountry(country);
+					HashSet<String> biobanks = new HashSet<>();
+					int nbSamples = 0;
+					for (NeoSpecimen specimen : specimens)
+						if (specimen.getAcronym().equals(acronym) &&
+								studyDesigns.contains(design) &&
+								specimen.getCountry().getName().equals(findCountry.getName())) {
+
+							nbSamples += 1;
+							if (specimen.getNoAliquots() > 0)
+								biobanks.add(specimen.getBiobankName());
+						}
+					if (nbSamples > 0) {
+						row.setNbSamples(nbSamples);
+						row.setBiobanks(new ArrayList<>(biobanks));
+						groupedSpecimens.add(row);
+					}
+				}
+		}
 		return groupedSpecimens;
 	}
 
