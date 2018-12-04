@@ -73,7 +73,7 @@ public interface SpecimenRepository extends PagingAndSortingRepository<NeoSpecim
     // query by acronyms and countries
     @Query( "MATCH (s:NeoStudy) " +
             "WHERE s.acronym IN {acronyms} " +
-            "MATCH (s)-[]->(p:NeoCountry)-[]->(m:NeoSpecimen)-[]->(c:NeoCountry) " +
+            "MATCH (s)-[]->(p:NeoParticipant)-[]->(m:NeoSpecimen)-[]->(c:NeoCountry) " +
             "WHERE c.name IN {countries} " +
             "RETURN m")
     List<NeoSpecimen> findByAcronymsAndCountries(@Param("acronyms") List<String> acronyms,

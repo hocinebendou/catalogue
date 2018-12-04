@@ -1096,7 +1096,8 @@ public class ApiController {
 													  List<String> diseases) {
 		List<RowForm> groupedSpecimens = new ArrayList<>();
 		for (String acronym : acronyms)
-			for (String country : countries)
+			for (String country : countries) {
+				NeoCountry findCountry = countryRepository.findNeoCountryByName(country);
 				for (String disease : diseases) {
 					RowForm row = new RowForm();
 					row.setAcronym(acronym);
@@ -1106,7 +1107,7 @@ public class ApiController {
 					int nbSamples = 0;
 					for (NeoSpecimen specimen : specimens)
 						if (specimen.getAcronym().equals(acronym) &&
-								specimen.getCountry().getName().equals(country) &&
+								specimen.getCountry().getName().equals(findCountry.getName()) &&
 								specimen.getDisease().equals(disease)) {
 							nbSamples += 1;
 							if (specimen.getNoAliquots() > 0)
@@ -1118,6 +1119,7 @@ public class ApiController {
 						groupedSpecimens.add(row);
 					}
 				}
+			}
 
 		return groupedSpecimens;
 	}
