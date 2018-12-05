@@ -441,6 +441,9 @@ public class ApiController {
 		else if (groupByColumns.contains("Design") && groupByColumns.contains("Ethnicity") && groupByColumns.contains("SpecType"))
 			groupedSpecimens = groupByDesignAndEthnicityAndType(specimens, acronymList, designList, allEthnicities, allSpecimenTypes);
 
+		else if (groupByColumns.contains("Design") && groupByColumns.contains("Ethnicity") && groupByColumns.contains("Country"))
+			groupedSpecimens = groupByDesignEthnicityAndCountry(specimens, acronymList, designList, allEthnicities, allCountries);
+
 		else if (groupByColumns.contains("Design") && groupByColumns.contains("Sex") &&	groupByColumns.contains("SpecType"))
 			groupedSpecimens = groupByDesignAndSexAndType(specimens, acronymList, designList, sexList, allSpecimenTypes);
 
@@ -489,6 +492,9 @@ public class ApiController {
 
 		else if (groupByColumns.contains("Design") && groupByColumns.contains("Sex"))
 			groupedSpecimens = groupByDesignAndSex(specimens, acronymList, designList, sexList);
+
+		else if (groupByColumns.contains("Design") && groupByColumns.contains("Ethnicity"))
+			groupedSpecimens = groupByDesignAndEthnicity(specimens, acronymList, designList, allEthnicities);
 
 		else if (groupByColumns.contains("Design") && groupByColumns.contains("Country"))
 			groupedSpecimens = groupByDesignAndCountry(specimens, acronymList, designList, allCountries);
@@ -2069,6 +2075,45 @@ public class ApiController {
 						if (specimen.getAcronym().equals(acronym) &&
 								studyDesigns.contains(design) &&
 								specimen.getSex().equals(sex)) {
+
+							nbSamples += 1;
+							if (specimen.getNoAliquots() > 0)
+								biobanks.add(specimen.getBiobankName());
+						}
+					if (nbSamples > 0) {
+						row.setNbSamples(nbSamples);
+						row.setBiobanks(new ArrayList<>(biobanks));
+						groupedSpecimens.add(row);
+					}
+				}
+			}
+		}
+
+		return groupedSpecimens;
+	}
+
+	private List<RowForm> groupByDesignAndEthnicity(List<NeoSpecimen> specimens,
+													List<String> acronyms,
+													List<String> designs,
+													List<String> ethnicities) {
+		List<RowForm> groupedSpecimens = new ArrayList<>();
+		HashMap<String, NeoStudy> studies = studyHashMap();
+		for (String acronym : acronyms) {
+			for (String design : designs) {
+				NeoStudy study = studies.get(acronym);
+				List<String> studyDesigns = new ArrayList<>();
+				study.getDesigns().forEach(item -> studyDesigns.add(item.getName()));
+				for (String ethnicity : ethnicities) {
+					RowForm row = new RowForm();
+					row.setAcronym(acronym);
+					row.setDesign(design);
+					row.setEthnicity(ethnicity);
+					HashSet<String> biobanks = new HashSet<>();
+					int nbSamples = 0;
+					for (NeoSpecimen specimen : specimens)
+						if (specimen.getAcronym().equals(acronym) &&
+								studyDesigns.contains(design) &&
+								specimen.getEthnicity().equals(ethnicity)) {
 
 							nbSamples += 1;
 							if (specimen.getNoAliquots() > 0)
