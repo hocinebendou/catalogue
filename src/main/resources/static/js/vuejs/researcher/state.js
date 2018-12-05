@@ -121,7 +121,7 @@ function removeElement (arr, item) {
 function addSelectedValue(arr, label, field) {
     // arr.push(value);
     if (label !== "Acronym") {
-        if (arr.length === 1) {
+        if (arr.length === 1 && !(state.selectedValues.columns.includes(label))) {
             state.columns.splice(
                 state.columns.length - 1,
                 0,
@@ -177,27 +177,54 @@ function adjustRow(row) {
             case 'specType':
                 tempRow['specType'] = val;
                 break;
+            case 'smoking':
+                tempRow['smoking'] = val;
+                break;
+            case 'diet':
+                tempRow['diet'] = val;
+                break;
+            case 'hivStatus':
+                tempRow['hivStatus'] = val;
+                break;
+            case 'bloodPressure':
+                tempRow['bloodPressure'] = val;
+                break;
+            case 'alcoholUse':
+                tempRow['alcoholUse'] = val;
+                break;
+            case 'bmiOp':
+                if (row['bmiVal']) {
+                    tempRow['bmiOp'] = val;
+                    tempRow['bmiVal'] = row['bmiVal'];
+                }
+                break;
+            case 'ageOp':
+                if (row['ageVal']) {
+                    tempRow['ageOp'] = val;
+                    tempRow['ageVal'] = row['ageVal'];
+                }
+                break;
         }
-        if (state.selectedValues.smoking) {
+        if (!('smoking' in row) && state.selectedValues.smoking) {
             tempRow['smoking'] = true;
         }
-        if (state.selectedValues.diet) {
+        if (!('diet' in row) && state.selectedValues.diet) {
             tempRow['diet'] = true;
         }
-        if (state.selectedValues.hivStatus) {
+        if (!('hivStatus' in row) && state.selectedValues.hivStatus) {
             tempRow['hivStatus'] = true;
         }
-        if (state.selectedValues.bloodPressure) {
+        if (!('bloodPressure' in row) && state.selectedValues.bloodPressure) {
             tempRow['bloodPressure'] = true;
         }
-        if (state.selectedValues.alcoholUse) {
+        if (!('alcoholUse' in row) && state.selectedValues.alcoholUse) {
             tempRow['alcoholUse'] = true;
         }
-        if (state.selectedValues.bmiOp && state.selectedValues.bmiVal) {
+        if (!('bmiOp' in row) && !('bmiVal' in row) && state.selectedValues.bmiOp && state.selectedValues.bmiVal) {
             tempRow['bmiOp'] = state.selectedValues.bmiOp;
             tempRow['bmiVal'] = state.selectedValues.bmiVal;
         }
-        if (state.selectedValues.ageOp && state.selectedValues.ageVal) {
+        if (!('ageOp' in row) && !('ageVal' in row) &&  state.selectedValues.ageOp && state.selectedValues.ageVal) {
             tempRow['ageOp'] = state.selectedValues.ageOp;
             tempRow['ageVal'] = state.selectedValues.ageVal;
         }

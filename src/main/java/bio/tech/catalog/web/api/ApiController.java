@@ -1068,6 +1068,7 @@ public class ApiController {
 		for (String acronym : acronyms)
 			for (String ethnicity : ethnicities)
 				for (String country : countries) {
+					NeoCountry findCountry = countryRepository.findNeoCountryByName(country);
 					RowForm row = new RowForm();
 					row.setAcronym(acronym);
 					row.setEthnicity(ethnicity);
@@ -1077,7 +1078,7 @@ public class ApiController {
 					for (NeoSpecimen specimen : specimens)
 						if (specimen.getAcronym().equals(acronym) &&
 								specimen.getEthnicity().equals(ethnicity) &&
-								specimen.getCountry().getName().equals(country)) {
+								specimen.getCountry().getName().equals(findCountry.getName())) {
 
 							nbSamples += 1;
 							if (specimen.getNoAliquots() > 0)
@@ -1089,6 +1090,51 @@ public class ApiController {
 						groupedSpecimens.add(row);
 					}
 				}
+
+		return groupedSpecimens;
+	}
+
+	private List<RowForm> groupByDesignEthnicityAndCountry(List<NeoSpecimen> specimens,
+														   List<String> acronyms,
+														   List<String> designs,
+														   List<String> ethnicities,
+														   List<String> countries) {
+		List<RowForm> groupedSpecimens = new ArrayList<>();
+		HashMap<String, NeoStudy> studies = studyHashMap();
+		for (String acronym : acronyms) {
+			NeoStudy study = studies.get(acronym);
+			List<String> studyDesigns = new ArrayList<>();
+			study.getDesigns().forEach(item -> studyDesigns.add(item.getName()));
+			for (String design : designs) {
+				for (String ethnicity : ethnicities) {
+					for (String country : countries) {
+						NeoCountry findCountry = countryRepository.findNeoCountryByName(country);
+						RowForm row = new RowForm();
+						row.setAcronym(acronym);
+						row.setDesign(design);
+						row.setEthnicity(ethnicity);
+						row.setCountry(country);
+						HashSet<String> biobanks = new HashSet<>();
+						int nbSamples = 0;
+						for (NeoSpecimen specimen : specimens)
+							if (specimen.getAcronym().equals(acronym) &&
+									specimen.getEthnicity().equals(ethnicity) &&
+									studyDesigns.contains(design) &&
+									specimen.getCountry().getName().equals(findCountry.getName())) {
+
+								nbSamples += 1;
+								if (specimen.getNoAliquots() > 0)
+									biobanks.add(specimen.getBiobankName());
+							}
+						if (nbSamples > 0) {
+							row.setNbSamples(nbSamples);
+							row.setBiobanks(new ArrayList<>(biobanks));
+							groupedSpecimens.add(row);
+						}
+					}
+				}
+			}
+		}
 
 		return groupedSpecimens;
 	}
