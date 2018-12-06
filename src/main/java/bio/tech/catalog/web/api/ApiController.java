@@ -385,9 +385,26 @@ public class ApiController {
 
 		List<RowForm> groupedSpecimens;
 
+		// 5
+		if (groupByColumns.contains("Design") && groupByColumns.contains("Disease") && groupByColumns.contains("Sex") && groupByColumns.contains("Ethnicity")
+				&& groupByColumns.contains("SpecType"))
+			groupedSpecimens = groupByDesignAndDiseaseAndSexAndEthnicityAndType(specimens, acronymList, designList, diseaseList, sexList, allEthnicities, allSpecimenTypes);
+
+		else if (groupByColumns.contains("Design") && groupByColumns.contains("Disease") && groupByColumns.contains("Sex") && groupByColumns.contains("SpecType")
+				&& groupByColumns.contains("Country"))
+			groupedSpecimens = groupByDesignAndDiseaseAndSexAndTypeAndCountry(specimens, acronymList, designList, diseaseList, sexList, allSpecimenTypes, allCountries);
+
+		else if (groupByColumns.contains("Design") && groupByColumns.contains("Disease") && groupByColumns.contains("Ethnicity") && groupByColumns.contains("SpecType")
+				&& groupByColumns.contains("Country"))
+			groupedSpecimens = groupByDesignAndDiseaseAndEthnicityAndTypeAndCountry(specimens, acronymList, designList, diseaseList, allEthnicities, allSpecimenTypes, allCountries);
+
+		else if (groupByColumns.contains("Design") && groupByColumns.contains("Disease") && groupByColumns.contains("Sex") && groupByColumns.contains("Ethnicity")
+				&& groupByColumns.contains("Country"))
+			groupedSpecimens = groupByDesignAndDiseaseAndSexAndEthnicityAndCountry(specimens, acronymList, designList, diseaseList, sexList, allEthnicities, allCountries);
+
 		// 4
-		if ( groupByColumns.contains("Disease") && groupByColumns.contains("Ethnicity") && groupByColumns.contains("SpecType") && groupByColumns.contains("Country"))
-			groupedSpecimens = groupByTypeAndEthnicityAndCountryAndDisease(specimens, acronymList, allSpecimenTypes, allEthnicities, allCountries, diseaseList);
+		else if ( groupByColumns.contains("Disease") && groupByColumns.contains("Ethnicity") && groupByColumns.contains("SpecType") && groupByColumns.contains("Country"))
+			groupedSpecimens = groupByDiseaseAndEthnicityAndTypeAndCountry(specimens, acronymList, diseaseList, allEthnicities, allSpecimenTypes, allCountries);
 
 		else if ( groupByColumns.contains("Disease") && groupByColumns.contains("Sex") && groupByColumns.contains("Ethnicity") && groupByColumns.contains("SpecType"))
 			groupedSpecimens = groupByDiseaseAndSexAndEthnicityAndType(specimens, acronymList, diseaseList, sexList,allEthnicities, allSpecimenTypes);
@@ -421,6 +438,9 @@ public class ApiController {
 
 		else if (groupByColumns.contains("Design") && groupByColumns.contains("Disease") && groupByColumns.contains("SpecType") && groupByColumns.contains("Country"))
 			groupedSpecimens = groupByDesignAndDiseaseTypeAndCountry(specimens, acronymList, designList, diseaseList, allSpecimenTypes, allCountries);
+
+		else if (groupByColumns.contains("Design") && groupByColumns.contains("Disease") && groupByColumns.contains("Ethnicity") && groupByColumns.contains("SpecType"))
+			groupedSpecimens = groupByDesignAndDiseaseAndEthnicityAndType(specimens, acronymList, designList, diseaseList, allEthnicities, allSpecimenTypes);
 
 		// 3
 
@@ -580,34 +600,35 @@ public class ApiController {
 		return datasets;
 	}
 
-	private List<RowForm> groupByTypeAndEthnicityAndCountryAndDisease(List<NeoSpecimen> specimens,
-																		 List<String> acronyms,
-																		 List<String> specimenTypes,
-																		 List<String> ethnicities,
-																		 List<String> countries,
-																		 List<String> diseases) {
+	private List<RowForm> groupByDiseaseAndEthnicityAndTypeAndCountry(List<NeoSpecimen> specimens,
+																	  List<String> acronyms,
+																	  List<String> diseases,
+																	  List<String> ethnicities,
+																	  List<String> specimenTypes,
+																	  List<String> countries) {
 		List<RowForm> groupedSpecimens = new ArrayList<>();
 		for (String acronym : acronyms)
-			for (String type : specimenTypes)
+			for (String disease : diseases)
 				for (String ethnicity : ethnicities)
-					for (String country : countries)
-						for (String disease : diseases) {
-							JSONObject object = new JSONObject();
+					for (String country : countries) {
+						NeoCountry findCountry = countryRepository.findNeoCountryByName(country);
+						for (String type : specimenTypes) {
+							NeoSpecType specType = typeRepository.findNeoSpecTypeByName(type);
 							RowForm row = new RowForm();
 							row.setAcronym(acronym);
-							row.setSpecType(type);
-							row.setEthnicity(ethnicity);
-							row.setCountry(country);
 							row.setDisease(disease);
+							row.setEthnicity(ethnicity);
+							row.setSpecType(type);
+							row.setCountry(country);
 							row.setNbSamples(0);
 							HashSet<String> biobanks = new HashSet<>();
 							int nbSamples = 0;
 							for (NeoSpecimen specimen : specimens)
 								if (specimen.getAcronym().equals(acronym) &&
-										specimen.getSpecType().getName().equals(type) &&
+										specimen.getDisease().equals(disease) &&
 										specimen.getEthnicity().equals(ethnicity) &&
-										specimen.getCountry().getName().equals(country) &&
-										specimen.getDisease().equals(disease)) {
+										specimen.getSpecType().getName().equals(specType.getName()) &&
+										specimen.getCountry().getName().equals(findCountry.getName())) {
 									nbSamples += 1;
 									if (specimen.getNoAliquots() > 0)
 										biobanks.add(specimen.getBiobankName());
@@ -618,6 +639,7 @@ public class ApiController {
 								groupedSpecimens.add(row);
 							}
 						}
+					}
 
 		return groupedSpecimens;
 	}
@@ -1988,6 +2010,106 @@ public class ApiController {
 		return groupedSpecimens;
 	}
 
+	private List<RowForm> groupByDesignAndDiseaseAndSexAndEthnicityAndType(List<NeoSpecimen> specimens,
+																		   List<String> acronyms,
+																		   List<String> designs,
+																		   List<String> diseases,
+																		   List<String> sexList,
+																		   List<String> ethnicities,
+																		   List<String> specimenTypes) {
+		List<RowForm> groupedSpecimens = new ArrayList<>();
+		HashMap<String, NeoStudy> studies = studyHashMap();
+		for (String acronym : acronyms) {
+			NeoStudy study = studies.get(acronym);
+			List<String> studyDesigns = new ArrayList<>();
+			study.getDesigns().forEach(item -> studyDesigns.add(item.getName()));
+			for (String design : designs) {
+				for (String sex: sexList)
+					for (String ethnicity: ethnicities)
+						for (String disease : diseases)
+							for (String type : specimenTypes) {
+								NeoSpecType specType = typeRepository.findNeoSpecTypeByName(type);
+								RowForm row = new RowForm();
+								row.setAcronym(acronym);
+								row.setDesign(design);
+								row.setDisease(disease);
+								row.setSex(sex);
+								row.setEthnicity(ethnicity);
+								row.setSpecType(type);
+								HashSet<String> biobanks = new HashSet<>();
+								int nbSamples = 0;
+								for (NeoSpecimen specimen : specimens)
+									if (specimen.getAcronym().equals(acronym) &&
+											studyDesigns.contains(design) &&
+											specimen.getDisease().equals(disease) &&
+											specimen.getSex().equals(sex) &&
+											specimen.getEthnicity().equals(ethnicity) &&
+											specimen.getSpecType().getName().equals(specType.getName())) {
+
+										nbSamples += 1;
+										if (specimen.getNoAliquots() > 0)
+											biobanks.add(specimen.getBiobankName());
+									}
+								if (nbSamples > 0) {
+									row.setNbSamples(nbSamples);
+									row.setBiobanks(new ArrayList<>(biobanks));
+									groupedSpecimens.add(row);
+								}
+							}
+			}
+		}
+
+		return groupedSpecimens;
+	}
+
+	private List<RowForm> groupByDesignAndDiseaseAndEthnicityAndType(List<NeoSpecimen> specimens,
+																	 List<String> acronyms,
+																	 List<String> designs,
+																	 List<String> diseases,
+																	 List<String> ethnicities,
+																	 List<String> specimenTypes) {
+		List<RowForm> groupedSpecimens = new ArrayList<>();
+		HashMap<String, NeoStudy> studies = studyHashMap();
+		for (String acronym : acronyms) {
+			NeoStudy study = studies.get(acronym);
+			List<String> studyDesigns = new ArrayList<>();
+			study.getDesigns().forEach(item -> studyDesigns.add(item.getName()));
+			for (String design : designs) {
+				for (String ethnicity: ethnicities)
+					for (String disease : diseases)
+						for (String type : specimenTypes) {
+							NeoSpecType specType = typeRepository.findNeoSpecTypeByName(type);
+							RowForm row = new RowForm();
+							row.setAcronym(acronym);
+							row.setDesign(design);
+							row.setDisease(disease);
+							row.setEthnicity(ethnicity);
+							row.setSpecType(type);
+							HashSet<String> biobanks = new HashSet<>();
+							int nbSamples = 0;
+							for (NeoSpecimen specimen : specimens)
+								if (specimen.getAcronym().equals(acronym) &&
+										studyDesigns.contains(design) &&
+										specimen.getDisease().equals(disease) &&
+										specimen.getEthnicity().equals(ethnicity) &&
+										specimen.getSpecType().getName().equals(specType.getName())) {
+
+									nbSamples += 1;
+									if (specimen.getNoAliquots() > 0)
+										biobanks.add(specimen.getBiobankName());
+								}
+							if (nbSamples > 0) {
+								row.setNbSamples(nbSamples);
+								row.setBiobanks(new ArrayList<>(biobanks));
+								groupedSpecimens.add(row);
+							}
+						}
+			}
+		}
+
+		return groupedSpecimens;
+	}
+
 	private List<RowForm> groupByDesignAndDiseaseAndSexAndType(List<NeoSpecimen> specimens,
 														       List<String> acronyms,
 														       List<String> designs,
@@ -2028,6 +2150,167 @@ public class ApiController {
 								row.setNbSamples(nbSamples);
 								row.setBiobanks(new ArrayList<>(biobanks));
 								groupedSpecimens.add(row);
+							}
+						}
+			}
+		}
+
+		return groupedSpecimens;
+	}
+
+	private List<RowForm> groupByDesignAndDiseaseAndSexAndTypeAndCountry(List<NeoSpecimen> specimens,
+																		 List<String> acronyms,
+																		 List<String> designs,
+																		 List<String> diseases,
+																		 List<String> sexList,
+																		 List<String> specimenTypes,
+																		 List<String> countries) {
+		List<RowForm> groupedSpecimens = new ArrayList<>();
+		HashMap<String, NeoStudy> studies = studyHashMap();
+		for (String acronym : acronyms) {
+			NeoStudy study = studies.get(acronym);
+			List<String> studyDesigns = new ArrayList<>();
+			study.getDesigns().forEach(item -> studyDesigns.add(item.getName()));
+			for (String design : designs) {
+				for (String disease: diseases)
+					for (String sex: sexList)
+						for (String type : specimenTypes) {
+							NeoSpecType specType = typeRepository.findNeoSpecTypeByName(type);
+							for (String country : countries) {
+								NeoCountry findCountry = countryRepository.findNeoCountryByName(country);
+								RowForm row = new RowForm();
+								row.setAcronym(acronym);
+								row.setDesign(design);
+								row.setDisease(disease);
+								row.setSex(sex);
+								row.setSpecType(type);
+								row.setCountry(country);
+								HashSet<String> biobanks = new HashSet<>();
+								int nbSamples = 0;
+								for (NeoSpecimen specimen : specimens)
+									if (specimen.getAcronym().equals(acronym) &&
+											studyDesigns.contains(design) &&
+											specimen.getDisease().equals(disease) &&
+											specimen.getSex().equals(sex) &&
+											specimen.getSpecType().getName().equals(specType.getName()) &&
+											specimen.getCountry().getName().equals(findCountry.getName())) {
+
+										nbSamples += 1;
+										if (specimen.getNoAliquots() > 0)
+											biobanks.add(specimen.getBiobankName());
+									}
+								if (nbSamples > 0) {
+									row.setNbSamples(nbSamples);
+									row.setBiobanks(new ArrayList<>(biobanks));
+									groupedSpecimens.add(row);
+								}
+							}
+						}
+			}
+		}
+
+		return groupedSpecimens;
+	}
+
+	private List<RowForm> groupByDesignAndDiseaseAndEthnicityAndTypeAndCountry(List<NeoSpecimen> specimens,
+																			   List<String> acronyms,
+																			   List<String> designs,
+																			   List<String> diseases,
+																			   List<String> ethnicities,
+																			   List<String> specimenTypes,
+																			   List<String> countries) {
+		List<RowForm> groupedSpecimens = new ArrayList<>();
+		HashMap<String, NeoStudy> studies = studyHashMap();
+		for (String acronym : acronyms) {
+			NeoStudy study = studies.get(acronym);
+			List<String> studyDesigns = new ArrayList<>();
+			study.getDesigns().forEach(item -> studyDesigns.add(item.getName()));
+			for (String design : designs) {
+				for (String disease: diseases)
+					for (String ethnicity: ethnicities)
+						for (String type : specimenTypes) {
+							NeoSpecType specType = typeRepository.findNeoSpecTypeByName(type);
+							for (String country : countries) {
+								NeoCountry findCountry = countryRepository.findNeoCountryByName(country);
+								RowForm row = new RowForm();
+								row.setAcronym(acronym);
+								row.setDesign(design);
+								row.setDisease(disease);
+								row.setEthnicity(ethnicity);
+								row.setSpecType(type);
+								row.setCountry(country);
+								HashSet<String> biobanks = new HashSet<>();
+								int nbSamples = 0;
+								for (NeoSpecimen specimen : specimens)
+									if (specimen.getAcronym().equals(acronym) &&
+											studyDesigns.contains(design) &&
+											specimen.getDisease().equals(disease) &&
+											specimen.getEthnicity().equals(ethnicity) &&
+											specimen.getSpecType().getName().equals(specType.getName()) &&
+											specimen.getCountry().getName().equals(findCountry.getName())) {
+
+										nbSamples += 1;
+										if (specimen.getNoAliquots() > 0)
+											biobanks.add(specimen.getBiobankName());
+									}
+								if (nbSamples > 0) {
+									row.setNbSamples(nbSamples);
+									row.setBiobanks(new ArrayList<>(biobanks));
+									groupedSpecimens.add(row);
+								}
+							}
+						}
+			}
+		}
+
+		return groupedSpecimens;
+	}
+
+	private List<RowForm> groupByDesignAndDiseaseAndSexAndEthnicityAndCountry(List<NeoSpecimen> specimens,
+																			  List<String> acronyms,
+																			  List<String> designs,
+																			  List<String> diseases,
+																			  List<String> sexList,
+																			  List<String> ethnicities,
+																			  List<String> countries) {
+		List<RowForm> groupedSpecimens = new ArrayList<>();
+		HashMap<String, NeoStudy> studies = studyHashMap();
+		for (String acronym : acronyms) {
+			NeoStudy study = studies.get(acronym);
+			List<String> studyDesigns = new ArrayList<>();
+			study.getDesigns().forEach(item -> studyDesigns.add(item.getName()));
+			for (String design : designs) {
+				for (String disease: diseases)
+					for (String sex: sexList)
+						for (String ethnicity : ethnicities) {
+							for (String country : countries) {
+								NeoCountry findCountry = countryRepository.findNeoCountryByName(country);
+								RowForm row = new RowForm();
+								row.setAcronym(acronym);
+								row.setDesign(design);
+								row.setDisease(disease);
+								row.setSex(sex);
+								row.setEthnicity(ethnicity);
+								row.setCountry(country);
+								HashSet<String> biobanks = new HashSet<>();
+								int nbSamples = 0;
+								for (NeoSpecimen specimen : specimens)
+									if (specimen.getAcronym().equals(acronym) &&
+											studyDesigns.contains(design) &&
+											specimen.getDisease().equals(disease) &&
+											specimen.getSex().equals(sex) &&
+											specimen.getEthnicity().equals(ethnicity) &&
+											specimen.getCountry().getName().equals(findCountry.getName())) {
+
+										nbSamples += 1;
+										if (specimen.getNoAliquots() > 0)
+											biobanks.add(specimen.getBiobankName());
+									}
+								if (nbSamples > 0) {
+									row.setNbSamples(nbSamples);
+									row.setBiobanks(new ArrayList<>(biobanks));
+									groupedSpecimens.add(row);
+								}
 							}
 						}
 			}
