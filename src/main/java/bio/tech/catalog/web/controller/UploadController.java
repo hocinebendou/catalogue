@@ -7,6 +7,7 @@ import bio.tech.catalog.persistence.model.User;
 import bio.tech.catalog.service.UserService;
 import com.jcraft.jsch.*;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.core.io.FileSystemResource;
@@ -20,9 +21,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Date;
 import java.util.stream.Collectors;
@@ -71,8 +72,8 @@ public class UploadController {
             Resource dir = userDirectory(user);
 
             try {
-                // copyFileToDir(file, fileType, dir, neoUser);
-                getFileFromUser(file, fileType, dir, user);
+                copyFileToDir(file, fileType, dir, user);
+                //getFileFromUser(file, fileType, dir, user);
                 redirectAttributes.addFlashAttribute("success", "File uploaded successfully!");
             } catch(Exception e) {
                 e.printStackTrace();
@@ -81,6 +82,25 @@ public class UploadController {
         }
 
         return "redirect:/upload";
+    }
+
+    /*
+     * THIS METHOD USES HTTPS FOR UPLOAD
+     */
+    private Resource copyFileToDir(MultipartFile file, String fileType, Resource dir, User user) throws IOException{
+
+        String fileExtension = getFileExtension(file.getOriginalFilename());
+        fileType = fileType.isEmpty()? "_" : "_" + fileType + "_";
+
+        String prefix =  user.getUsername() + fileType + LocalDate.now().toString() + "_";
+        File tempFile = File.createTempFile(prefix, fileExtension, dir.getFile());
+        try (InputStream in = file.getInputStream();
+             OutputStream out = new FileOutputStream(tempFile)) {
+            IOUtils.copy(in, out);
+            IOUtils.closeQuietly(in);
+            IOUtils.closeQuietly(out);
+        }
+        return new FileSystemResource(tempFile);
     }
 
     /*
